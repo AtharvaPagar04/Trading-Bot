@@ -24,6 +24,8 @@ class PaperExecutionEngine:
         fee_percent: float = 0.001,
 
         slippage_percent: float = 0.0005,
+        spread_percent: float = 0.0002,
+
     ):
 
         self.runtime = runtime
@@ -34,6 +36,10 @@ class PaperExecutionEngine:
 
         self.slippage_percent = (
             slippage_percent
+        )
+
+        self.spread_percent = (
+            spread_percent
         )
 
         self.executed_orders = []
@@ -57,10 +63,17 @@ class PaperExecutionEngine:
             order.price
         )
 
+        half_spread = (
+            self.spread_percent
+            / 2
+        )
+
         if order.side == "BUY":
 
             execution_price *= (
                 1
+                +
+                half_spread
                 +
                 self.slippage_percent
             )
@@ -69,6 +82,8 @@ class PaperExecutionEngine:
 
             execution_price *= (
                 1
+                -
+                half_spread
                 -
                 self.slippage_percent
             )

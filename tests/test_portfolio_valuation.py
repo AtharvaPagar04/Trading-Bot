@@ -64,7 +64,7 @@ def test_unrealized_pnl_updates():
     assert (
         engine.portfolio.unrealized_pnl
         ==
-        895.5
+        894.6
     )
 
 def test_total_equity_calculation():
@@ -110,4 +110,4 @@ def test_total_equity_calculation():
         )
     )
 
-    assert equity == 10886.4955
+    assert equity == 10885.5946
