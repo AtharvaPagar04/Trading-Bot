@@ -9,18 +9,26 @@ from src.paper_execution.paper_order import (
 from src.paper_execution.paper_portfolio import (
     PaperPortfolio,
 )
+
 from src.paper_execution.paper_position import (
     PaperPosition,
 )
+
 
 class PaperExecutionEngine:
 
     def __init__(
         self,
         runtime: GovernedRuntime,
+
+        fee_percent: float = 0.001,
     ):
 
         self.runtime = runtime
+
+        self.fee_percent = (
+            fee_percent
+        )
 
         self.executed_orders = []
 
@@ -45,32 +53,33 @@ class PaperExecutionEngine:
             order.price
         )
 
+        fee = (
+            notional
+            *
+            self.fee_percent
+        )
+
         if order.side == "BUY":
+
+            total_cost = (
+                notional
+                +
+                fee
+            )
 
             if (
                 self.portfolio.cash_balance
-                < notional
+                < total_cost
             ):
                 return False
 
             self.portfolio.cash_balance -= (
-                notional
+                total_cost
             )
 
-            position = (
-                self.portfolio.positions
-                .get(order.symbol)
+            self.portfolio.fees_paid += (
+                fee
             )
-
-            if position is None:
-
-                position = PaperPosition(
-                    symbol=order.symbol,
-                )
-
-                self.portfolio.positions[
-                    order.symbol
-                ] = position
 
             position = (
                 self.portfolio.positions
@@ -159,6 +168,12 @@ class PaperExecutionEngine:
 
             self.portfolio.cash_balance += (
                 notional
+                -
+                fee
+            )
+
+            self.portfolio.fees_paid += (
+                fee
             )
 
             if position.quantity == 0:

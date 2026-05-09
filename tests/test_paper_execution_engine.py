@@ -126,7 +126,7 @@ def test_buy_order_updates_portfolio():
     assert (
         engine.portfolio.cash_balance
         ==
-        starting_balance - 1000.0
+        starting_balance - 1001.0
     )
 
     assert (
@@ -225,7 +225,7 @@ def test_sell_order_reduces_position():
     assert (
         engine.portfolio.cash_balance
         ==
-        starting_balance + 1000.0
+        starting_balance + 999.0
     )
 
 
@@ -245,7 +245,7 @@ def test_sell_rejected_for_insufficient_position():
     sell_order = PaperOrder(
         symbol="BTCUSDT",
         side="SELL",
-        quantity=0.1,
+        quantity=0.09,
         price=100000.0,
         timestamp=datetime.utcnow(),
     )
@@ -271,7 +271,7 @@ def test_realized_pnl_updates_after_sell():
     buy_order = PaperOrder(
         symbol="BTCUSDT",
         side="BUY",
-        quantity=0.1,
+        quantity=0.09,
         price=100000.0,
         timestamp=datetime.utcnow(),
     )
@@ -283,7 +283,7 @@ def test_realized_pnl_updates_after_sell():
     sell_order = PaperOrder(
         symbol="BTCUSDT",
         side="SELL",
-        quantity=0.1,
+        quantity=0.09,
         price=110000.0,
         timestamp=datetime.utcnow(),
     )
@@ -294,6 +294,6 @@ def test_realized_pnl_updates_after_sell():
 
     assert (
         engine.portfolio.realized_pnl
-        ==
-        1000.0
+
+        == 900.0
     )

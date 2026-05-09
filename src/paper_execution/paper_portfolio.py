@@ -20,3 +20,4 @@ class PaperPortfolio:
 
     realized_pnl: float = 0.0
     unrealized_pnl: float = 0.0
+    fees_paid: float = 0.0

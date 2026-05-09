@@ -44,7 +44,7 @@ def test_unrealized_pnl_updates():
     buy_order = PaperOrder(
         symbol="BTCUSDT",
         side="BUY",
-        quantity=0.1,
+        quantity=0.09,
         price=100000.0,
         timestamp=datetime.utcnow(),
     )
@@ -64,7 +64,7 @@ def test_unrealized_pnl_updates():
     assert (
         engine.portfolio.unrealized_pnl
         ==
-        1000.0
+        900.0
     )
 
 def test_total_equity_calculation():
@@ -83,7 +83,7 @@ def test_total_equity_calculation():
     buy_order = PaperOrder(
         symbol="BTCUSDT",
         side="BUY",
-        quantity=0.1,
+        quantity=0.09,
         price=100000.0,
         timestamp=datetime.utcnow(),
     )
@@ -110,4 +110,4 @@ def test_total_equity_calculation():
         )
     )
 
-    assert equity == 11000.0
+    assert equity == 10891.0
