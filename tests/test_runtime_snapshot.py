@@ -13,6 +13,17 @@ from src.events.event_dispatcher import (
 from src.persistence.runtime_snapshot import (
     persist_runtime_snapshot,
 )
+from src.strategy.strategy_state import (
+    StrategyState,
+)
+
+from src.paper_execution.paper_portfolio import (
+    PaperPortfolio,
+)
+
+from src.risk.drawdown_tracker import (
+    DrawdownState,
+)
 
 runtime = build_runtime_state(
     capital=2000,
@@ -38,7 +49,19 @@ runtime = dispatch_runtime_events(
 )
 
 persist_runtime_snapshot(
-    runtime
+    runtime=runtime,
+
+    strategy_state=
+    StrategyState(),
+
+    portfolio=
+    PaperPortfolio(),
+
+    drawdown_state=
+    DrawdownState(
+        peak_equity=1000.0,
+        current_drawdown_percent=0.0,
+    ),
 )
 
 print("Runtime snapshot persisted")

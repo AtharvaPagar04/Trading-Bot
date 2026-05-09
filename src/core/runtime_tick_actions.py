@@ -26,9 +26,22 @@ from src.persistence.runtime_store import (
     persist_runtime_metrics,
 )
 
+from src.strategy.strategy_state import (
+    StrategyState,
+)
+
+from src.paper_execution.paper_portfolio import (
+    PaperPortfolio,
+)
+
+from src.risk.drawdown_tracker import (
+    DrawdownState,
+)
+
 
 @dataclass
 class TickActionResult:
+
     heartbeat: HeartbeatState
 
     metrics: RuntimeMetrics
@@ -57,7 +70,21 @@ def execute_tick_actions(
     )
 
     persist_runtime_snapshot(
-        runtime
+        runtime=runtime,
+
+        strategy_state=
+        StrategyState(),
+
+        portfolio=
+        PaperPortfolio(),
+
+        drawdown_state=
+        DrawdownState(
+            peak_equity=
+            runtime.session.current_capital,
+
+            current_drawdown_percent=0.0,
+        ),
     )
 
     return TickActionResult(
