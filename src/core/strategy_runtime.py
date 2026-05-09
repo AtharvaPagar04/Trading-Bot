@@ -53,6 +53,20 @@ def execute_strategy_cycle(
         )
     )
 
+    MIN_CONFIDENCE = 0.65
+
+    if (
+        signal.confidence
+        <
+        MIN_CONFIDENCE
+    ):
+
+        return StrategyRuntimeResult(
+            runtime=runtime,
+            executed=False,
+            signal=signal.signal,
+        )
+
     side = None
 
     has_position = (
