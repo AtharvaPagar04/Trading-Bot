@@ -118,6 +118,19 @@ def execute_strategy_cycle(
             signal=signal.signal,
             state=state,
             )
+            
+    if (
+        state.last_executed_candle_time
+        ==
+        candle.timestamp
+    ):
+
+        return StrategyRuntimeResult(
+            runtime=runtime,
+            executed=False,
+            signal=signal.signal,
+            state=state,
+        )
 
     has_position = (
         len(exchange.positions)
@@ -166,10 +179,15 @@ def execute_strategy_cycle(
             trade_side=side,
         )
     )
+    
     if autonomous.executed:
         state.last_execution_time = (
             datetime.utcnow()
         )
+
+        state.last_executed_candle_time = (
+            candle.timestamp
+    )
 
     return StrategyRuntimeResult(
         runtime=autonomous.runtime,

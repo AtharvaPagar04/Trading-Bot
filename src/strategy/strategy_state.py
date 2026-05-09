@@ -14,3 +14,7 @@ class StrategyState:
     last_execution_time: (
         datetime | None
     ) = None
+
+    last_executed_candle_time: (
+        datetime | None
+    ) = None
