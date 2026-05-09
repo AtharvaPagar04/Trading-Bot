@@ -132,7 +132,7 @@ def test_buy_order_updates_portfolio():
     assert (
         engine.portfolio.positions[
             "BTCUSDT"
-        ]
+        ].quantity
         ==
         0.01
     )
@@ -217,6 +217,7 @@ def test_sell_order_reduces_position():
         engine.portfolio.positions[
             "BTCUSDT"
         ]
+        .quantity
         ==
         0.01
     )
@@ -244,7 +245,7 @@ def test_sell_rejected_for_insufficient_position():
     sell_order = PaperOrder(
         symbol="BTCUSDT",
         side="SELL",
-        quantity=1.0,
+        quantity=0.1,
         price=100000.0,
         timestamp=datetime.utcnow(),
     )
@@ -254,3 +255,45 @@ def test_sell_rejected_for_insufficient_position():
     )
 
     assert result is False
+def test_realized_pnl_updates_after_sell():
+
+    runtime = GovernedRuntime(
+        RuntimeMode.DRY_RUN,
+        EventBus(),
+    )
+
+    runtime.start()
+
+    engine = PaperExecutionEngine(
+        runtime
+    )
+
+    buy_order = PaperOrder(
+        symbol="BTCUSDT",
+        side="BUY",
+        quantity=0.1,
+        price=100000.0,
+        timestamp=datetime.utcnow(),
+    )
+
+    engine.execute_order(
+        buy_order
+    )
+
+    sell_order = PaperOrder(
+        symbol="BTCUSDT",
+        side="SELL",
+        quantity=0.1,
+        price=110000.0,
+        timestamp=datetime.utcnow(),
+    )
+
+    engine.execute_order(
+        sell_order
+    )
+
+    assert (
+        engine.portfolio.realized_pnl
+        ==
+        1000.0
+    )

@@ -9,7 +9,9 @@ from src.paper_execution.paper_order import (
 from src.paper_execution.paper_portfolio import (
     PaperPortfolio,
 )
-
+from src.paper_execution.paper_position import (
+    PaperPosition,
+)
 
 class PaperExecutionEngine:
 
@@ -55,43 +57,115 @@ class PaperExecutionEngine:
                 notional
             )
 
-            current_position = (
+            position = (
                 self.portfolio.positions
-                .get(order.symbol, 0.0)
+                .get(order.symbol)
             )
 
-            self.portfolio.positions[
-                order.symbol
-            ] = (
-                current_position
+            if position is None:
+
+                position = PaperPosition(
+                    symbol=order.symbol,
+                )
+
+                self.portfolio.positions[
+                    order.symbol
+                ] = position
+
+            position = (
+                self.portfolio.positions
+                .get(order.symbol)
+            )
+
+            if position is None:
+
+                position = PaperPosition(
+                    symbol=order.symbol,
+                )
+
+                self.portfolio.positions[
+                    order.symbol
+                ] = position
+
+            existing_quantity = (
+                position.quantity
+            )
+
+            existing_notional = (
+                existing_quantity
+                *
+                position.average_entry_price
+            )
+
+            new_notional = (
+                order.quantity
+                *
+                order.price
+            )
+
+            new_total_quantity = (
+                existing_quantity
                 +
                 order.quantity
             )
 
-        elif order.side == "SELL":
-
-            current_position = (
-                self.portfolio.positions
-                .get(order.symbol, 0.0)
+            position.average_entry_price = (
+                (
+                    existing_notional
+                    +
+                    new_notional
+                )
+                /
+                new_total_quantity
             )
 
+            position.quantity = (
+                new_total_quantity
+            )
+
+        elif order.side == "SELL":
+
+            position = (
+                self.portfolio.positions
+                .get(order.symbol)
+            )
+
+            if position is None:
+                return False
+
             if (
-                current_position
+                position.quantity
                 < order.quantity
             ):
                 return False
 
-            self.portfolio.positions[
-                order.symbol
-            ] = (
-                current_position
-                -
+            realized_pnl = (
+                (
+                    order.price
+                    -
+                    position.average_entry_price
+                )
+                *
+                order.quantity
+            )
+
+            self.portfolio.realized_pnl += (
+                realized_pnl
+            )
+
+            position.quantity -= (
                 order.quantity
             )
 
             self.portfolio.cash_balance += (
                 notional
             )
+
+            if position.quantity == 0:
+
+                del self.portfolio.positions[
+                    order.symbol
+                ]
 
         else:
             return False

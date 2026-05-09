@@ -1,18 +1,22 @@
 from dataclasses import dataclass
 from dataclasses import field
 
+from src.paper_execution.paper_position import (
+    PaperPosition,
+)
+
 
 @dataclass
 class PaperPortfolio:
 
     cash_balance: float = 10000.0
 
-    positions: dict = field(
-        default_factory=dict
-    )
-
-    average_entry_prices: dict = field(
+    positions: dict[
+        str,
+        PaperPosition,
+    ] = field(
         default_factory=dict
     )
 
     realized_pnl: float = 0.0
+    unrealized_pnl: float = 0.0
