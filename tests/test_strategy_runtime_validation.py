@@ -48,6 +48,9 @@ from src.risk.session_risk import (
 from src.exchange.models import (
     Position,
 )
+from src.strategy.strategy_state import (
+    StrategyState,
+)
 def create_runtime() -> RuntimeState:
 
     return RuntimeState(
@@ -164,6 +167,7 @@ def test_buy_signal_executes():
         exchange=exchange,
         snapshot=snapshot,
         candle=candle,
+        state=StrategyState(),
     )
 
     assert (
@@ -206,6 +210,7 @@ def test_buy_blocked_when_position_exists():
         exchange=exchange,
         snapshot=snapshot,
         candle=candle,
+        state=StrategyState(),
     )
 
     assert (
@@ -255,6 +260,7 @@ def test_sell_signal_executes():
         exchange=exchange,
         snapshot=snapshot,
         candle=candle,
+        state=StrategyState(),
     )
 
     assert (
@@ -316,6 +322,7 @@ def test_hold_signal_skips_execution():
         exchange=exchange,
         snapshot=snapshot,
         candle=candle,
+        state=StrategyState(),
     )
 
     assert (

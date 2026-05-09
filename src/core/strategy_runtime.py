@@ -25,7 +25,9 @@ from src.strategy.mean_reversion import (
 from src.strategy.models import (
     TradeSignal,
 )
-
+from src.strategy.strategy_state import (
+    StrategyState,
+)
 
 @dataclass
 class StrategyRuntimeResult:
@@ -34,6 +36,7 @@ class StrategyRuntimeResult:
     executed: bool
 
     signal: TradeSignal
+    state: StrategyState
 
 
 def execute_strategy_cycle(
@@ -41,6 +44,7 @@ def execute_strategy_cycle(
     exchange: PaperExchange,
     snapshot: MarketDataSnapshot,
     candle: Candle,
+    state: StrategyState,
 ) -> StrategyRuntimeResult:
 
     strategy = (
@@ -65,9 +69,22 @@ def execute_strategy_cycle(
             runtime=runtime,
             executed=False,
             signal=signal.signal,
+            state=state,
         )
 
     side = None
+    if (
+        state.last_signal
+        ==
+        signal.signal
+    ):
+
+        return StrategyRuntimeResult(
+            runtime=runtime,
+            executed=False,
+            signal=signal.signal,
+            state=state,
+        )
 
     has_position = (
         len(exchange.positions)
@@ -100,7 +117,12 @@ def execute_strategy_cycle(
             runtime=runtime,
             executed=False,
             signal=signal.signal,
+            state=state,
         )
+        
+    state.last_signal = (
+        signal.signal
+    )
 
     autonomous: AutonomousCycleResult = (
         execute_autonomous_cycle(
@@ -116,4 +138,5 @@ def execute_strategy_cycle(
         runtime=autonomous.runtime,
         executed=autonomous.executed,
         signal=signal.signal,
+        state=state,
     )

@@ -9,7 +9,9 @@ from src.backtest.models import (
 from src.core.strategy_runtime import (
     execute_strategy_cycle,
 )
-
+from src.strategy.strategy_state import (
+    StrategyState,
+)
 from src.exchange.paper_exchange import (
     PaperExchange,
 )
@@ -71,6 +73,10 @@ def run_backtest(
 
     candles = snapshot.candles
 
+    strategy_state = (
+        StrategyState()
+    )
+    
     for candle in candles[10:]:
 
         result = (
@@ -82,6 +88,7 @@ def run_backtest(
                 snapshot=snapshot,
 
                 candle=candle,
+                state=strategy_state,
             )
         )
         diagnostics = (

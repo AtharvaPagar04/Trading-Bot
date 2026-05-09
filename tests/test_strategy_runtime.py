@@ -7,7 +7,9 @@ from src.core.strategy_runtime import (
 from src.exchange.paper_exchange import (
     PaperExchange,
 )
-
+from src.strategy.strategy_state import (
+    StrategyState,
+)
 from src.market.csv_provider import (
     load_market_snapshot_from_csv,
 )
@@ -61,6 +63,7 @@ result = (
         snapshot=snapshot,
 
         candle=candle,
+        state=StrategyState(),
     )
 )
 
