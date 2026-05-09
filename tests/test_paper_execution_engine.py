@@ -126,7 +126,7 @@ def test_buy_order_updates_portfolio():
     assert (
         engine.portfolio.cash_balance
         ==
-        starting_balance - 1001.0
+        starting_balance - 1001.5005
     )
 
     assert (
@@ -225,7 +225,7 @@ def test_sell_order_reduces_position():
     assert (
         engine.portfolio.cash_balance
         ==
-        starting_balance + 999.0
+        starting_balance + 998.5005
     )
 
 
@@ -295,5 +295,5 @@ def test_realized_pnl_updates_after_sell():
     assert (
         engine.portfolio.realized_pnl
 
-        == 900.0
+        == 890.55
     )

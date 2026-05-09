@@ -22,12 +22,18 @@ class PaperExecutionEngine:
         runtime: GovernedRuntime,
 
         fee_percent: float = 0.001,
+
+        slippage_percent: float = 0.0005,
     ):
 
         self.runtime = runtime
 
         self.fee_percent = (
             fee_percent
+        )
+
+        self.slippage_percent = (
+            slippage_percent
         )
 
         self.executed_orders = []
@@ -47,10 +53,30 @@ class PaperExecutionEngine:
         ):
             return False
 
+        execution_price = (
+            order.price
+        )
+
+        if order.side == "BUY":
+
+            execution_price *= (
+                1
+                +
+                self.slippage_percent
+            )
+
+        elif order.side == "SELL":
+
+            execution_price *= (
+                1
+                -
+                self.slippage_percent
+            )
+
         notional = (
             order.quantity
             *
-            order.price
+            execution_price
         )
 
         fee = (
@@ -109,7 +135,7 @@ class PaperExecutionEngine:
             new_notional = (
                 order.quantity
                 *
-                order.price
+                execution_price
             )
 
             new_total_quantity = (
@@ -150,7 +176,7 @@ class PaperExecutionEngine:
 
             realized_pnl = (
                 (
-                    order.price
+                    execution_price
                     -
                     position.average_entry_price
                 )
