@@ -1,4 +1,8 @@
 from dataclasses import dataclass
+from datetime import (
+    datetime,
+    timedelta,
+)
 
 from src.core.autonomous_runtime import (
     AutonomousCycleResult,
@@ -28,6 +32,8 @@ from src.strategy.models import (
 from src.strategy.strategy_state import (
     StrategyState,
 )
+
+
 
 @dataclass
 class StrategyRuntimeResult:
@@ -86,6 +92,33 @@ def execute_strategy_cycle(
             state=state,
         )
 
+    EXECUTION_COOLDOWN = (
+        timedelta(seconds=60)
+    )
+
+    if (
+        state.last_execution_time
+        is not None
+    ):
+
+        elapsed = (
+            datetime.utcnow()
+            -
+            state.last_execution_time
+        )
+
+        if (
+            elapsed
+            < EXECUTION_COOLDOWN
+        ):
+
+            return StrategyRuntimeResult(
+            runtime=runtime,
+            executed=False,
+            signal=signal.signal,
+            state=state,
+            )
+
     has_position = (
         len(exchange.positions)
         > 0
@@ -133,6 +166,10 @@ def execute_strategy_cycle(
             trade_side=side,
         )
     )
+    if autonomous.executed:
+        state.last_execution_time = (
+            datetime.utcnow()
+        )
 
     return StrategyRuntimeResult(
         runtime=autonomous.runtime,
