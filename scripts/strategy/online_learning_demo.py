@@ -4,12 +4,29 @@ from src.exchange.models import (
     CompletedTrade,
 )
 
-from src.strategy.attribution import (
-    update_strategy_attribution,
-)
-
 from src.strategy.attribution_models import (
     StrategyAttribution,
+)
+
+from src.strategy.mean_reversion import (
+    MeanReversionStrategy,
+)
+
+from src.strategy.online_learning import (
+    process_completed_trade,
+)
+
+from src.strategy.weighted_models import (
+    WeightedStrategy,
+)
+
+strategy = (
+    WeightedStrategy(
+        strategy=
+        MeanReversionStrategy(),
+
+        weight=0.5,
+    )
 )
 
 attribution = (
@@ -32,9 +49,11 @@ trade = CompletedTrade(
 
     entry_price=100,
 
-    exit_price=120,
+    exit_price=130,
 
-    realized_pnl=20,
+    realized_pnl=30,
+
+    fees_paid=0,
 
     opened_at=
     datetime.utcnow(),
@@ -44,7 +63,10 @@ trade = CompletedTrade(
 )
 
 updated = (
-    update_strategy_attribution(
+    process_completed_trade(
+        weighted_strategy=
+        strategy,
+
         attribution=
         attribution,
 

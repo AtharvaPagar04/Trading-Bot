@@ -4,10 +4,13 @@ from src.runtime.runtime_enums import (
     RuntimeStatus,
     EmergencyReason,
 )
-
+from src.runtime.event_bus import EventBus
 
 def test_runtime_starts():
-    runtime = GovernedRuntime(RuntimeMode.DRY_RUN)
+    runtime = GovernedRuntime(
+        RuntimeMode.DRY_RUN,
+        EventBus(),
+    )
 
     runtime.start()
 
@@ -15,7 +18,10 @@ def test_runtime_starts():
 
 
 def test_emergency_stop():
-    runtime = GovernedRuntime(RuntimeMode.DRY_RUN)
+    runtime = GovernedRuntime(
+        RuntimeMode.DRY_RUN,
+        EventBus(),
+    )
 
     runtime.emergency_stop(EmergencyReason.MAX_DRAWDOWN)
 

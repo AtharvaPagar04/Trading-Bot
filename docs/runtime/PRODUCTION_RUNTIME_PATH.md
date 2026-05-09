@@ -15,38 +15,48 @@ Any module outside this path is considered:
 Experimental systems may NOT bypass this runtime path.
 
 ---
-
 # 2. Canonical Production Runtime Flow
 
-MARKET DATA
+WEBSOCKET MARKET INGESTION
     ↓
-market/market_state_pipeline.py
+market/binance_ws.py
+    ↓
+EVENT NORMALIZATION
     ↓
 core/events.py
     ↓
-core/event_bus.py
+EVENT TRANSPORT
+    ↓
+runtime/event_bus.py
+runtime/async_event_bus.py
+    ↓
+MARKET STATE PIPELINE
     ↓
 strategy/orchestrator.py
+    ↓
+RISK SYNCHRONIZATION
     ↓
 risk/session_risk.py
 risk/exposure.py
 risk/cooldown.py
 risk/kill_switch.py
     ↓
-exchange/execution_engine.py
+EXECUTION VALIDATION
     ↓
+exchange/execution_engine.py
 exchange/paper_exchange.py
     ↓
-portfolio/accounting_engine.py
+PORTFOLIO SYNCHRONIZATION
     ↓
 runtime/governed_runtime.py
     ↓
-persistence/runtime_store.py
-persistence/event_store.py
-persistence/metrics_store.py
-
----
-
+OBSERVABILITY
+    ↓
+runtime/event_journal.py
+runtime/logger.py
+runtime/metrics.py
+    ↓
+PERSISTENCE
 # 3. Runtime Ownership
 
 ## Canonical Runtime Authority
@@ -76,17 +86,21 @@ Responsibilities:
 - runtime tick execution
 
 ---
-
 # 4. Canonical Event Authority
 
-Approved event system:
+Canonical event definitions:
 
 core/events.py
-core/event_bus.py
 
-No secondary event propagation systems may bypass canonical event authority.
+Canonical event transport systems:
 
----
+runtime/event_bus.py
+runtime/async_event_bus.py
+
+Architectural principle:
+Transport systems propagate canonical runtime events.
+They MUST NOT redefine event semantics.
+
 
 # 5. Canonical Risk Authority
 
@@ -123,10 +137,25 @@ Execution systems:
 
 The following systems are NOT on the production runtime path:
 
-## Experimental Runtime
-- cognitive_runtime.py
-- financial_runtime.py
+## Validated But Non-Production-Hardened Runtime
+
+Validated infrastructure:
 - async_runtime_loop.py
+- async_event_bus.py
+- binance_ws.py
+
+Validated capabilities:
+- async propagation
+- websocket lifecycle management
+- reconnect containment
+- runtime-controlled shutdown
+
+NOT yet production-hardened:
+- stale-feed detection
+- heartbeat monitoring
+- reconnect backoff strategy
+- backpressure handling
+- task supervision
 
 ## Experimental Strategy
 - adaptive_ensemble.py
@@ -184,6 +213,41 @@ No runtime expansion allowed without:
 - operational justification
 
 ---
+# 9. Observability Requirements
+
+Production runtime MUST emit observable events for:
+- runtime state transitions
+- governance overrides
+- execution approvals
+- execution failures
+- portfolio synchronization
+- emergency conditions
+
+Canonical observability systems:
+
+runtime/
+    event_journal.py
+    logger.py
+    metrics.py
+
+Architectural principle:
+Critical runtime behavior MUST remain auditable.
+
+# 10. Production Safety Constraints
+
+NO execution path may bypass:
+- runtime governance
+- risk synchronization
+- execution validation
+- portfolio reconciliation
+
+Execution approval REQUIRES:
+- runtime approval
+- risk approval
+- governance approval
+- execution integrity validation
+
+Any bypass of canonical runtime authority is considered a production violation.
 
 # 10. Current Strategic Objective
 
@@ -196,3 +260,4 @@ NOT:
 - self-modifying governance
 - evolutionary execution
 - unrestricted adaptive complexity
+

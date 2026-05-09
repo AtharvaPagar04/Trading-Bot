@@ -61,6 +61,8 @@ result = (
         snapshot=snapshot,
 
         candle=candle,
+
+        trade_side="BUY",
     )
 )
 

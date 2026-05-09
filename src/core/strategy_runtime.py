@@ -19,7 +19,7 @@ from src.market.market_data import (
 )
 
 from src.strategy.mean_reversion import (
-    generate_mean_reversion_signal,
+    MeanReversionStrategy,
 )
 
 from src.strategy.models import (
@@ -43,8 +43,12 @@ def execute_strategy_cycle(
     candle: Candle,
 ) -> StrategyRuntimeResult:
 
+    strategy = (
+        MeanReversionStrategy()
+    )
+
     signal = (
-        generate_mean_reversion_signal(
+        strategy.generate_signal(
             snapshot
         )
     )

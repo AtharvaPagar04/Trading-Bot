@@ -7,11 +7,11 @@ from src.runtime.async_event_bus import (
     AsyncEventBus,
 )
 
-from src.runtime.events import (
+from src.core.events import (
     MARKET_TICK,
 )
 
-from src.runtime.events import (
+from src.core.events import (
     RuntimeEvent,
 )
 
@@ -47,54 +47,68 @@ class BinanceWebsocketClient:
             f"Connecting to {url}"
         )
 
-        async with websockets.connect(
-            url
-        ) as websocket:
+        while self.running:
 
-            print(
-                "Connected to Binance"
-            )
+            try:
 
-            while self.running:
+                async with websockets.connect(
+                    url
+                ) as websocket:
 
-                raw_message = (
-                    await websocket.recv()
+                    print(
+                        "Connected to Binance"
+                    )
+
+                    while self.running:
+
+                        raw_message = (
+                            await websocket.recv()
+                        )
+
+                        data = json.loads(
+                            raw_message
+                        )
+
+                        event = RuntimeEvent(
+                            event_type=
+                            MARKET_TICK,
+
+                            payload={
+                                "symbol":
+                                data["s"],
+
+                                "price":
+                                float(
+                                    data["p"]
+                                ),
+
+                                "quantity":
+                                float(
+                                    data["q"]
+                                ),
+                            },
+
+                            timestamp=
+                            datetime.utcnow(),
+                        )
+
+                        await self.event_bus.publish(
+                            event_type=
+                            MARKET_TICK,
+
+                            payload=
+                            event,
+                        )
+
+            except Exception as e:
+
+                print(
+                    "Websocket connection error"
                 )
 
-                data = json.loads(
-                    raw_message
-                )
+                print(e)
 
-                event = RuntimeEvent(
-                    event_type=
-                    MARKET_TICK,
-
-                    payload={
-                        "symbol":
-                        data["s"],
-
-                        "price":
-                        float(
-                            data["p"]
-                        ),
-
-                        "quantity":
-                        float(
-                            data["q"]
-                        ),
-                    },
-
-                    timestamp=
-                    datetime.utcnow(),
-                )
-
-                await self.event_bus.publish(
-                    event_type=
-                    MARKET_TICK,
-
-                    payload=
-                    event,
-                )
+                await asyncio.sleep(5)
 
     def stop(self):
 

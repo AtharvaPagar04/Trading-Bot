@@ -5,11 +5,8 @@ from src.runtime.async_event_bus import (
     AsyncEventBus,
 )
 
-from src.runtime.events import (
+from src.core.events import (
     MARKET_TICK,
-)
-
-from src.runtime.events import (
     RuntimeEvent,
 )
 

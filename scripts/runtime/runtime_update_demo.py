@@ -33,5 +33,5 @@ for pnl in trade_results:
     print(runtime.risk_state)
 
     print("\nEVENTS")
-    for event in runtime.active_events:
+    for event in runtime.runtime_events:
         print(event)

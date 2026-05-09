@@ -41,6 +41,44 @@ PERSISTENCE + LOGGING
 METRICS + ANALYTICS
 
 ---
+# 2.1 Validated Runtime Execution Path
+
+Validated execution topology:
+
+WEBSOCKET INGESTION
+    ↓
+MARKET EVENT NORMALIZATION
+    ↓
+ASYNC EVENT PROPAGATION
+    ↓
+RUNTIME GOVERNANCE
+    ↓
+MARKET STATE UPDATE
+    ↓
+STRATEGY EVALUATION
+    ↓
+PORTFOLIO RISK SYNCHRONIZATION
+    ↓
+POSITION SIZING
+    ↓
+EXECUTION VALIDATION
+    ↓
+PAPER EXECUTION
+    ↓
+PORTFOLIO SYNCHRONIZATION
+    ↓
+EVENT JOURNALING
+    ↓
+RUNTIME METRICS
+
+Validated components:
+- async event propagation
+- websocket lifecycle management
+- runtime governance transitions
+- strategy execution flow
+- portfolio synchronization
+- event journaling
+- runtime telemetry
 
 # 3. Runtime Authority Hierarchy
 
@@ -138,6 +176,30 @@ Responsibilities:
 No secondary runtime loops should bypass canonical runtime flow.
 
 ---
+# 5.1 Async Runtime Ownership
+
+Canonical async runtime modules:
+
+runtime/
+    async_runtime_loop.py
+    async_event_bus.py
+
+Responsibilities:
+- concurrent event propagation
+- async runtime coordination
+- streaming event distribution
+- async lifecycle management
+
+Validated capabilities:
+- async handler execution
+- graceful runtime shutdown
+- event propagation integrity
+- coordinated runtime stopping
+
+Current limitations:
+- no event backpressure management
+- limited timeout enforcement
+- minimal task supervision
 
 # 6. Persistence Flow
 
@@ -176,6 +238,32 @@ Pattern:
 - immutable append-only
 
 ---
+# 6.1 Observability Flow
+
+Canonical observability modules:
+
+runtime/
+    event_journal.py
+    logger.py
+    metrics.py
+
+Observability pipeline:
+
+RUNTIME EVENT
+    ↓
+EVENT JOURNAL
+    ↓
+STRUCTURED LOGGING
+    ↓
+METRIC AGGREGATION
+
+Validated capabilities:
+- persistent event journaling
+- runtime metric tracking
+- structured event logging
+
+Architectural principle:
+Critical runtime transitions SHOULD emit observable events.
 
 # 7. Recovery Flow
 
@@ -197,6 +285,26 @@ Recovery must:
 - validate portfolio consistency
 
 ---
+# 7.1 Websocket Recovery Behavior
+
+Canonical streaming module:
+
+market/
+    binance_ws.py
+
+Current resilience capabilities:
+- reconnect loop
+- exception containment
+- runtime-controlled shutdown
+
+Current limitations:
+- no stale-feed detection
+- no heartbeat verification
+- limited reconnect backoff strategy
+
+Architectural principle:
+Exchange payloads MUST be normalized into
+internal RuntimeEvent structures before propagation.
 
 # 8. Execution Safety Rules
 
@@ -213,6 +321,29 @@ Execution approval requires:
 - execution integrity validation
 
 ---
+# 9. Validation Architecture
+
+Repository validation structure:
+
+tests/
+    deterministic runtime validation
+
+scripts/
+    manual runtime demos
+    experimentation
+    operational simulations
+
+Validated systems:
+- governance runtime
+- async runtime
+- websocket lifecycle
+- event propagation
+- runtime metrics
+- strategy execution flow
+
+Architectural principle:
+Deterministic validation MUST remain isolated from
+manual runtime experimentation.
 
 # 9. Experimental System Isolation
 

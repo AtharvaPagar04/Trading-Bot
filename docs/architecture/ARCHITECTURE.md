@@ -80,7 +80,34 @@ Future objective:
 - single centralized event topology
 
 ---
+# 3.1 Async Runtime Infrastructure
 
+Canonical async runtime modules:
+
+runtime/
+    async_event_bus.py
+    async_runtime_loop.py
+
+Responsibilities:
+- async event propagation
+- concurrent runtime orchestration
+- streaming event coordination
+- async lifecycle management
+
+Validated capabilities:
+- async event publishing
+- graceful runtime shutdown
+- async handler execution
+- runtime loop lifecycle integrity
+
+Current limitations:
+- no backpressure management
+- no task fanout control
+- limited cancellation coordination
+- minimal timeout protection
+
+Future objective:
+- resilient concurrent event infrastructure
 # 4. Canonical Risk Ownership
 
 Canonical modules:
@@ -148,6 +175,34 @@ Execution layer MUST remain:
 - downstream from risk approval
 
 ---
+# 6.1 Streaming Market Infrastructure
+
+Canonical modules:
+
+market/
+    binance_ws.py
+
+Responsibilities:
+- websocket market ingestion
+- market tick normalization
+- exchange event transformation
+- runtime event publication
+
+Current resilience capabilities:
+- reconnect loop
+- exception containment
+- runtime-controlled shutdown
+
+Architectural principle:
+External exchange payloads MUST be normalized into
+internal RuntimeEvent structures before propagation.
+
+Future objectives:
+- heartbeat monitoring
+- stale-feed detection
+- reconnect backoff strategies
+- multi-symbol stream orchestration
+
 
 # 7. Persistence Architecture
 
@@ -181,6 +236,28 @@ Pattern:
 - immutable append-only
 
 ---
+# 7.1 Observability Infrastructure
+
+Canonical modules:
+
+runtime/
+    event_journal.py
+    metrics.py
+    logger.py
+
+Responsibilities:
+- runtime telemetry
+- event persistence
+- operational diagnostics
+- execution auditing
+
+Validated capabilities:
+- persistent event journaling
+- runtime metric aggregation
+- structured runtime logging
+
+Architectural principle:
+All critical runtime transitions SHOULD emit observable events.
 
 # 8. Immediate Consolidation Priorities
 
@@ -221,6 +298,30 @@ Focus:
 
 ---
 
+# 9. Validation Architecture
+
+Repository validation structure:
+
+tests/
+    deterministic runtime validation
+
+scripts/
+    manual runtime demos
+    experimentation
+    operational simulations
+
+Validation status:
+- governance runtime validated
+- async runtime validated
+- websocket lifecycle validated
+- execution orchestration validated
+- runtime metrics validated
+- event journaling validated
+
+Architectural principle:
+Deterministic validation MUST remain separated from
+manual runtime experimentation.
+
 # 10. Current Architectural Goal
 
 Target state:
@@ -230,5 +331,9 @@ risk-governed
 recoverable
 observable
 modular
-statistically validated
+validated
+event-driven
+risk-governed
+observable
+recoverable
 adaptive trading infrastructure

@@ -8,14 +8,13 @@ from src.runtime.runtime_enums import (
     EmergencyReason,
 )
 
-from src.core.event_bus import EventBus
+from src.runtime.event_bus import EventBus
 
 from src.core.events import (
     RuntimeEvent,
     RISK_ALERT,
     SYSTEM_RECALIBRATION,
 )
-
 
 class GovernedRuntime:
 
@@ -30,6 +29,8 @@ class GovernedRuntime:
         self.event_bus = event_bus
 
         self._register_handlers()
+
+    
 
     def _register_handlers(self):
 

@@ -5,14 +5,10 @@ from src.runtime.event_bus import (
     EventBus,
 )
 
-from src.runtime.events import (
+from src.core.events import (
     MARKET_TICK,
-)
-
-from src.runtime.events import (
     RuntimeEvent,
 )
-
 
 class RuntimeLoop:
 

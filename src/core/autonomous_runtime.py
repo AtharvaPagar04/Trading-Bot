@@ -56,7 +56,6 @@ class AutonomousCycleResult:
 
     executed: bool
 
-
 def execute_autonomous_cycle(
     runtime: RuntimeState,
 
@@ -65,6 +64,8 @@ def execute_autonomous_cycle(
     snapshot: MarketDataSnapshot,
 
     candle: Candle,
+
+    trade_side: str,
 ) -> AutonomousCycleResult:
 
     # Streaming update
@@ -85,7 +86,12 @@ def execute_autonomous_cycle(
 
     portfolio = (
         synchronize_portfolio(
-            exchange
+            exchange=exchange,
+
+            market_prices={
+                snapshot.symbol:
+                candle.close
+            },
         )
     )
 
@@ -169,8 +175,11 @@ def execute_autonomous_cycle(
             symbol=
             snapshot.symbol,
 
-            side=
-            OrderSide.BUY,
+            side=(
+                OrderSide.BUY
+                if trade_side == "BUY"
+                else OrderSide.SELL
+            ),
 
             quantity=
             decision
@@ -185,13 +194,15 @@ def execute_autonomous_cycle(
 
     # Sync updated portfolio
 
-    synchronize_portfolio(
-        exchange=exchange,
+    updated_portfolio = (
+        synchronize_portfolio(
+            exchange=exchange,
 
-        market_prices={
-            snapshot.symbol:
-            candle.close
-        },
+            market_prices={
+                snapshot.symbol:
+                candle.close
+            },
+        )
     )
 
     runtime = (
