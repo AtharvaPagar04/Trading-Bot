@@ -26,5 +26,16 @@ class RuntimeState:
 
     active_positions: int = 0
     active_orders: int = 0
+    total_trades: int = 0
+
+    winning_trades: int = 0
+    losing_trades: int = 0
+    latest_price: float = 0.0
+
+    last_execution_price: float = 0.0
+    last_execution_time: Optional[datetime] = None
+    latest_candle_close: float = 0.0
+
+    latest_candle_timestamp: Optional[datetime] = None
 
     is_trading_enabled: bool = True

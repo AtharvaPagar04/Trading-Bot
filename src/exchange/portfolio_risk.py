@@ -73,7 +73,26 @@ def evaluate_portfolio_risk(
         )
         * 100
     )
+    
+    if exposure_percent >= 50:
 
+        return PortfolioRiskState(
+            risk_level=
+            PortfolioRiskLevel
+            .CRITICAL,
+
+            utilization_percent=
+            utilization_percent,
+
+            exposure_percent=
+            exposure_percent,
+
+            pnl_percent=
+            pnl_percent,
+
+            allow_new_entries=
+            False,
+        )
     if pnl_percent <= -15:
 
         return PortfolioRiskState(

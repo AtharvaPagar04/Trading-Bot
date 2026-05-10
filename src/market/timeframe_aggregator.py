@@ -20,7 +20,16 @@ class TimeframeAggregator:
         self.current_candle = None
 
         self.window_start = None
+    
+    def align_timestamp(
+        self,
+        timestamp: datetime,
+    ):
 
+        return timestamp.replace(
+            second=0,
+        microsecond=0,
+    )
     def process_tick(
         self,
         price: float,
@@ -31,7 +40,9 @@ class TimeframeAggregator:
 
         if self.current_candle is None:
 
-            self.window_start = now
+            self.window_start = (
+                self.align_timestamp(now)
+            )
 
             self.current_candle = Candle(
                 open=price,
@@ -39,14 +50,12 @@ class TimeframeAggregator:
                 low=price,
                 close=price,
                 volume=quantity,
-                timestamp=now,
+                timestamp=self.window_start,
             )
 
             return None
 
-        elapsed = (
-            now - self.window_start
-        )
+       
 
         candle = self.current_candle
 
@@ -64,17 +73,22 @@ class TimeframeAggregator:
 
         candle.volume += quantity
 
-        if (
-            elapsed >=
+        next_window = (
+            self.window_start
+            +
             timedelta(
                 seconds=
                 self.interval_seconds
             )
-        ):
+        )
+
+        if now >= next_window:
 
             completed = candle
 
-            self.window_start = now
+            self.window_start = (
+                self.align_timestamp(now)
+            )
 
             self.current_candle = Candle(
                 open=price,
@@ -82,7 +96,7 @@ class TimeframeAggregator:
                 low=price,
                 close=price,
                 volume=quantity,
-                timestamp=now,
+                timestamp=self.window_start,
             )
 
             return completed

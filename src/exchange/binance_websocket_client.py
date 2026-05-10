@@ -35,6 +35,7 @@ class BinanceWebSocketClient:
         self.reconnect_attempts = 0
 
         self.max_reconnect_attempts = 5
+        self.shutdown_requested = False
 
         self.url = (
             f"wss://stream.binance.com:9443/ws/"
@@ -120,8 +121,8 @@ class BinanceWebSocketClient:
         print(
             "[WS CLOSED]"
         )
-
-        self.reconnect()
+        if not self.shutdown_requested:
+            self.reconnect()
 
     def connect(
         self,
@@ -155,7 +156,12 @@ class BinanceWebSocketClient:
     def disconnect(
         self,
     ):
+        self.shutdown_requested = True
 
+        print(
+            "[WS SHUTDOWN] "
+            "Disconnect requested"
+        )
         if self.ws:
 
             self.ws.close()

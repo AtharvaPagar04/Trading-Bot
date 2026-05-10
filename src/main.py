@@ -98,9 +98,27 @@ def main():
         "runtime started"
     )
 
-    while True:
+    try:
 
-        time.sleep(1)
+        while True:
+
+            time.sleep(1)
+
+    except KeyboardInterrupt:
+
+        print(
+            "\n[SYSTEM] "
+            "Shutdown requested"
+        )
+
+        websocket.disconnect()
+
+        runtime.shutdown()
+
+        print(
+            "[SYSTEM] "
+            "Runtime stopped cleanly"
+        )
 
 
 if __name__ == "__main__":
