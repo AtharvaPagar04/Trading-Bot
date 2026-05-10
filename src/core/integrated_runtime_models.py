@@ -27,3 +27,13 @@ class IntegratedRuntimeDecision:
     execution: StabilityExecutionDecision
 
     scaling: DynamicPositionSizing
+
+
+@dataclass
+class MarketDataSnapshot:
+
+    symbol: str
+
+    price: float
+
+    timestamp: object

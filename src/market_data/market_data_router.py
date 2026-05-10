@@ -12,9 +12,15 @@ class MarketDataRouter:
     def __init__(
         self,
         runtime: GovernedRuntime,
+
+        tick_handler=None,
     ):
 
         self.runtime = runtime
+
+        self.tick_handler = (
+            tick_handler
+        )
 
     def route_tick(
         self,
@@ -22,3 +28,12 @@ class MarketDataRouter:
     ):
 
         self.runtime.market_data_heartbeat()
+
+        if (
+            self.tick_handler
+            is not None
+        ):
+
+            self.tick_handler.process_tick(
+                tick
+            )
