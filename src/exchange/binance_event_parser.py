@@ -27,4 +27,11 @@ def parse_user_event(
         payload.get(
             "x"
         ),
+
+        "requires_reconciliation":
+        (
+            payload.get("x")
+            ==
+            "TRADE"
+        ),
     }
