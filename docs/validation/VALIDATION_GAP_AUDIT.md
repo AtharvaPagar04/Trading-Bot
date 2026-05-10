@@ -2,7 +2,7 @@
 
 # 1. Current Validation State
 
-The repository has completed a major validation normalization phase.
+The repository has completed a major runtime stabilization phase.
 
 Completed stabilization work:
 - runtime contract synchronization
@@ -10,17 +10,20 @@ Completed stabilization work:
 - websocket lifecycle validation
 - governance runtime validation
 - strategy execution validation
+- live runtime orchestration validation
+- paper trading lifecycle validation
 - observability validation
-- repository boundary normalization
 
 Primary architectural improvement:
-- deterministic validation separated from runtime demos
+- validated live-data autonomous runtime execution
 
 Current validation status:
 
-22 passing validation tests
+95+ passing validation tests
 0 collection errors
 0 runtime import drift
+
+---
 
 # 2. Confirmed Validated Areas
 
@@ -30,8 +33,19 @@ Validated:
 - runtime/event_bus.py
 - runtime/async_event_bus.py
 - runtime/runtime_loop.py
-- runtime/async_runtime_loop.py
+- runtime/live_tick_handler.py
 - governed runtime lifecycle
+
+---
+
+## Live Runtime Infrastructure
+
+Validated:
+- Binance websocket connectivity
+- reconnect containment
+- runtime-controlled shutdown
+- live market routing
+- autonomous paper execution
 
 ---
 
@@ -41,35 +55,32 @@ Validated:
 - emergency stop transitions
 - runtime pause/recovery
 - governance override behavior
-- critical risk interruption
+- execution gating
 
 ---
 
-## Strategy Runtime
+## Execution Infrastructure
 
 Validated:
-- BUY execution flow
-- SELL execution flow
-- HOLD flow suppression
-- autonomous runtime delegation
-
----
-
-## Websocket Infrastructure
-
-Validated:
-- websocket client lifecycle
-- reconnect containment
-- runtime-controlled shutdown
+- paper exchange execution
+- spread simulation
+- slippage simulation
+- fee modeling
+- portfolio synchronization
+- pnl evaluation
 
 ---
 
 ## Observability Infrastructure
 
 Validated:
+- runtime logging
 - event journaling
 - runtime metrics
-- structured logging behavior
+- live position visibility
+- live balance visibility
+
+---
 
 # 3. Repository Boundary Normalization
 
@@ -87,17 +98,21 @@ docs/
     architecture and operational authority
 
 Primary stabilization achievement:
-removal of demo-script pollution from pytest validation flow.
+
+removal of runtime-demo pollution from pytest validation flow.
+
+---
 
 # 4. Remaining Validation Risks
 
 ## Live Exchange Execution
 
-NOT fully validated:
-- live order reconciliation
-- partial fills
+NOT validated:
+- live order execution
+- exchange reconciliation
 - exchange rejection handling
-- stale order handling
+- partial fills
+- stale order management
 
 Risk level:
 HIGH
@@ -141,11 +156,15 @@ Validated:
 - local synchronization
 
 NOT validated:
+- multi-symbol synchronization
 - exchange reconciliation drift
-- multi-symbol consistency
+- portfolio replay consistency
 
 Risk level:
 MEDIUM
+
+---
+
 # 5. Validation Governance Rules
 
 Validation systems MUST remain:
@@ -155,24 +174,26 @@ Validation systems MUST remain:
 
 Tests MUST NOT:
 - depend on live exchange connectivity
-- contain print-driven demo execution
+- contain print-driven runtime demos
 - mutate unrelated runtime state
 - redefine runtime contracts
 
 Manual runtime experimentation belongs in:
 scripts/
 
+---
+
 # 6. Current Strategic Priority
 
 Current priority is:
 
-validation consolidation
+runtime lifecycle stabilization
 
 NOT:
-- new features
-- new ML systems
-- additional orchestration layers
-- governance expansion
+- advanced ML systems
+- governance proliferation
+- distributed orchestration
+- unrestricted autonomous execution
 
 ---
 
@@ -186,3 +207,4 @@ recoverable
 observable
 execution-safe
 integration-tested
+live-runtime stabilized

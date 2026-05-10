@@ -10,6 +10,18 @@
 | runtime/runtime_loop.py | CANONICAL | execution loop |
 | runtime/runtime_state.py | CANONICAL | runtime state |
 | runtime/runtime_enums.py | CANONICAL | runtime enums |
+| runtime/live_tick_handler.py | CANONICAL | live runtime orchestration |
+
+---
+
+## Stable Runtime Infrastructure
+
+| Module | Status |
+|---|---|
+| exchange/binance_websocket_client.py | VALIDATED |
+| market_data/market_data_router.py | VALIDATED |
+| exchange/paper_exchange.py | VALIDATED |
+| core/autonomous_runtime.py | VALIDATED SUPPORTING |
 
 ---
 
@@ -18,16 +30,15 @@
 | Module | Current Risk |
 |---|---|
 | core/runtime.py | ownership overlap |
-| core/autonomous_runtime.py | unclear authority |
-| core/strategy_runtime.py | runtime fragmentation |
+| core/strategy_runtime.py | orchestration duplication |
 | core/integrated_runtime.py | integration ambiguity |
 | runtime/financial_runtime.py | undefined scope |
 | runtime/cognitive_runtime.py | experimental creep |
 
 Action:
 - freeze expansion
-- evaluate ownership
-- merge or isolate later
+- preserve validated runtime path
+- consolidate overlapping orchestration later
 
 ---
 
@@ -37,8 +48,9 @@ Action:
 
 | Module | Status |
 |---|---|
-| core/events.py | CANONICAL |
-| core/event_bus.py | CANONICAL |
+| runtime/event_bus.py | CANONICAL |
+| runtime/async_event_bus.py | CANONICAL |
+| market_data/market_data_router.py | CANONICAL |
 
 ---
 
@@ -48,16 +60,41 @@ Action:
 |---|---|
 | events/event.py | duplicated semantics |
 | events/event_dispatcher.py | propagation ambiguity |
-| runtime/event_bus.py | topology fragmentation |
-| runtime/async_event_bus.py | split infrastructure |
 
 Action:
-- converge toward single event authority
-- async handled as implementation detail
+- converge toward single runtime event topology
+- normalize all market ingestion through MarketTick
 
 ---
 
-# 3. Governance Layer Audit
+# 3. Runtime Lifecycle Audit
+
+## Stable Lifecycle Components
+
+| Module |
+|---|
+| runtime/live_tick_handler.py |
+| exchange/paper_exchange.py |
+| core/autonomous_runtime.py |
+| market_data/market_data_router.py |
+
+Validated lifecycle:
+
+LIVE TICK
+↓
+Runtime Governance
+↓
+Execution Validation
+↓
+Paper Execution
+↓
+Portfolio Synchronization
+↓
+PnL Monitoring
+
+---
+
+# 4. Governance Layer Audit
 
 ## Stable Governance Components
 
@@ -67,6 +104,7 @@ Action:
 | risk/session_risk.py |
 | risk/cooldown.py |
 | core/runtime_state_machine.py |
+| runtime/governed_runtime.py |
 
 ---
 
@@ -78,17 +116,17 @@ Action:
 | hierarchy.py |
 | evolution.py |
 | population.py |
-| runtime_auto_escalation.py |
 
 Risk:
-- governance complexity exceeds validation maturity
+- governance complexity exceeds runtime stabilization maturity
 
 Action:
 - isolate experimental governance systems
+- prioritize runtime stabilization
 
 ---
 
-# 4. Strategy Layer Audit
+# 5. Strategy Layer Audit
 
 ## Stable Strategy Components
 
@@ -101,22 +139,20 @@ Action:
 
 ---
 
-## Experimental Strategy Systems
+## Current Runtime Strategy Limitation
 
-| Module |
-|---|
-| meta_learning.py |
-| online_learning.py |
-| adaptive_ensemble.py |
-| ensemble_selection.py |
-| autonomous_decay.py |
+Current runtime behavior:
+- hardcoded BUY execution
+- fixed take-profit evaluation
+- no dynamic signal engine
 
-Action:
-- isolate from production runtime path
+Priority:
+- stabilize lifecycle first
+- strategy sophistication later
 
 ---
 
-# 5. Persistence Layer Audit
+# 6. Persistence Layer Audit
 
 ## Canonical Persistence Roles
 
@@ -136,60 +172,62 @@ Potential overlap:
 - runtime_recovery
 
 Action:
-- define explicit ownership boundaries
+- define explicit lifecycle recovery ownership
 
 ---
 
-# 6. Immediate Freeze Policy
+# 7. Immediate Freeze Policy
 
 Frozen Areas:
-- new runtime systems
 - new governance abstractions
-- new ML orchestration
-- new evolutionary systems
+- new runtime orchestration systems
+- distributed runtime systems
+- ML execution autonomy
 
 Allowed Areas:
-- consolidation
-- validation
-- testing
+- runtime stabilization
 - observability
+- lifecycle refinement
 - execution integrity
 - recovery integrity
 
 ---
 
-# 7. Next Consolidation Objectives
+# 8. Next Consolidation Objectives
 
 Priority 1:
-- remove duplicate event buses
+- stabilize live runtime lifecycle
 
 Priority 2:
-- define single runtime authority
+- implement candle aggregation
 
 Priority 3:
-- define runtime bootstrap sequence
+- add stop-loss lifecycle
 
 Priority 4:
-- define execution approval hierarchy
+- reduce runtime logging spam
 
 Priority 5:
+- improve execution observability
+
+Priority 6:
 - isolate experimental systems
 
 ---
 
-# 8. Current Strategic Direction
+# 9. Current Strategic Direction
 
 The project should evolve toward:
 
 deterministic
 event-driven
 risk-governed
-recoverable
 observable
+recoverable
 modular
-validated trading infrastructure
+live autonomous paper trading infrastructure
 
 NOT toward:
 - uncontrolled abstraction growth
-- premature autonomous complexity
-- unvalidated adaptive behavior
+- premature ML complexity
+- unrestricted autonomous behavior

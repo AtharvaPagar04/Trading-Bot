@@ -2,104 +2,88 @@
 
 # 1. Canonical Event Authority
 
-Canonical event definitions MUST originate from:
+Canonical runtime event ownership:
 
-src/core/events.py
+runtime/
+    event_bus.py
+    async_event_bus.py
 
 Responsibilities:
-- authoritative RuntimeEvent definition
-- event type definitions
-- event normalization contracts
-- runtime-safe event schemas
+- deterministic propagation
+- runtime coordination
+- event synchronization
 
 Architectural principle:
-All runtime communication MUST use normalized internal events.
-
-No secondary module may redefine:
-- canonical runtime events
-- event payload contracts
-- runtime event semantics
-
-# 2. Event Transport Layers
-
-The system supports multiple event propagation mechanisms.
-
-## Synchronous Transport
-
-Canonical module:
-
-runtime/event_bus.py
-
-Responsibilities:
-- deterministic local propagation
-- synchronous runtime coordination
+All runtime communication MUST use canonical runtime events.
 
 ---
 
-## Asynchronous Transport
+# 2. Runtime Event Flow
 
-Canonical module:
+LIVE BINANCE TRADE
+    ↓
+BinanceWebSocketClient
+    ↓
+MarketTick
+    ↓
+MarketDataRouter
+    ↓
+LiveTickHandler
+    ↓
+Autonomous Runtime
+    ↓
+PaperExchange
+    ↓
+Portfolio Synchronization
+    ↓
+Runtime Governance
+    ↓
+Observability
 
-runtime/async_event_bus.py
-
-Responsibilities:
-- async propagation
-- concurrent runtime coordination
-- websocket event distribution
-
-Architectural principle:
-Transport layers propagate canonical events.
-They do NOT redefine event semantics.
+---
 
 # 3. External Event Normalization
 
-External exchange payloads are NOT canonical runtime events.
+External Binance payloads are NOT canonical runtime events.
 
-Canonical ingestion modules:
+Canonical normalization flow:
 
-market/binance_ws.py
-
-Responsibilities:
-- exchange payload ingestion
-- payload normalization
-- RuntimeEvent conversion
-- event propagation into runtime topology
-
-Normalization pipeline:
-
-EXTERNAL PAYLOAD
+BINANCE PAYLOAD
     ↓
-NORMALIZATION
+BinanceWebSocketClient
     ↓
-RuntimeEvent
+MarketTick
     ↓
-Event Transport
+MarketDataSnapshot
     ↓
-Runtime Consumers
+Runtime Consumption
 
 Architectural principle:
 Internal systems MUST remain isolated from
 exchange-specific payload formats.
 
-# 4. Runtime Event Consumers
+---
+
+# 4. Runtime Consumers
 
 Canonical runtime consumers:
 
-core/
 runtime/
-risk/
+core/
 exchange/
+risk/
 strategy/
 
 Responsibilities:
-- consume canonical runtime events
+- consume normalized runtime events
 - react to propagated state changes
-- emit observable runtime transitions
+- maintain runtime determinism
 
 Consumers MUST NOT:
-- redefine canonical events
-- mutate transport semantics
-- create competing event authorities
+- redefine canonical event semantics
+- mutate propagation topology
+
+---
 
 # 5. Observability Topology
 
@@ -107,33 +91,56 @@ Canonical observability modules:
 
 runtime/
     event_journal.py
-    logger.py
     metrics.py
+    logger.py
 
 Observability flow:
 
-RuntimeEvent
-    ↓
-Journal Persistence
+Runtime Event
     ↓
 Structured Logging
     ↓
 Metric Aggregation
+    ↓
+Persistence
 
-Architectural principle:
-Critical runtime transitions SHOULD emit observable events.
+Validated observability:
+- live price visibility
+- position visibility
+- balance visibility
+- pnl visibility
 
-# 5. Immediate Refactor Priority
+---
+
+# 6. Current Event Stability Status
+
+Validated:
+- websocket event ingestion
+- runtime event routing
+- autonomous runtime invocation
+- paper execution propagation
+
+Current limitations:
+- no event replay
+- no event persistence guarantees
+- no event throttling
+- no distributed event topology
+
+---
+
+# 7. Immediate Event Priorities
 
 Priority 1:
-remove duplication inside core/
+stabilize live runtime propagation
 
 Priority 2:
-reroute core systems to canonical event layers
+reduce console spam
 
 Priority 3:
-preserve async runtime stability
+add structured runtime logging
 
 Priority 4:
-avoid breaking live runtime topology
+implement candle aggregation topology
 
+Priority 5:
+prepare multi-symbol event routing

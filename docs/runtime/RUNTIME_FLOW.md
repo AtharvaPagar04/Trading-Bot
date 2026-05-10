@@ -9,6 +9,7 @@ Purpose:
 - prevent runtime fragmentation
 - enforce risk-first execution
 - centralize governance authority
+- stabilize live runtime orchestration
 
 This flow is authoritative.
 
@@ -18,67 +19,70 @@ All future runtime systems must conform to this topology.
 
 # 2. Canonical Runtime Flow
 
-MARKET DATA
+LIVE MARKET DATA
     ↓
-MARKET STATE PIPELINE
+MARKET NORMALIZATION
     ↓
-EVENT GENERATION
+RUNTIME ROUTING
     ↓
-STRATEGY EVALUATION
+AUTONOMOUS RUNTIME
     ↓
 RISK EVALUATION
     ↓
 EXECUTION APPROVAL
     ↓
-EXECUTION ENGINE
+PAPER EXECUTION
     ↓
 PORTFOLIO UPDATE
     ↓
 RUNTIME GOVERNANCE
     ↓
-PERSISTENCE + LOGGING
+OBSERVABILITY
     ↓
-METRICS + ANALYTICS
+PERSISTENCE
 
 ---
-# 2.1 Validated Runtime Execution Path
+
+# 2.1 Validated Live Runtime Execution Path
 
 Validated execution topology:
 
-WEBSOCKET INGESTION
+BINANCE WEBSOCKET
     ↓
-MARKET EVENT NORMALIZATION
+BinanceWebSocketClient
     ↓
-ASYNC EVENT PROPAGATION
+MarketTick
     ↓
-RUNTIME GOVERNANCE
+MarketDataRouter
     ↓
-MARKET STATE UPDATE
+LiveTickHandler
     ↓
-STRATEGY EVALUATION
+Autonomous Runtime
     ↓
-PORTFOLIO RISK SYNCHRONIZATION
+Portfolio Risk Synchronization
     ↓
-POSITION SIZING
+Position Sizing
     ↓
-EXECUTION VALIDATION
+Execution Validation
     ↓
-PAPER EXECUTION
+Paper Execution
     ↓
-PORTFOLIO SYNCHRONIZATION
+Portfolio Synchronization
     ↓
-EVENT JOURNALING
+PnL Evaluation
     ↓
-RUNTIME METRICS
+Runtime Observability
 
 Validated components:
-- async event propagation
-- websocket lifecycle management
-- runtime governance transitions
-- strategy execution flow
+- live websocket ingestion
+- reconnect handling
+- autonomous execution
+- paper trading lifecycle
 - portfolio synchronization
-- event journaling
-- runtime telemetry
+- unrealized pnl tracking
+- runtime observability
+
+---
 
 # 3. Runtime Authority Hierarchy
 
@@ -105,6 +109,7 @@ Governed runtime controls:
 - cooldown state
 - emergency state
 - recovery state
+- live runtime coordination
 
 Runtime governance may:
 - pause runtime
@@ -133,19 +138,22 @@ Strategy systems may NOT:
 Execution systems may:
 - simulate fills
 - route approved orders
-- apply fee/slippage models
+- apply spread/slippage models
+- update portfolio state
 
 Execution systems may NOT:
-- override risk decisions
 - override governance state
+- bypass risk approval
 
 ---
 
 # 4. Canonical Event Flow
 
-MARKET_TICK
+LIVE_MARKET_TICK
     ↓
-STRATEGY_SIGNAL
+MARKET_STATE_UPDATE
+    ↓
+RUNTIME_EVALUATION
     ↓
 RISK_CHECK
     ↓
@@ -155,9 +163,9 @@ ORDER_EXECUTED
     ↓
 POSITION_UPDATED
     ↓
-RUNTIME_UPDATED
+PNL_UPDATED
     ↓
-METRICS_RECORDED
+RUNTIME_UPDATED
 
 ---
 
@@ -173,33 +181,22 @@ Responsibilities:
 - orchestration coordination
 - heartbeat management
 
-No secondary runtime loops should bypass canonical runtime flow.
-
 ---
-# 5.1 Async Runtime Ownership
 
-Canonical async runtime modules:
+# 5.1 Live Runtime Ownership
 
-runtime/
-    async_runtime_loop.py
-    async_event_bus.py
+Canonical live runtime coordinator:
+
+runtime/live_tick_handler.py
 
 Responsibilities:
-- concurrent event propagation
-- async runtime coordination
-- streaming event distribution
-- async lifecycle management
+- live tick processing
+- autonomous runtime invocation
+- execution gating
+- pnl monitoring
+- position lifecycle management
 
-Validated capabilities:
-- async handler execution
-- graceful runtime shutdown
-- event propagation integrity
-- coordinated runtime stopping
-
-Current limitations:
-- no event backpressure management
-- limited timeout enforcement
-- minimal task supervision
+---
 
 # 6. Persistence Flow
 
@@ -218,9 +215,9 @@ Pattern:
 ## Metrics
 
 Stored after:
-- completed cycles
-- completed sessions
 - execution events
+- pnl transitions
+- runtime cycles
 
 Pattern:
 - append-only
@@ -230,83 +227,16 @@ Pattern:
 ## Event Journal
 
 Stored after:
-- all critical events
+- critical runtime events
+- execution transitions
 - emergency triggers
-- runtime transitions
 
 Pattern:
 - immutable append-only
 
 ---
-# 6.1 Observability Flow
 
-Canonical observability modules:
-
-runtime/
-    event_journal.py
-    logger.py
-    metrics.py
-
-Observability pipeline:
-
-RUNTIME EVENT
-    ↓
-EVENT JOURNAL
-    ↓
-STRUCTURED LOGGING
-    ↓
-METRIC AGGREGATION
-
-Validated capabilities:
-- persistent event journaling
-- runtime metric tracking
-- structured event logging
-
-Architectural principle:
-Critical runtime transitions SHOULD emit observable events.
-
-# 7. Recovery Flow
-
-BOOT
-    ↓
-LOAD RUNTIME STATE
-    ↓
-VALIDATE RECOVERY POLICY
-    ↓
-RECONCILE POSITIONS
-    ↓
-RESTORE GOVERNANCE STATE
-    ↓
-RESUME RUNTIME
-
-Recovery must:
-- validate cooldown state
-- validate emergency state
-- validate portfolio consistency
-
----
-# 7.1 Websocket Recovery Behavior
-
-Canonical streaming module:
-
-market/
-    binance_ws.py
-
-Current resilience capabilities:
-- reconnect loop
-- exception containment
-- runtime-controlled shutdown
-
-Current limitations:
-- no stale-feed detection
-- no heartbeat verification
-- limited reconnect backoff strategy
-
-Architectural principle:
-Exchange payloads MUST be normalized into
-internal RuntimeEvent structures before propagation.
-
-# 8. Execution Safety Rules
+# 7. Execution Safety Rules
 
 No execution allowed if:
 - emergency stop active
@@ -321,50 +251,27 @@ Execution approval requires:
 - execution integrity validation
 
 ---
-# 9. Validation Architecture
 
-Repository validation structure:
+# 8. Runtime Lifecycle Status
 
-tests/
-    deterministic runtime validation
+Validated:
+- live market ingestion
+- autonomous BUY execution
+- portfolio persistence
+- unrealized pnl evaluation
+- duplicate execution prevention
 
-scripts/
-    manual runtime demos
-    experimentation
-    operational simulations
-
-Validated systems:
-- governance runtime
-- async runtime
-- websocket lifecycle
-- event propagation
-- runtime metrics
-- strategy execution flow
-
-Architectural principle:
-Deterministic validation MUST remain isolated from
-manual runtime experimentation.
-
-# 9. Experimental System Isolation
-
-The following systems are considered experimental:
-- cognitive runtime
-- evolution systems
-- population systems
-- meta governance
-- online learning
-- autonomous orchestration
-
-Experimental systems must NOT:
-- possess execution authority
-- override risk systems
-- mutate canonical runtime state directly
+Current limitations:
+- no advanced signal engine
+- no candle aggregation
+- no stop-loss lifecycle
+- no multi-symbol execution
 
 ---
 
-# 10. Canonical System Goal
+# 9. Current Strategic Goal
 
-Target system properties:
+Target runtime properties:
 
 deterministic
 recoverable
@@ -373,4 +280,4 @@ event-driven
 observable
 modular
 execution-safe
-statistically validated
+live-data autonomous paper trading

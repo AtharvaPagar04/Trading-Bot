@@ -4,8 +4,9 @@
 
 The system has evolved from:
 - simple grid execution
+
 into:
-- event-driven adaptive trading infrastructure
+- event-driven autonomous paper trading infrastructure
 
 The architecture currently contains:
 - runtime governance
@@ -14,21 +15,32 @@ The architecture currently contains:
 - risk orchestration
 - strategy orchestration
 - execution simulation
-- analytics
 - portfolio intelligence
-- adaptive ensemble systems
+- live websocket ingestion
+- autonomous runtime execution
+- paper trading lifecycle management
+- runtime observability
 
-Primary architectural risk:
+Primary architectural strengths:
+- modular runtime separation
+- governance-first execution
+- exchange abstraction
+- normalized runtime state
+- realistic execution modeling
+
+Primary architectural risks:
 - overlapping ownership boundaries
 - duplicated runtime abstractions
 - fragmented event infrastructure
 - governance layer explosion
+- runtime orchestration drift
 
 This document defines:
 - canonical ownership
 - authoritative modules
-- deprecation targets
-- future consolidation direction
+- runtime topology
+- operational architecture
+- consolidation direction
 
 ---
 
@@ -43,16 +55,22 @@ runtime/
     runtime_loop.py
     runtime_state.py
     runtime_enums.py
+    live_tick_handler.py
 
 Responsibilities:
 - lifecycle control
 - runtime state transitions
-- cooldown state
-- emergency state
+- emergency handling
 - execution permissions
 - runtime orchestration
+- live market tick processing
+- autonomous runtime coordination
 
-Non-canonical runtime modules in core/ are candidates for consolidation.
+Architectural principle:
+Runtime governance MUST remain authoritative over:
+- execution permissions
+- emergency states
+- runtime transitions
 
 ---
 
@@ -62,52 +80,21 @@ Non-canonical runtime modules in core/ are candidates for consolidation.
 
 Canonical modules:
 
-core/
-    events.py
+runtime/
     event_bus.py
+    async_event_bus.py
 
 Responsibilities:
-- event definitions
-- event propagation
-- event subscription
 - runtime communication
-
-Deprecated direction:
-- src/events/
-- duplicate runtime event buses
+- event propagation
+- async event coordination
+- runtime synchronization
 
 Future objective:
-- single centralized event topology
+- centralized deterministic event topology
 
 ---
-# 3.1 Async Runtime Infrastructure
 
-Canonical async runtime modules:
-
-runtime/
-    async_event_bus.py
-    async_runtime_loop.py
-
-Responsibilities:
-- async event propagation
-- concurrent runtime orchestration
-- streaming event coordination
-- async lifecycle management
-
-Validated capabilities:
-- async event publishing
-- graceful runtime shutdown
-- async handler execution
-- runtime loop lifecycle integrity
-
-Current limitations:
-- no backpressure management
-- no task fanout control
-- limited cancellation coordination
-- minimal timeout protection
-
-Future objective:
-- resilient concurrent event infrastructure
 # 4. Canonical Risk Ownership
 
 Canonical modules:
@@ -115,7 +102,6 @@ Canonical modules:
 risk/
     kill_switch.py
     exposure.py
-    session_risk.py
     cooldown.py
     dynamic_position_sizer.py
 
@@ -123,7 +109,7 @@ Responsibilities:
 - capital protection
 - exposure control
 - drawdown management
-- cooldown enforcement
+- execution throttling
 - emergency triggers
 
 Risk layer MUST remain independent from:
@@ -138,20 +124,17 @@ Canonical modules:
 
 strategy/
     regime.py
-    spacing.py
-    asymmetric_grid.py
     orchestrator.py
 
 Responsibilities:
 - signal generation
-- regime adaptation
-- grid construction
+- market regime interpretation
 - execution recommendations
 
 Strategy layer MUST NOT:
 - place orders directly
-- bypass risk systems
-- mutate runtime state
+- bypass runtime governance
+- mutate portfolio state
 
 ---
 
@@ -161,70 +144,106 @@ Canonical modules:
 
 exchange/
     execution_engine.py
-    execution_simulator.py
     paper_exchange.py
+    binance_websocket_client.py
 
 Responsibilities:
 - simulated fills
 - fee modeling
-- slippage handling
-- execution routing
+- spread modeling
+- slippage modeling
+- websocket ingestion
+- exchange normalization
+- paper execution lifecycle
 
 Execution layer MUST remain:
-- stateless where possible
-- downstream from risk approval
+- downstream from runtime governance
+- isolated from strategy ownership
 
 ---
-# 6.1 Streaming Market Infrastructure
+
+# 6.1 Live Market Infrastructure
 
 Canonical modules:
 
 market/
-    binance_ws.py
+    market_data_router.py
+
+exchange/
+    binance_websocket_client.py
 
 Responsibilities:
-- websocket market ingestion
-- market tick normalization
-- exchange event transformation
-- runtime event publication
+- Binance websocket connectivity
+- reconnect handling
+- live trade ingestion
+- MarketTick normalization
+- runtime tick routing
 
-Current resilience capabilities:
-- reconnect loop
-- exception containment
-- runtime-controlled shutdown
-
-Architectural principle:
-External exchange payloads MUST be normalized into
-internal RuntimeEvent structures before propagation.
+Validated capabilities:
+- live Binance websocket ingestion
+- reconnect protection
+- runtime tick routing
+- live autonomous runtime invocation
 
 Future objectives:
 - heartbeat monitoring
 - stale-feed detection
-- reconnect backoff strategies
-- multi-symbol stream orchestration
+- multi-symbol streaming
+- websocket backoff strategy
+- candle aggregation engine
 
+---
 
-# 7. Persistence Architecture
+# 7. Autonomous Runtime Architecture
+
+Canonical modules:
+
+core/
+    autonomous_runtime.py
+    streaming_runtime.py
+
+Responsibilities:
+- runtime orchestration
+- portfolio synchronization
+- portfolio risk integration
+- execution evaluation
+- autonomous execution lifecycle
+
+Operational flow:
+
+LIVE BINANCE TRADE
+    ↓
+MarketTick
+    ↓
+MarketDataRouter
+    ↓
+LiveTickHandler
+    ↓
+Autonomous Runtime
+    ↓
+PaperExchange
+    ↓
+Portfolio Update
+    ↓
+Runtime Synchronization
+
+Architectural principle:
+Execution authority MUST remain downstream from:
+- runtime governance
+- portfolio risk evaluation
+- execution validation
+
+---
+
+# 8. Persistence Architecture
 
 Persistence categories:
 
 ## Runtime State
 Purpose:
 - restart recovery
-- cooldown persistence
 - emergency persistence
-
-Pattern:
-- overwrite latest authoritative state
-
-## Metrics
-Purpose:
-- analytics
-- telemetry
-- monitoring
-
-Pattern:
-- append-only
+- lifecycle continuity
 
 ## Event Journal
 Purpose:
@@ -232,108 +251,74 @@ Purpose:
 - auditability
 - debugging
 
-Pattern:
-- immutable append-only
+## Runtime Metrics
+Purpose:
+- observability
+- telemetry
+- runtime diagnostics
 
 ---
-# 7.1 Observability Infrastructure
+
+# 9. Runtime Observability
 
 Canonical modules:
 
 runtime/
-    event_journal.py
-    metrics.py
     logger.py
+    metrics.py
+    event_journal.py
 
-Responsibilities:
-- runtime telemetry
-- event persistence
-- operational diagnostics
-- execution auditing
+Validated runtime observability:
+- live execution visibility
+- pnl visibility
+- position visibility
+- runtime lifecycle visibility
+
+Current console telemetry:
+- live BTC price
+- execution status
+- balance state
+- position state
+- unrealized pnl
+
+Future observability goals:
+- structured logging
+- persistent runtime telemetry
+- execution analytics
+- performance dashboards
+
+---
+
+# 10. Paper Trading Runtime Status
 
 Validated capabilities:
-- persistent event journaling
-- runtime metric aggregation
-- structured runtime logging
+- live Binance websocket ingestion
+- autonomous BUY execution
+- portfolio accounting
+- slippage/spread simulation
+- fee simulation
+- runtime governance integration
+- duplicate execution prevention
+- unrealized pnl monitoring
+- live runtime orchestration
 
-Architectural principle:
-All critical runtime transitions SHOULD emit observable events.
-
-# 8. Immediate Consolidation Priorities
-
-Priority 1:
-- eliminate duplicate event systems
-
-Priority 2:
-- consolidate runtime ownership
-
-Priority 3:
-- define governance authority hierarchy
-
-Priority 4:
-- isolate experimental ML systems
-
-Priority 5:
-- reduce architectural overlap
+Current limitations:
+- no advanced signal engine
+- no candle aggregation
+- no dynamic exits
+- no stop-loss engine
+- no multi-symbol orchestration
 
 ---
 
-# 9. Development Freeze Rules
-
-Until consolidation stabilizes:
-
-DO NOT ADD:
-- new governance layers
-- new runtime abstractions
-- new orchestration systems
-- additional meta-learning systems
-- distributed runtime systems
-
-Focus:
-- validation
-- consolidation
-- deterministic behavior
-- observability
-- runtime integrity
-
----
-
-# 9. Validation Architecture
-
-Repository validation structure:
-
-tests/
-    deterministic runtime validation
-
-scripts/
-    manual runtime demos
-    experimentation
-    operational simulations
-
-Validation status:
-- governance runtime validated
-- async runtime validated
-- websocket lifecycle validated
-- execution orchestration validated
-- runtime metrics validated
-- event journaling validated
-
-Architectural principle:
-Deterministic validation MUST remain separated from
-manual runtime experimentation.
-
-# 10. Current Architectural Goal
+# 11. Current Architectural Goal
 
 Target state:
 
 event-driven
-risk-governed
-recoverable
+governed
 observable
+recoverable
 modular
-validated
-event-driven
-risk-governed
-observable
-recoverable
-adaptive trading infrastructure
+live-data
+paper-trading infrastructure

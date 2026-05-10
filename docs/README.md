@@ -2,14 +2,56 @@
 
 ## Overview
 
-This repository contains a modular event-driven trading infrastructure focused on:
+This repository contains a modular event-driven autonomous trading infrastructure focused on:
 
 - runtime governance
+- live Binance websocket ingestion
+- autonomous paper execution
 - execution orchestration
-- async event propagation
 - portfolio synchronization
-- risk-aware autonomous execution
+- risk-aware execution
 - observability and validation
+- runtime lifecycle management
+
+---
+
+# Current Runtime Status
+
+## Operational Capabilities
+
+The system now supports:
+
+- live Binance websocket connectivity
+- real-time market tick ingestion
+- autonomous runtime orchestration
+- paper trading execution
+- portfolio accounting
+- unrealized pnl monitoring
+- execution guardrails
+- runtime governance integration
+- websocket reconnect handling
+
+---
+
+# Runtime Execution Flow
+
+LIVE BINANCE TRADE
+↓
+BinanceWebSocketClient
+↓
+MarketTick
+↓
+MarketDataRouter
+↓
+LiveTickHandler
+↓
+Autonomous Runtime
+↓
+PaperExchange
+↓
+Portfolio Synchronization
+↓
+Runtime Observability
 
 ---
 
@@ -22,23 +64,6 @@ This repository contains a modular event-driven trading infrastructure focused o
 | architecture/ARCHITECTURE.md | Core system architecture |
 | architecture/EVENT_TOPOLOGY.md | Runtime event propagation topology |
 | architecture/EVENT_UNIFICATION_PLAN.md | Event model consolidation plan |
-
----
-
-## Runtime
-
-| Document | Purpose |
-|---|---|
-| runtime/RUNTIME_FLOW.md | Runtime lifecycle and orchestration |
-| runtime/PRODUCTION_RUNTIME_PATH.md | Production execution path |
-
----
-
-## Validation
-
-| Document | Purpose |
-|---|---|
-| validation/VALIDATION_GAP_AUDIT.md | Validation coverage and historical gaps |
 
 ---
 
@@ -58,35 +83,36 @@ This repository contains a modular event-driven trading infrastructure focused o
 
 ---
 
-## Roadmap
+# Validated Infrastructure
 
-| Document | Purpose |
-|---|---|
-| roadmap/CONSOLIDATION_PLAN.md | Consolidation and migration roadmap |
+## Runtime Infrastructure
 
----
+- governed runtime lifecycle
+- runtime orchestration
+- async runtime propagation
+- websocket lifecycle handling
+- runtime observability
 
-# Current System Status
+## Trading Infrastructure
 
-## Validated Infrastructure
+- paper exchange execution
+- spread simulation
+- slippage simulation
+- fee modeling
+- position synchronization
+- pnl tracking
 
-- synchronous runtime orchestration
-- async runtime lifecycle
-- websocket lifecycle
-- runtime governance
-- event journaling
-- runtime metrics
-- strategy execution validation
+## Validation Infrastructure
 
-## Current Architectural State
+- deterministic runtime validation
+- websocket validation
+- execution lifecycle validation
+- strategy runtime validation
+- runtime persistence validation
 
-The repository has completed major stabilization work involving:
+Current validation count:
 
-- runtime contract normalization
-- validation cleanup
-- test/demo separation
-- websocket resilience hardening
-- async event propagation validation
+95+ passing tests
 
 ---
 
@@ -97,36 +123,3 @@ src/        -> implementation
 tests/      -> deterministic validation
 scripts/    -> runtime demos and experiments
 docs/       -> architecture and operational documentation
-
-
-
----
-
-# Why This Matters
-
-You are now establishing:
-
-# Documentation Governance
-
-Meaning:
-- future docs have authority boundaries
-- architectural knowledge becomes navigable
-- onboarding becomes easier
-- drift becomes easier to detect
-
-This is HIGH leverage.
-
----
-
-# After Creating This
-
-Next step should be:
-
-# Update Core Architecture Docs
-
-Especially:
-- ARCHITECTURE.md
-- RUNTIME_FLOW.md
-- EVENT_TOPOLOGY.md
-
-because today’s stabilization work materially changed repo maturity and runtime topology.

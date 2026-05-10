@@ -8,10 +8,10 @@
 | runtime/runtime_loop.py | CANONICAL |
 | runtime/runtime_state.py | CANONICAL |
 | runtime/runtime_enums.py | CANONICAL |
+| runtime/live_tick_handler.py | CANONICAL |
 | runtime/runtime_recovery.py | SUPPORTING |
 | runtime/logger.py | SUPPORTING |
 | runtime/event_journal.py | SUPPORTING |
-| runtime/instrumentation.py | SUPPORTING |
 | runtime/metrics.py | SUPPORTING |
 | runtime/async_runtime_loop.py | EXPERIMENTAL |
 | runtime/cognitive_runtime.py | EXPERIMENTAL |
@@ -27,16 +27,10 @@
 | core/runtime_transition_engine.py | CANONICAL |
 | core/runtime_transition_rules.py | CANONICAL |
 | core/runtime_integrity.py | CANONICAL |
-| core/recovery_policy.py | SUPPORTING |
-| core/recovery_workflow.py | SUPPORTING |
-| core/recovery_coordinator.py | SUPPORTING |
-| core/runtime_governance_loop.py | SUPPORTING |
-| core/runtime_tick_engine.py | SUPPORTING |
-| core/runtime_tick_actions.py | SUPPORTING |
-| core/runtime.py | DEPRECATED CANDIDATE |
-| core/autonomous_runtime.py | EXPERIMENTAL |
-| core/strategy_runtime.py | DEPRECATED CANDIDATE |
+| core/autonomous_runtime.py | SUPPORTING |
 | core/integrated_runtime.py | SUPPORTING |
+| core/runtime.py | DEPRECATED CANDIDATE |
+| core/strategy_runtime.py | DEPRECATED CANDIDATE |
 
 ---
 
@@ -44,17 +38,27 @@
 
 | Module | Classification |
 |---|---|
-| core/events.py | CANONICAL |
-| core/event_bus.py | CANONICAL |
-| runtime/event_bus.py | DEPRECATED CANDIDATE |
-| runtime/async_event_bus.py | EXPERIMENTAL |
+| runtime/event_bus.py | CANONICAL |
+| runtime/async_event_bus.py | CANONICAL |
+| market_data/market_data_router.py | CANONICAL |
+| market_data/market_tick.py | CANONICAL |
 | events/event.py | DEPRECATED CANDIDATE |
 | events/event_dispatcher.py | DEPRECATED CANDIDATE |
-| events/event_factory.py | SUPPORTING |
 
 ---
 
-# 4. Risk Systems
+# 4. Market Infrastructure
+
+| Module | Classification |
+|---|---|
+| exchange/binance_websocket_client.py | CANONICAL |
+| market/market_data.py | CANONICAL |
+| market/streaming_runtime.py | SUPPORTING |
+| market/candle_feed_engine.py | SUPPORTING |
+
+---
+
+# 5. Risk Systems
 
 | Module | Classification |
 |---|---|
@@ -64,34 +68,28 @@
 | risk/exposure.py | CANONICAL |
 | risk/dynamic_position_sizer.py | CANONICAL |
 | risk/grid_protection.py | CANONICAL |
-| risk/recovery.py | SUPPORTING |
 | risk/risk_sync.py | SUPPORTING |
 | risk/capital_governance.py | SUPPORTING |
 | risk/risk_budgeting.py | EXPERIMENTAL |
 
 ---
 
-# 5. Strategy Systems
+# 6. Strategy Systems
 
 | Module | Classification |
 |---|---|
 | strategy/regime.py | CANONICAL |
 | strategy/spacing.py | CANONICAL |
 | strategy/asymmetric_grid.py | CANONICAL |
-| strategy/grid_anchor.py | CANONICAL |
 | strategy/orchestrator.py | CANONICAL |
 | strategy/performance_tracker.py | SUPPORTING |
-| strategy/strategy_registry.py | SUPPORTING |
 | strategy/ensemble.py | EXPERIMENTAL |
 | strategy/meta_learning.py | EXPERIMENTAL |
 | strategy/adaptive_ensemble.py | EXPERIMENTAL |
-| strategy/online_learning.py | EXPERIMENTAL |
-| strategy/regime_router.py | EXPERIMENTAL |
-| strategy/adaptive_orchestrator.py | EXPERIMENTAL |
 
 ---
 
-# 6. Execution Systems
+# 7. Execution Systems
 
 | Module | Classification |
 |---|---|
@@ -101,13 +99,12 @@
 | exchange/fees.py | CANONICAL |
 | exchange/slippage.py | CANONICAL |
 | exchange/spread.py | CANONICAL |
-| exchange/portfolio.py | SUPPORTING |
 | exchange/portfolio_sync.py | SUPPORTING |
 | exchange/portfolio_risk.py | SUPPORTING |
 
 ---
 
-# 7. Persistence Systems
+# 8. Persistence Systems
 
 | Module | Classification |
 |---|---|
@@ -119,44 +116,56 @@
 
 ---
 
-# 8. Analytics Systems
+# 9. Runtime Status
 
-| Module | Classification |
-|---|---|
-| analytics/performance.py | SUPPORTING |
-| analytics/montecarlo.py | EXPERIMENTAL |
-| analytics/risk_of_ruin.py | SUPPORTING |
+## Validated Runtime Capabilities
+
+- live Binance websocket ingestion
+- autonomous paper execution
+- runtime orchestration
+- portfolio synchronization
+- live pnl tracking
+- duplicate execution prevention
+- websocket reconnect handling
+
+## Current Runtime Limitations
+
+- no candle aggregation
+- no advanced signal engine
+- no stop-loss lifecycle
+- no multi-symbol orchestration
+- no telemetry persistence
 
 ---
 
-# 9. Governance Freeze Policy
+# 10. Governance Freeze Policy
 
-Until consolidation stabilizes:
+Until stabilization completes:
 
 DO NOT:
 - create new runtime abstractions
-- create new event systems
 - create new orchestration layers
-- create new governance frameworks
+- create distributed runtimes
+- create autonomous execution bypasses
 
 Allowed:
-- consolidation
-- simplification
-- validation
+- stabilization
 - observability
-- deterministic recovery
+- lifecycle refinement
+- validation
 - execution integrity
+- runtime simplification
 
 ---
 
-# 10. Current Strategic Priority
+# 11. Current Strategic Priority
 
 Current priority is:
 
-architecture stabilization
+live autonomous paper trading stabilization
 
 NOT:
-- feature expansion
-- autonomous complexity
 - ML sophistication
 - governance proliferation
+- distributed execution
+- aggressive feature expansion
