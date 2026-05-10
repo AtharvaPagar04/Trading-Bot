@@ -13,6 +13,8 @@ Purpose:
 * preserve execution safety
 * centralize operational control
 * stabilize autonomous runtime orchestration
+* standardize lifecycle observability
+* centralize execution telemetry
 
 Each domain must have:
 
@@ -41,6 +43,8 @@ Very few systems may mutate canonical runtime state.
 | runtime state | runtime/runtime_state.py |
 | runtime enums | runtime/runtime_enums.py |
 | live tick orchestration | runtime/live_tick_handler.py |
+| runtime snapshots | runtime/runtime_snapshot.py |
+| runtime rendering | runtime/runtime_console_renderer.py |
 
 ---
 
@@ -56,6 +60,10 @@ Canonical runtime authority controls:
 * cooldown state
 * live tick orchestration
 * autonomous runtime coordination
+* runtime telemetry generation
+* active trade lifecycle visibility
+* completed trade lifecycle visibility
+* runtime observability propagation
 
 Runtime authority may:
 
@@ -65,6 +73,9 @@ Runtime authority may:
 * reject runtime continuation
 * initiate recovery flow
 * reject live execution routing
+* halt execution on exposure breach
+* block new entries
+* emit runtime telemetry
 
 No downstream system may override runtime governance directly.
 
@@ -78,8 +89,22 @@ No downstream system may override runtime governance directly.
 | runtime/async_event_bus.py | validated |
 | runtime/runtime_loop.py | validated |
 | runtime/live_tick_handler.py | validated |
+| runtime/runtime_snapshot.py | validated |
+| runtime/runtime_console_renderer.py | validated |
 | exchange/binance_websocket_client.py | validated |
 | market_data/market_data_router.py | validated |
+| market/timeframe_aggregator.py | validated |
+
+Validated runtime capabilities:
+- reconnect-safe websocket lifecycle
+- candle aggregation
+- candle-close execution
+- active trade telemetry
+- completed trade journaling
+- exposure governance
+- runtime halting
+- portfolio telemetry rendering
+- runtime snapshot generation
 
 ---
 
@@ -103,6 +128,7 @@ No downstream system may override runtime governance directly.
 | synchronous propagation | runtime/event_bus.py |
 | asynchronous propagation | runtime/async_event_bus.py |
 | live market routing | market_data/market_data_router.py |
+| candle aggregation routing | market/timeframe_aggregator.py |
 
 ---
 
@@ -113,6 +139,8 @@ Transport systems:
 * propagate normalized runtime state
 * MUST NOT redefine execution semantics
 * MUST NOT bypass governance authority
+* MUST remain replay-safe
+* MUST preserve lifecycle ordering
 
 Architectural principle:
 
@@ -127,15 +155,20 @@ multiple transport mechanisms
 |---|---|
 | websocket ingestion | exchange/binance_websocket_client.py |
 | market tick normalization | market_data/market_tick.py |
+| candle aggregation | market/timeframe_aggregator.py |
 | runtime routing | market_data/market_data_router.py |
 
-External exchange payloads are NOT canonical runtime runtime state.
+External exchange payloads are NOT canonical runtime state.
 
 Normalization flow:
 
 BINANCE PAYLOAD
 ↓
 MarketTick
+↓
+TimeframeAggregator
+↓
+Candle
 ↓
 MarketDataSnapshot
 ↓
@@ -158,6 +191,7 @@ Internal systems MUST remain isolated from:
 | cooldown enforcement | risk/cooldown.py |
 | session risk | risk/session_risk.py |
 | position sizing | risk/dynamic_position_sizer.py |
+| portfolio exposure governance | exchange/portfolio_risk.py |
 
 ---
 
@@ -183,8 +217,15 @@ Execution is forbidden if:
 * emergency stop active
 * runtime governance rejected execution
 * portfolio synchronization failed
+* exposure threshold exceeded
 
 Risk authority is FINAL.
+
+Validated governance capabilities:
+- exposure-based execution blocking
+- runtime halting
+- execution permission gating
+- portfolio exposure evaluation
 
 ---
 
@@ -214,6 +255,7 @@ Strategy systems may NOT:
 * bypass runtime governance
 * override risk systems
 * mutate canonical runtime state
+* bypass execution validation
 
 ---
 
@@ -226,6 +268,7 @@ Strategy systems may NOT:
 | execution simulation | exchange/execution_simulator.py |
 | websocket execution ingestion | exchange/binance_websocket_client.py |
 | portfolio synchronization | exchange/portfolio_sync.py |
+| trade lifecycle tracking | runtime/runtime_snapshot.py |
 
 ---
 
@@ -237,6 +280,8 @@ Execution systems:
 * require prior risk approval
 * require execution validation
 * must emit observable runtime transitions
+* must synchronize portfolio state
+* must emit lifecycle telemetry
 
 Execution systems may NOT:
 
@@ -256,6 +301,20 @@ RISK VALIDATION
 EXECUTION VALIDATION
 ↓
 PAPER EXCHANGE EXECUTION
+↓
+PORTFOLIO SYNCHRONIZATION
+↓
+RUNTIME SNAPSHOT
+↓
+OBSERVABILITY
+
+Validated execution capabilities:
+- active trade lifecycle tracking
+- completed trade journaling
+- mark-to-market accounting
+- unrealized pnl tracking
+- holdings valuation
+- exposure tracking
 
 ---
 
@@ -294,6 +353,16 @@ Persistence systems MUST NOT:
 * override governance state
 * replay unauthorized execution
 
+Current persistence status:
+- not yet implemented
+- runtime currently fully in-memory
+
+Future persistence objectives:
+- runtime snapshot persistence
+- completed trade persistence
+- structured telemetry persistence
+- replay-safe execution journaling
+
 ---
 
 # 8. Observability Authority
@@ -303,6 +372,8 @@ Persistence systems MUST NOT:
 | runtime logging | runtime/logger.py |
 | event journaling | runtime/event_journal.py |
 | runtime metrics | runtime/metrics.py |
+| runtime snapshots | runtime/runtime_snapshot.py |
+| console rendering | runtime/runtime_console_renderer.py |
 
 ---
 
@@ -319,10 +390,23 @@ Observable categories:
 * execution failures
 * emergency conditions
 * websocket connectivity
+* active trade lifecycle
+* completed trade lifecycle
+* exposure state
+* portfolio valuation
 
 Architectural principle:
 
 critical runtime behavior MUST remain auditable
+
+Validated observability capabilities:
+- runtime status rendering
+- market telemetry rendering
+- portfolio telemetry rendering
+- active trade rendering
+- completed trade rendering
+- governance halt visibility
+- exposure visibility
 
 ---
 
@@ -347,6 +431,8 @@ Governance systems possess authority over:
 * recovery state
 * cooldown coordination
 * live runtime orchestration
+* exposure halting
+* execution gating
 
 Governance systems may:
 
@@ -354,12 +440,20 @@ Governance systems may:
 * disable trading
 * enter recovery mode
 * trigger safe mode
+* reject execution
+* block new entries
 
 Governance systems may NOT:
 
 * bypass persistence integrity
 * override immutable journal history
 * bypass risk authority
+
+Validated governance capabilities:
+- runtime halting
+- exposure-based blocking
+- governance-aware execution routing
+- centralized execution approval
 
 ---
 
@@ -403,31 +497,35 @@ Experimental infrastructure MUST remain downstream from:
 
 Priority 1:
 
-* stabilize live runtime lifecycle
+* stabilize runtime persistence
 
 Priority 2:
 
-* centralize event contracts
+* centralize execution telemetry
 
 Priority 3:
 
-* simplify governance topology
+* implement FastAPI telemetry layer
 
 Priority 4:
 
-* isolate experimental ML systems
+* implement dashboard infrastructure
 
 Priority 5:
 
-* reduce orchestration overlap
+* stabilize replay-safe persistence
 
 Priority 6:
 
-* improve runtime observability consistency
+* isolate experimental ML systems
 
 Priority 7:
 
-* add candle aggregation infrastructure
+* improve runtime observability consistency
+
+Priority 8:
+
+* stabilize multi-symbol orchestration
 
 ---
 
@@ -445,3 +543,6 @@ execution-safe
 live-data driven
 autonomous
 operationally auditable
+runtime-stabilized
+lifecycle-observable
+replay-safe

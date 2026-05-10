@@ -6,12 +6,16 @@ Unify all runtime infrastructure into:
 - one canonical runtime authority
 - one canonical event topology
 - one normalized market data pipeline
+- one governance-controlled execution lifecycle
+- one centralized observability system
 
 Purpose:
 - eliminate propagation ambiguity
 - simplify runtime governance
 - improve observability
 - stabilize autonomous runtime execution
+- standardize execution lifecycle telemetry
+- prepare replay-safe infrastructure
 
 ---
 
@@ -21,10 +25,20 @@ Approved runtime authority:
 
 runtime/
     governed_runtime.py
+    runtime_snapshot.py
+    runtime_console_renderer.py
 
 Approved orchestration flow:
 
 BinanceWebSocketClient
+    ↓
+MarketTick
+    ↓
+TimeframeAggregator
+    ↓
+Candle
+    ↓
+MarketDataSnapshot
     ↓
 MarketDataRouter
     ↓
@@ -32,11 +46,28 @@ LiveTickHandler
     ↓
 Autonomous Runtime
     ↓
+Portfolio Risk Evaluation
+    ↓
+Execution Decision
+    ↓
 PaperExchange
+    ↓
+Portfolio Synchronization
+    ↓
+Runtime Snapshot
+    ↓
+Console Observability
 
 All future runtime systems MUST integrate through:
 - canonical runtime governance
 - canonical runtime orchestration
+- canonical runtime observability
+
+Execution authority MUST remain:
+- governance-controlled
+- runtime-controlled
+- observable
+- centralized
 
 ---
 
@@ -46,7 +77,11 @@ Approved market normalization flow:
 
 BINANCE PAYLOAD
     ↓
+BinanceWebSocketClient
+    ↓
 MarketTick
+    ↓
+TimeframeAggregator
     ↓
 Candle
     ↓
@@ -59,6 +94,14 @@ Exchange-specific payloads MUST NOT leak into:
 - strategy systems
 - risk systems
 - runtime governance
+- portfolio systems
+- observability systems
+
+Normalization guarantees:
+- deterministic runtime execution
+- replay-safe market structures
+- governance-safe execution flow
+- exchange abstraction
 
 ---
 
@@ -69,30 +112,44 @@ Deprecated patterns:
 - bypassed runtime governance
 - direct exchange payload usage
 - duplicate execution routing
+- execution without portfolio synchronization
+- execution without governance evaluation
+- fragmented runtime telemetry
 
 Future runtime systems MUST remain:
 - normalized
 - observable
 - governance-controlled
+- replay-safe
+- lifecycle-auditable
 
 ---
 
 # 5. Runtime Stabilization Priorities
 
 Priority 1:
-prevent duplicate execution
+stabilize runtime persistence
 
 Priority 2:
-stabilize portfolio synchronization
+stabilize execution journaling
 
 Priority 3:
-stabilize execution lifecycle
+stabilize telemetry propagation
 
 Priority 4:
-stabilize runtime observability
+implement FastAPI telemetry layer
 
 Priority 5:
-implement controlled exits
+implement dashboard infrastructure
+
+Priority 6:
+implement replay-safe persistence
+
+Priority 7:
+stabilize multi-symbol orchestration
+
+Priority 8:
+stabilize structured runtime metrics
 
 ---
 
@@ -100,18 +157,50 @@ implement controlled exits
 
 Validated:
 - live websocket connectivity
-- autonomous BUY execution
+- reconnect-safe websocket lifecycle
+- timeframe candle aggregation
+- autonomous candle-close execution
 - portfolio accounting
 - unrealized pnl tracking
+- exposure governance
 - execution guardrails
 - runtime synchronization
+- active trade lifecycle tracking
+- completed trade journaling
+- runtime telemetry snapshots
+- runtime observability rendering
+- governance-based runtime halting
+- exposure-based execution blocking
+
+Current governance capabilities:
+- exposure-based execution blocking
+- runtime halt propagation
+- centralized execution approval
+- governance-aware execution routing
+
+Current accounting capabilities:
+- invested capital tracking
+- holdings valuation
+- unrealized pnl tracking
+- portfolio valuation tracking
+- cash utilization tracking
+
+Current observability capabilities:
+- runtime status rendering
+- market telemetry rendering
+- portfolio telemetry rendering
+- active trade rendering
+- completed trade rendering
+- runtime lifecycle visibility
 
 Current limitations:
-- no advanced signal engine
-- no realistic candle engine
-- no dynamic strategy lifecycle
-- no stop-loss engine
-- no runtime telemetry persistence
+- no persistence layer
+- no dashboard frontend
+- no telemetry API
+- no replay engine
+- no stop-loss lifecycle
+- no advanced exit lifecycle
+- no multi-symbol orchestration
 
 ---
 
@@ -119,13 +208,23 @@ Current limitations:
 
 Next runtime objectives:
 
-1. runtime log throttling
-2. stop-loss integration
-3. realistic take-profit lifecycle
-4. cooldown after exits
-5. candle aggregation engine
-6. structured telemetry
-7. multi-symbol orchestration
+1. persistence layer
+2. completed trade persistence
+3. structured execution journaling
+4. FastAPI telemetry layer
+5. dashboard websocket streaming
+6. live dashboard frontend
+7. replay-safe runtime persistence
+8. historical runtime analytics
+9. runtime metrics API
+10. structured event persistence
+
+Immediate architectural goals:
+- durable runtime state
+- persistent execution lifecycle tracking
+- replay-safe telemetry
+- dashboard-ready runtime APIs
+- centralized runtime observability
 
 ---
 
@@ -137,12 +236,22 @@ Production runtime MUST guarantee:
 - replay-safe runtime events
 - governance-controlled execution
 - normalized market ingestion
+- centralized runtime telemetry
+- auditable execution lifecycle
 
 Runtime execution MUST remain:
 - centralized
 - auditable
 - inspectable
 - risk-governed
+- governance-controlled
+
+Production observability MUST support:
+- runtime replay
+- historical telemetry inspection
+- execution lifecycle reconstruction
+- portfolio lifecycle reconstruction
+- governance event reconstruction
 
 ---
 
@@ -150,10 +259,23 @@ Runtime execution MUST remain:
 
 Current goal is:
 
-live autonomous paper trading stabilization
+runtime-stabilized
+governance-controlled
+observable
+live-data
+autonomous paper trading platform
+
+Focus areas:
+- runtime durability
+- observability
+- execution lifecycle visibility
+- portfolio telemetry
+- replay-safe architecture
+- dashboard readiness
 
 NOT:
+- aggressive optimization
+- advanced ML systems
 - high-frequency execution
-- distributed runtimes
-- advanced ML orchestration
-- aggressive strategy complexity
+- distributed orchestration
+- profitability optimization

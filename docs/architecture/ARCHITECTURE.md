@@ -20,6 +20,13 @@ The architecture currently contains:
 - autonomous runtime execution
 - paper trading lifecycle management
 - runtime observability
+- runtime telemetry snapshots
+- active trade lifecycle tracking
+- completed trade journal infrastructure
+- exposure governance
+- candle aggregation runtime
+- console observability renderer
+- portfolio mark-to-market accounting
 
 Primary architectural strengths:
 - modular runtime separation
@@ -27,6 +34,9 @@ Primary architectural strengths:
 - exchange abstraction
 - normalized runtime state
 - realistic execution modeling
+- runtime observability
+- lifecycle visibility
+- portfolio telemetry transparency
 
 Primary architectural risks:
 - overlapping ownership boundaries
@@ -56,6 +66,8 @@ runtime/
     runtime_state.py
     runtime_enums.py
     live_tick_handler.py
+    runtime_snapshot.py
+    runtime_console_renderer.py
 
 Responsibilities:
 - lifecycle control
@@ -65,12 +77,17 @@ Responsibilities:
 - runtime orchestration
 - live market tick processing
 - autonomous runtime coordination
+- runtime telemetry generation
+- execution lifecycle visibility
+- console observability rendering
 
 Architectural principle:
 Runtime governance MUST remain authoritative over:
 - execution permissions
 - emergency states
 - runtime transitions
+- governance enforcement
+- runtime telemetry propagation
 
 ---
 
@@ -105,12 +122,17 @@ risk/
     cooldown.py
     dynamic_position_sizer.py
 
+exchange/
+    portfolio_risk.py
+
 Responsibilities:
 - capital protection
 - exposure control
 - drawdown management
 - execution throttling
 - emergency triggers
+- exposure governance
+- execution blocking
 
 Risk layer MUST remain independent from:
 - strategy layer
@@ -155,6 +177,11 @@ Responsibilities:
 - websocket ingestion
 - exchange normalization
 - paper execution lifecycle
+- active trade lifecycle tracking
+- completed trade journaling
+- realized pnl calculation
+- unrealized pnl propagation
+- exposure-aware execution governance
 
 Execution layer MUST remain:
 - downstream from runtime governance
@@ -168,6 +195,7 @@ Canonical modules:
 
 market/
     market_data_router.py
+    timeframe_aggregator.py
 
 exchange/
     binance_websocket_client.py
@@ -178,19 +206,23 @@ Responsibilities:
 - live trade ingestion
 - MarketTick normalization
 - runtime tick routing
+- timeframe candle aggregation
+- candle-close runtime propagation
 
 Validated capabilities:
 - live Binance websocket ingestion
 - reconnect protection
 - runtime tick routing
 - live autonomous runtime invocation
+- timeframe candle aggregation
+- candle-close autonomous execution
+- runtime candle orchestration
 
 Future objectives:
 - heartbeat monitoring
 - stale-feed detection
 - multi-symbol streaming
 - websocket backoff strategy
-- candle aggregation engine
 
 ---
 
@@ -208,6 +240,10 @@ Responsibilities:
 - portfolio risk integration
 - execution evaluation
 - autonomous execution lifecycle
+- active trade telemetry generation
+- runtime snapshot generation
+- portfolio telemetry synchronization
+- governance-aware execution routing
 
 Operational flow:
 
@@ -215,17 +251,31 @@ LIVE BINANCE TRADE
     ↓
 MarketTick
     ↓
+TimeframeAggregator
+    ↓
+Candle
+    ↓
+MarketDataSnapshot
+    ↓
 MarketDataRouter
     ↓
 LiveTickHandler
     ↓
 Autonomous Runtime
     ↓
+Portfolio Risk Evaluation
+    ↓
+Execution Decision
+    ↓
 PaperExchange
     ↓
 Portfolio Update
     ↓
 Runtime Synchronization
+    ↓
+Runtime Snapshot
+    ↓
+Console Renderer
 
 Architectural principle:
 Execution authority MUST remain downstream from:
@@ -257,6 +307,17 @@ Purpose:
 - telemetry
 - runtime diagnostics
 
+Current persistence status:
+- not yet implemented
+- runtime currently fully in-memory
+- shutdown clears telemetry and trade history
+
+Next persistence objectives:
+- runtime snapshot persistence
+- completed trade persistence
+- structured execution journaling
+- replay-safe event persistence
+
 ---
 
 # 9. Runtime Observability
@@ -264,28 +325,52 @@ Purpose:
 Canonical modules:
 
 runtime/
+    runtime_snapshot.py
+    runtime_console_renderer.py
     logger.py
     metrics.py
     event_journal.py
 
 Validated runtime observability:
-- live execution visibility
-- pnl visibility
-- position visibility
+- live BTC price telemetry
+- candle-close telemetry
 - runtime lifecycle visibility
+- execution visibility
+- active trade visibility
+- completed trade journal visibility
+- portfolio accounting visibility
+- unrealized pnl visibility
+- exposure visibility
+- governance halt visibility
 
-Current console telemetry:
-- live BTC price
-- execution status
-- balance state
-- position state
+Current runtime console sections:
+- runtime status
+- market telemetry
+- portfolio telemetry
+- active trades
+- completed trade journal
+
+Current runtime telemetry:
+- latest market price
+- candle close state
+- runtime operating state
+- exposure state
 - unrealized pnl
+- portfolio value
+- invested capital
+- holdings value
+- available cash
+- trade count
+- active trade lifecycle
+- completed trade lifecycle
 
 Future observability goals:
-- structured logging
-- persistent runtime telemetry
+- structured telemetry persistence
+- websocket dashboard streaming
+- historical runtime replay
 - execution analytics
-- performance dashboards
+- equity curve rendering
+- runtime metrics API
 
 ---
 
@@ -293,21 +378,50 @@ Future observability goals:
 
 Validated capabilities:
 - live Binance websocket ingestion
-- autonomous BUY execution
-- portfolio accounting
-- slippage/spread simulation
-- fee simulation
+- reconnect-safe websocket lifecycle
+- autonomous candle-close execution
 - runtime governance integration
-- duplicate execution prevention
-- unrealized pnl monitoring
-- live runtime orchestration
+- exposure-based execution blocking
+- portfolio synchronization
+- mark-to-market accounting
+- slippage simulation
+- spread simulation
+- fee simulation
+- active trade lifecycle tracking
+- completed trade journaling
+- runtime telemetry snapshots
+- runtime console observability
+- unrealized pnl propagation
+- halted runtime state handling
+- execution lifecycle visibility
+
+Current governance capabilities:
+- exposure-based runtime halting
+- runtime execution blocking
+- governance-controlled execution approval
+
+Current accounting capabilities:
+- invested capital tracking
+- holdings valuation
+- unrealized pnl tracking
+- total portfolio valuation
+- cash utilization tracking
 
 Current limitations:
-- no advanced signal engine
-- no candle aggregation
-- no dynamic exits
-- no stop-loss engine
+- no persistence layer
+- no FastAPI telemetry layer
+- no dashboard frontend
+- no replay engine
+- no stop-loss lifecycle
+- no advanced exits
 - no multi-symbol orchestration
+- no historical analytics
+
+Current architectural status:
+runtime-stabilized
+governance-controlled
+observable
+live-data autonomous paper trading platform
 
 ---
 
