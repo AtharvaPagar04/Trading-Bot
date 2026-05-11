@@ -1,0 +1,32 @@
+from src.db.database import (
+    Base,
+    engine,
+)
+
+from src.db.models import (
+    CandleEntity,
+    CompletedTradeEntity,
+)
+from src.db.position_models import (
+    PositionEntity,
+)
+from src.db.balance_models import (
+    BalanceEntity,
+)
+from src.db.runtime_models import (
+    RuntimeStateEntity,
+)
+def init_db():
+
+    Base.metadata.create_all(
+        bind=engine
+    )
+
+    print(
+        "[DB] Tables created"
+    )
+
+
+if __name__ == "__main__":
+
+    init_db()
