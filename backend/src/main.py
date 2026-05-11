@@ -31,7 +31,9 @@ from src.exchange.paper_exchange import (
 from src.core.runtime_builder import (
     build_runtime_state,
 )
-
+from src.api.main import (
+    runtime_controller,
+)
 
 def main():
 
@@ -82,6 +84,9 @@ def main():
 
             exchange=
             exchange,
+
+            runtime_controller=
+            runtime_controller,
         )
     )
     exchange.load_persisted_balance()

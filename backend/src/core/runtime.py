@@ -19,7 +19,9 @@ from src.events.event import (
 from src.risk.risk_sync import (
     RiskSyncState,
 )
-
+from datetime import (
+    datetime,
+)
 
 @dataclass
 class RuntimeState:
@@ -43,3 +45,6 @@ class RuntimeState:
     current_unrealized_pnl: float = 0.0
 
     current_unrealized_pnl_percent: float = 0.0
+    session_started_at: datetime | None = None
+
+    runtime_uptime_seconds: int = 0

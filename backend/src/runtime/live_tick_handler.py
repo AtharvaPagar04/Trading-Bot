@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 
 from src.market_data.market_tick import (
@@ -36,7 +37,9 @@ from src.exchange.models import (
 from src.db.runtime_repository import (
     RuntimeRepository,
 )
-
+from datetime import (
+    datetime,
+)
 
 class LiveTickHandler:
 
@@ -44,6 +47,7 @@ class LiveTickHandler:
         self,
         runtime_state,
         exchange,
+        runtime_controller,
     ):
 
         self.runtime_state = (
@@ -63,15 +67,34 @@ class LiveTickHandler:
                 interval_seconds=60
             )
         )
+        self.runtime_controller = (
+            runtime_controller
+        )
 
     def process_tick(
         self,
         tick: MarketTick,
     ):
+        if (
+            not
+            self.runtime_controller
+            .is_running
+        ):
 
+            return
+            
         self.runtime_state.latest_price = (
             tick.price
         )
+
+        self.runtime_state.runtime_uptime_seconds = int(
+        (
+            datetime.utcnow()
+            -
+            self.runtime_state
+            .session_started_at
+        ).total_seconds()
+    )
 
         completed_candle = (
             self.aggregator.process_tick(
@@ -176,6 +199,13 @@ class LiveTickHandler:
             )
         )
 
+        if (
+            self.runtime_controller
+            .is_paused
+        ):
+
+            return
+
         result = (
             execute_autonomous_cycle(
                 runtime=
@@ -194,7 +224,6 @@ class LiveTickHandler:
                 "BUY",
             )
         )
-
         self.runtime_state = (
             result.runtime
         )
@@ -231,6 +260,9 @@ class LiveTickHandler:
 
                 exchange=
                 self.exchange,
+
+                runtime_controller=
+                self.runtime_controller,
             )
         )
 

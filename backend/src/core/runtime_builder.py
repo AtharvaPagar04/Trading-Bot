@@ -13,7 +13,9 @@ from src.core.session_builder import (
 from src.risk.risk_sync import (
     synchronize_risk_state,
 )
-
+from datetime import (
+    datetime,
+)
 
 def build_runtime_state(
     capital: float,
@@ -47,4 +49,7 @@ def build_runtime_state(
 
         active_events=[],
         event_history=[],
+        session_started_at=
+        datetime.utcnow(),
+        runtime_uptime_seconds=0,
     )

@@ -6,6 +6,7 @@ from src.exchange.paper_exchange import (
 def build_runtime_snapshot(
     runtime,
     exchange: PaperExchange,
+    runtime_controller,
 ):
 
     positions = []
@@ -216,4 +217,25 @@ def build_runtime_snapshot(
         active_trades,
         "trade_journal":
         completed_trades,
+        "session": {
+            "started_at":
+            runtime.session_started_at
+            .isoformat(),
+            "uptime_seconds":
+            runtime
+            .runtime_uptime_seconds,
+        },
+        "controller": {
+            "is_running":
+            runtime_controller
+            .is_running,
+
+            "is_paused":
+            runtime_controller
+            .is_paused,
+
+            "safe_mode":
+            runtime_controller
+            .safe_mode,
+        },
     }
