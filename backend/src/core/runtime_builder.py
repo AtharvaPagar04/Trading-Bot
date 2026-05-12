@@ -16,7 +16,10 @@ from src.risk.risk_sync import (
 from datetime import (
     datetime,
 )
-
+from src.runtime.runtime_enums import (
+    RuntimeMode,
+    RuntimeStatus,
+)
 def build_runtime_state(
     capital: float,
     timeframe: str,
@@ -55,4 +58,13 @@ def build_runtime_state(
         last_tick_received_at=None,
         websocket_connected=False,
         reconnect_attempts=0,
+        mode=RuntimeMode.DRY_RUN,
+
+        status=RuntimeStatus.STARTING,
+
+        started_at=datetime.utcnow(),
+
+        last_heartbeat=datetime.utcnow(),
+
+        is_trading_enabled=True,
     )

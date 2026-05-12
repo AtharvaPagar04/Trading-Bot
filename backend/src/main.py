@@ -48,10 +48,21 @@ from src.runtime.runtime_monitor_loop import (
 def main():
 
     event_bus = EventBus()
+    runtime_state = (
+        build_runtime_state(
+            capital=2000,
+
+            timeframe="5m",
+
+            adx_value=20,
+
+            atr_percent=1.5,
+        )
+    )
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        event_bus,
+        runtime_state=runtime_state,
+        event_bus=event_bus,
     )
 
     runtime.start()
@@ -72,18 +83,7 @@ def main():
     runtime_monitor_loop.start()
    
 
-    runtime_state = (
-        build_runtime_state(
-            capital=2000,
-
-            timeframe="5m",
-
-            adx_value=20,
-
-            atr_percent=1.5,
-        )
-    )
-
+    
     api_thread = threading.Thread(
         target=lambda: uvicorn.run(
             "src.api.main:app",

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from src.runtime.runtime_state import RuntimeState
+from src.core.runtime import RuntimeState
 
 from src.runtime.runtime_enums import (
     RuntimeMode,
@@ -68,13 +68,11 @@ class GovernedRuntime:
 
     def __init__(
         self,
-        mode: RuntimeMode,
+        runtime_state: RuntimeState,
         event_bus: EventBus,
     ):
 
-        self.state = RuntimeState(
-            mode=mode
-        )
+        self.state = runtime_state
 
         self.event_bus = event_bus
 
