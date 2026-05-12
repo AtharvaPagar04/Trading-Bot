@@ -1,22 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
+import React from "react";
+import type { ActiveSessionResponse } from "../../services/api";
 
 interface SessionClockProps {
-  /** ISO 8601 datetime string from backend */
-  startedAt: string;
-  /**
-   * Backend-reported uptime in seconds.
-   * Used ONLY as the SSR/pre-hydration fallback when startedAt cannot be
-   * parsed on the server. The live ticker always derives elapsed time from
-   * the startedAt wall-clock so the counter is strictly monotonic across
-   * page refreshes.
-   */
-  uptimeSeconds: number;
-  /** e.g. "RUNNING" | "PAUSED" | "HALTED" | "ERROR" */
-  operatingState: string;
+  activeSession: ActiveSessionResponse | null;
+  connStatus: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -32,50 +21,31 @@ function formatUptime(totalSeconds: number): string {
   ].join(" ");
 }
 
-function formatStartTime(iso: string): string {
-  try {
-    const d = new Date(iso);
-    if (isNaN(d.getTime())) return "—";
-    // Format as "12 May 2026, 02:24:51"
-    return d.toLocaleString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
-  } catch {
-    return "—";
-  }
+function usd(n: number): string {
+  return n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 }
 
-function stateColor(state: string): string {
-  switch (state.toUpperCase()) {
-    case "RUNNING":
+function statusColor(status: string): string {
+  switch (status.toUpperCase()) {
+    case "ACTIVE":
       return "#22c55e";
-    case "PAUSED":
+    case "RECOVERING":
       return "#f59e0b";
-    case "HALTED":
-    case "ERROR":
-      return "#ef4444";
+    case "STOPPED":
     default:
-      return "#64748b";
+      return "#ef4444";
   }
 }
 
-function stateBgColor(state: string): string {
-  switch (state.toUpperCase()) {
-    case "RUNNING":
+function statusBgColor(status: string): string {
+  switch (status.toUpperCase()) {
+    case "ACTIVE":
       return "rgba(34,197,94,0.08)";
-    case "PAUSED":
+    case "RECOVERING":
       return "rgba(245,158,11,0.08)";
-    case "HALTED":
-    case "ERROR":
-      return "rgba(239,68,68,0.08)";
+    case "STOPPED":
     default:
-      return "rgba(100,116,139,0.08)";
+      return "rgba(239,68,68,0.08)";
   }
 }
 
@@ -91,12 +61,11 @@ function PulseDot({ color }: { color: string }) {
         justifyContent: "center",
         width: 8,
         height: 8,
-        marginRight: 5,
+        marginRight: 6,
         verticalAlign: "middle",
         flexShrink: 0,
       }}
     >
-      {/* outer pulse ring — only for RUNNING */}
       <span
         style={{
           position: "absolute",
@@ -130,7 +99,7 @@ function Cell({
   accent,
 }: {
   label: string;
-  value: string;
+  value: React.ReactNode;
   mono?: boolean;
   accent?: string;
 }) {
@@ -168,69 +137,94 @@ function Cell({
   );
 }
 
-// ─── Uptime derivation ────────────────────────────────────────────────────────
-
-/**
- * Parse startedAt and compute elapsed seconds from the wall clock.
- * Returns null when startedAt is absent or unparseable (SSR safe).
- */
-function computeUptimeFromOrigin(startedAt: string): number | null {
-  try {
-    const origin = new Date(startedAt).getTime();
-    if (isNaN(origin)) return null;
-    return Math.max(0, Math.floor((Date.now() - origin) / 1000));
-  } catch {
-    return null;
-  }
-}
-
 // ─── SessionClock ─────────────────────────────────────────────────────────────
 
 export function SessionClock({
-  startedAt,
-  uptimeSeconds,
-  operatingState,
+  activeSession,
+  connStatus,
 }: SessionClockProps): React.ReactElement {
-  /**
-   * Hydration strategy:
-   *   - SSR / first render: `mounted` is false → render the server-safe
-   *     `uptimeSeconds` value so the HTML matches on both sides.
-   *   - After mount: flip `mounted`, start interval, derive uptime purely
-   *     from wall-clock so the counter never moves backwards on refresh.
-   */
-  const [mounted, setMounted] = useState<boolean>(false);
-  const [liveUptime, setLiveUptime] = useState<number>(uptimeSeconds);
+  let status = "STOPPED";
+  if (connStatus !== "CONNECTED") {
+    status = "RECOVERING";
+  } else if (activeSession?.active) {
+    status = "ACTIVE";
+  }
 
-  useEffect(() => {
-    // Mark mounted to unlock client-side display
-    setMounted(true);
+  // Handle loading state implicitly with activeSession === null, but since we also have isInitialLoad in Dashboard, we can just show loading or "No Active Session"
+  if (!activeSession) {
+    return (
+      <section style={{ marginBottom: 32 }}>
+        <div
+          style={{
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "#334155",
+            borderBottom: "1px solid #1e293b",
+            paddingBottom: 6,
+            marginBottom: 12,
+          }}
+        >
+          Session
+        </div>
+        <div
+          style={{
+            background: "#0f172a",
+            border: "1px solid #1e293b",
+            borderRadius: 6,
+            padding: "10px 14px",
+            fontSize: 11,
+            color: "#475569",
+            fontFamily: "'Geist Sans', system-ui, sans-serif",
+            fontStyle: "italic",
+          }}
+        >
+          Loading session data...
+        </div>
+      </section>
+    );
+  }
 
-    // Immediately show the correct wall-clock value before first tick
-    const tick = (): void => {
-      const derived = computeUptimeFromOrigin(startedAt);
-      // Fall back to uptimeSeconds only when startedAt is unresolvable
-      setLiveUptime(derived ?? uptimeSeconds);
-    };
+  if (!activeSession.active || !activeSession.session) {
+    return (
+      <section style={{ marginBottom: 32 }}>
+        <div
+          style={{
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: "0.1em",
+            color: "#334155",
+            borderBottom: "1px solid #1e293b",
+            paddingBottom: 6,
+            marginBottom: 12,
+          }}
+        >
+          Session
+        </div>
+        <div
+          style={{
+            background: "#0f172a",
+            border: "1px solid #1e293b",
+            borderRadius: 6,
+            padding: "10px 14px",
+            fontSize: 11,
+            color: "#475569",
+            fontFamily: "'Geist Sans', system-ui, sans-serif",
+            fontStyle: "italic",
+          }}
+        >
+          No Active Runtime Session
+        </div>
+      </section>
+    );
+  }
 
-    tick();
-    const id = setInterval(tick, 1000);
-
-    // Cleanup: clear interval on unmount or prop change
-    return () => clearInterval(id);
-  // Re-run if startedAt changes (new session after restart)
-  // uptimeSeconds intentionally omitted — it is only used as fallback inside tick()
-  }, [startedAt]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const color = stateColor(operatingState);
-  const bg = stateBgColor(operatingState);
-
-  // SSR: render server snapshot to avoid hydration mismatch.
-  // Client: render the wall-clock-derived value.
-  const displayUptime = mounted ? formatUptime(liveUptime) : formatUptime(uptimeSeconds);
+  const color = statusColor(status);
+  const bg = statusBgColor(status);
+  const s = activeSession.session;
 
   return (
     <>
-      {/* Keyframe for the ping animation */}
       <style>{`
         @keyframes session-ping {
           0%   { transform: scale(1); opacity: 0.25; }
@@ -239,7 +233,6 @@ export function SessionClock({
         }
       `}</style>
 
-      {/* Section header — matches existing dashboard visual language */}
       <section style={{ marginBottom: 32 }}>
         <div
           style={{
@@ -255,15 +248,14 @@ export function SessionClock({
           Session
         </div>
 
-        {/* Card */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
             gap: 8,
           }}
         >
-          {/* Session Start */}
+          {/* Active Session ID */}
           <div
             style={{
               background: "#0f172a",
@@ -273,14 +265,14 @@ export function SessionClock({
             }}
           >
             <Cell
-              label="Session Start"
-              value={formatStartTime(startedAt)}
+              label="Session ID"
+              value={`#${s.id}`}
               mono
               accent="#cbd5e1"
             />
           </div>
 
-          {/* Live Uptime */}
+          {/* Runtime Duration */}
           <div
             style={{
               background: "#0f172a",
@@ -290,14 +282,68 @@ export function SessionClock({
             }}
           >
             <Cell
-              label="Live Uptime"
-              value={displayUptime}
+              label="Runtime Duration"
+              value={formatUptime(s.duration_seconds || 0)}
               mono
               accent="#7dd3fc"
             />
           </div>
 
-          {/* Runtime State */}
+          {/* Live Portfolio Value */}
+          <div
+            style={{
+              background: "#0f172a",
+              border: "1px solid #1e293b",
+              borderRadius: 6,
+              padding: "10px 14px",
+            }}
+          >
+            <Cell
+              label="Portfolio Value"
+              value={usd(s.portfolio_value || 0)}
+              mono
+              accent="#cbd5e1"
+            />
+          </div>
+
+          {/* Total Trades */}
+          <div
+            style={{
+              background: "#0f172a",
+              border: "1px solid #1e293b",
+              borderRadius: 6,
+              padding: "10px 14px",
+            }}
+          >
+            <Cell
+              label="Total Trades"
+              value={s.total_trades?.toString() || "0"}
+              mono
+              accent="#cbd5e1"
+            />
+          </div>
+
+          {/* Realized PnL */}
+          <div
+            style={{
+              background: "#0f172a",
+              border: "1px solid #1e293b",
+              borderRadius: 6,
+              padding: "10px 14px",
+            }}
+          >
+            <Cell
+              label="Realized PnL"
+              value={
+                <span style={{ color: (s.realized_pnl || 0) > 0 ? "#22c55e" : (s.realized_pnl || 0) < 0 ? "#ef4444" : "#cbd5e1" }}>
+                  {(s.realized_pnl || 0) >= 0 ? "+" : ""}{usd(s.realized_pnl || 0)}
+                </span>
+              }
+              mono
+            />
+          </div>
+
+          {/* Session Status */}
           <div
             style={{
               background: bg,
@@ -306,7 +352,6 @@ export function SessionClock({
               padding: "10px 14px",
               display: "flex",
               alignItems: "center",
-              gap: 0,
             }}
           >
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -319,7 +364,7 @@ export function SessionClock({
                   fontFamily: "'Geist Sans', system-ui, sans-serif",
                 }}
               >
-                Runtime State
+                Session Status
               </span>
               <span
                 style={{
@@ -333,7 +378,7 @@ export function SessionClock({
                 }}
               >
                 <PulseDot color={color} />
-                {operatingState}
+                {status}
               </span>
             </div>
           </div>
@@ -343,38 +388,3 @@ export function SessionClock({
   );
 }
 
-// ─── Fallback ─────────────────────────────────────────────────────────────────
-
-export function SessionClockUnavailable(): React.ReactElement {
-  return (
-    <section style={{ marginBottom: 32 }}>
-      <div
-        style={{
-          fontSize: 10,
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-          color: "#334155",
-          borderBottom: "1px solid #1e293b",
-          paddingBottom: 6,
-          marginBottom: 12,
-        }}
-      >
-        Session
-      </div>
-      <div
-        style={{
-          background: "#0f172a",
-          border: "1px solid #1e293b",
-          borderRadius: 6,
-          padding: "10px 14px",
-          fontSize: 11,
-          color: "#475569",
-          fontFamily: "'Geist Sans', system-ui, sans-serif",
-          fontStyle: "italic",
-        }}
-      >
-        Session unavailable
-      </div>
-    </section>
-  );
-}

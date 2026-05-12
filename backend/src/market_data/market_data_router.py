@@ -27,7 +27,7 @@ class MarketDataRouter:
         tick: MarketTick,
     ):
 
-        self.runtime.market_data_heartbeat()
+        
 
         if (
             self.tick_handler

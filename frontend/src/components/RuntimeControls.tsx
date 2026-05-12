@@ -8,17 +8,17 @@ import {
   resumeRuntime,
   toggleSafeMode,
 } from "../../services/api";
+import { AnalyticsModal, AnalyticsButton } from "./AnalyticsModal";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface RuntimeControlsProps {
-  /** Current operating state from backend: "RUNNING" | "PAUSED" | "HALTED" | "ERROR" | "STOPPED" | "UNKNOWN" */
-  operatingState: string;
-  /** Whether safe mode is currently active */
+  isRunning: boolean;
+  isPaused: boolean;
   safeModeActive: boolean;
 }
 
-type ButtonId = "start" | "stop" | "pause" | "resume" | "safeMode";
+type ButtonId = "runtime" | "pause" | "safeMode";
 type FeedbackKind = "success" | "error";
 
 interface ButtonFeedback {
@@ -36,10 +36,8 @@ type ControlState = Record<ButtonId, ButtonState>;
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const INITIAL_STATE: ControlState = {
-  start:    { loading: false, feedback: null },
-  stop:     { loading: false, feedback: null },
+  runtime:  { loading: false, feedback: null },
   pause:    { loading: false, feedback: null },
-  resume:   { loading: false, feedback: null },
   safeMode: { loading: false, feedback: null },
 };
 
@@ -124,12 +122,11 @@ function StatusPill({
 // ─── Control button ───────────────────────────────────────────────────────────
 
 interface CtrlButtonProps {
-  id: ButtonId;
   label: string;
   state: ButtonState;
-  disabled: boolean;
+  disabled?: boolean;
   variant: "neutral" | "green" | "red" | "amber" | "sky" | "violet";
-  onClick: (id: ButtonId) => void;
+  onClick: () => void;
 }
 
 const VARIANT_COLORS: Record<
@@ -145,10 +142,9 @@ const VARIANT_COLORS: Record<
 };
 
 function CtrlButton({
-  id,
   label,
   state,
-  disabled,
+  disabled = false,
   variant,
   onClick,
 }: CtrlButtonProps): React.ReactElement {
@@ -181,7 +177,7 @@ function CtrlButton({
   return (
     <button
       disabled={isDisabled}
-      onClick={() => onClick(id)}
+      onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
@@ -222,10 +218,12 @@ function CtrlButton({
 // ─── RuntimeControls ──────────────────────────────────────────────────────────
 
 export function RuntimeControls({
-  operatingState,
+  isRunning,
+  isPaused,
   safeModeActive,
 }: RuntimeControlsProps): React.ReactElement {
   const [ctrlState, setCtrlState] = useState<ControlState>(INITIAL_STATE);
+  const [analyticsOpen, setAnalyticsOpen] = useState<boolean>(false);
 
   // ── helpers ──────────────────────────────────────────────────────────────
 
@@ -270,35 +268,8 @@ export function RuntimeControls({
   );
 
   // ── derived operating states ──────────────────────────────────────────────
-
-  const state = operatingState.toUpperCase();
-  const isRunning = state === "RUNNING";
-  const isPaused  = state === "PAUSED";
-  const isStopped = state === "STOPPED" || state === "HALTED" || state === "UNKNOWN" || state === "ERROR";
-
-  // ── button click handler ──────────────────────────────────────────────────
-
-  function handleClick(id: ButtonId): void {
-    const actions: Record<ButtonId, () => Promise<unknown>> = {
-      start:    startRuntime,
-      stop:     stopRuntime,
-      pause:    pauseRuntime,
-      resume:   resumeRuntime,
-      safeMode: toggleSafeMode,
-    };
-    void runAction(id, actions[id]);
-  }
-
-  // ── disable rules ─────────────────────────────────────────────────────────
-  // A button is disabled when its action makes no contextual sense.
-
-  const disabled: Record<ButtonId, boolean> = {
-    start:    isRunning || isPaused,
-    stop:     isStopped,
-    pause:    !isRunning,
-    resume:   !isPaused,
-    safeMode: false,   // always available
-  };
+  
+  const isRuntimeActive = isRunning;
 
   // ─────────────────────────────────────────────────────────────────────────
 
@@ -319,13 +290,13 @@ export function RuntimeControls({
           justifyContent: "space-between",
         }}
       >
-        <span>Controls</span>
+        <span>Operator Command Center</span>
 
         {/* Status pills */}
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <StatusPill
             label="Running"
-            active={isRunning}
+            active={isRunning && !isPaused}
             activeColor="#22c55e"
             activeBg="rgba(34,197,94,0.08)"
           />
@@ -338,8 +309,8 @@ export function RuntimeControls({
           <StatusPill
             label="Safe Mode"
             active={safeModeActive}
-            activeColor="#a78bfa"
-            activeBg="rgba(167,139,250,0.08)"
+            activeColor="#f59e0b"
+            activeBg="rgba(245,158,11,0.08)"
           />
         </div>
       </div>
@@ -354,23 +325,32 @@ export function RuntimeControls({
         }}
       >
         <CtrlButton
-          id="start"
-          label="Start"
-          state={ctrlState.start}
-          disabled={disabled.start}
-          variant="green"
-          onClick={handleClick}
-        />
-        <CtrlButton
-          id="stop"
-          label="Stop"
-          state={ctrlState.stop}
-          disabled={disabled.stop}
-          variant="red"
-          onClick={handleClick}
+          label={isRuntimeActive ? "STOP RUNTIME" : "START RUNTIME"}
+          state={ctrlState.runtime}
+          variant={isRuntimeActive ? "red" : "green"}
+          onClick={() => runAction("runtime", isRuntimeActive ? stopRuntime : startRuntime)}
         />
 
-        {/* Divider */}
+        {isRuntimeActive && (
+          <>
+            <span
+              style={{
+                width: 1,
+                height: 20,
+                background: "#1e293b",
+                display: "inline-block",
+                margin: "0 2px",
+              }}
+            />
+            <CtrlButton
+              label={isPaused ? "RESUME" : "PAUSE"}
+              state={ctrlState.pause}
+              variant={isPaused ? "sky" : "amber"}
+              onClick={() => runAction("pause", isPaused ? resumeRuntime : pauseRuntime)}
+            />
+          </>
+        )}
+
         <span
           style={{
             width: 1,
@@ -382,42 +362,30 @@ export function RuntimeControls({
         />
 
         <CtrlButton
-          id="pause"
-          label="Pause"
-          state={ctrlState.pause}
-          disabled={disabled.pause}
-          variant="amber"
-          onClick={handleClick}
-        />
-        <CtrlButton
-          id="resume"
-          label="Resume"
-          state={ctrlState.resume}
-          disabled={disabled.resume}
-          variant="sky"
-          onClick={handleClick}
-        />
-
-        {/* Divider */}
-        <span
-          style={{
-            width: 1,
-            height: 20,
-            background: "#1e293b",
-            display: "inline-block",
-            margin: "0 2px",
-          }}
-        />
-
-        <CtrlButton
-          id="safeMode"
-          label={safeModeActive ? "Disable Safe Mode" : "Enable Safe Mode"}
+          label={safeModeActive ? "SAFE MODE: ON" : "SAFE MODE: OFF"}
           state={ctrlState.safeMode}
-          disabled={disabled.safeMode}
-          variant="violet"
-          onClick={handleClick}
+          disabled={!isRuntimeActive}
+          variant={safeModeActive ? "amber" : "neutral"}
+          onClick={() => runAction("safeMode", toggleSafeMode)}
         />
+
+        <span
+          style={{
+            width: 1,
+            height: 20,
+            background: "#1e293b",
+            display: "inline-block",
+            margin: "0 2px",
+          }}
+        />
+
+        <AnalyticsButton onClick={() => setAnalyticsOpen(true)} />
       </div>
+
+      <AnalyticsModal
+        open={analyticsOpen}
+        onClose={() => setAnalyticsOpen(false)}
+      />
     </section>
   );
 }

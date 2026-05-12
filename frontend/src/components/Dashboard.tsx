@@ -2,11 +2,14 @@
 
 import { MetricCard } from "./MetricCard";
 import { TradesTable } from "./TradesTable";
-import { SessionClock, SessionClockUnavailable } from "./SessionClock";
+import { SessionClock } from "./SessionClock";
 import { RuntimeControls } from "./RuntimeControls";
+import { SessionHistory } from "./SessionHistory";
+import { AnalyticsDashboard } from "./AnalyticsDashboard";
 import type { ActiveTrade, CompletedTrade } from "@/types";
 import { useEffect, useState, useRef } from "react";
-import { fetchRuntime } from "../../services/api";
+import { fetchRuntime, fetchSessions, fetchOverallAnalytics, fetchActiveSession } from "../../services/api";
+import type { SessionRecord, SessionAnalytics, ActiveSessionResponse } from "../../services/api";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 
@@ -194,9 +197,88 @@ interface BackendData {
   }>;
   /** Populated by runtime_snapshot when session_started_at is set */
   session?: { started_at?: string; uptime_seconds?: number };
+  controller?: {
+    is_running?: boolean;
+    is_paused?: boolean;
+    safe_mode?: boolean;
+  };
 }
 
 type ConnectionStatus = "CONNECTED" | "DISCONNECTED" | "RECONNECTING";
+
+// ── Historical Data Hook ──────────────────────────────────────────────────────
+
+function useHistoricalData(isBackendConnected: boolean) {
+  const [sessions, setSessions] = useState<SessionRecord[]>([]);
+  const [analytics, setAnalytics] = useState<SessionAnalytics | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [offline, setOffline] = useState<boolean>(false);
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    if (!isBackendConnected) {
+      setTimeout(() => {
+        setOffline(true);
+        setLoading(false);
+      }, 0);
+      return;
+    }
+
+    let mounted = true;
+
+    async function poll() {
+      if (!mounted) return;
+      try {
+        const controller = new AbortController();
+        abortRef.current = controller;
+        const fetchTimeoutId = setTimeout(() => controller.abort(), 4000);
+        
+        let dataSessions: SessionRecord[];
+        let dataAnalytics: SessionAnalytics;
+        
+        try {
+          [dataSessions, dataAnalytics] = await Promise.all([
+            fetchSessions(controller.signal),
+            fetchOverallAnalytics(controller.signal),
+          ]);
+        } finally {
+          clearTimeout(fetchTimeoutId);
+        }
+
+        if (!mounted) return;
+        dataSessions.sort((a, b) => b.id - a.id);
+        
+        setSessions(dataSessions);
+        setAnalytics(dataAnalytics);
+        setOffline(false);
+        setLoading(false);
+      } catch (err) {
+        if (!mounted) return;
+        const isAbort = err instanceof Error && err.name === "AbortError";
+        if (!isAbort) {
+          setOffline(true);
+          setLoading(false);
+        }
+      } finally {
+        if (mounted) {
+          timeoutRef.current = setTimeout(poll, 8000);
+        }
+      }
+    }
+    
+    poll();
+    
+    return () => {
+      mounted = false;
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (abortRef.current) abortRef.current.abort();
+    };
+  }, [isBackendConnected]);
+
+  return { sessions, analytics, loading, offline };
+}
 
 // ── Dashboard ─────────────────────────────────────────────────────────────────
 
@@ -208,6 +290,8 @@ export function Dashboard(): React.ReactElement {
     active_trades: [],
     trade_journal: [],
   });
+
+  const [activeSession, setActiveSession] = useState<ActiveSessionResponse | null>(null);
 
   // True only during the very first fetch attempt (before any response or error)
   const [isInitialLoad, setIsInitialLoad] = useState<boolean>(true);
@@ -241,8 +325,12 @@ export function Dashboard(): React.ReactElement {
         const fetchTimeoutId = setTimeout(() => controller.abort(), 3000);
 
         let json: unknown;
+        let activeSessionJson: ActiveSessionResponse;
         try {
-          json = await fetchRuntime(controller.signal);
+          [json, activeSessionJson] = await Promise.all([
+            fetchRuntime(controller.signal),
+            fetchActiveSession(controller.signal)
+          ]);
         } finally {
           clearTimeout(fetchTimeoutId);
         }
@@ -252,6 +340,8 @@ export function Dashboard(): React.ReactElement {
         if (json && typeof json === "object") {
           setData((prev) => ({ ...prev, ...(json as BackendData) }));
         }
+        
+        setActiveSession(activeSessionJson);
 
         // Recovery: reset offline log gate so next disconnect fires once
         hasLoggedOffline.current = false;
@@ -301,6 +391,8 @@ export function Dashboard(): React.ReactElement {
   // ── derived state ───────────────────────────────────────────────────────────
 
   const isBackendConnected: boolean = connStatus === "CONNECTED";
+  
+  const { sessions, analytics, loading: historicalLoading, offline: historicalOffline } = useHistoricalData(isBackendConnected);
 
   const runtime = {
     state: data?.runtime?.operating_state ?? "UNKNOWN",
@@ -429,20 +521,16 @@ export function Dashboard(): React.ReactElement {
       <div style={liveStyle} aria-hidden={!isBackendConnected}>
 
         {/* Session Clock */}
-        {data?.session?.started_at ? (
-          <SessionClock
-            startedAt={data.session.started_at}
-            uptimeSeconds={data.session.uptime_seconds ?? 0}
-            operatingState={data?.runtime?.operating_state ?? "UNKNOWN"}
-          />
-        ) : (
-          <SessionClockUnavailable />
-        )}
+        <SessionClock
+          activeSession={activeSession}
+          connStatus={connStatus}
+        />
 
         {/* Runtime Controls */}
         <RuntimeControls
-          operatingState={data?.runtime?.operating_state ?? "UNKNOWN"}
-          safeModeActive={data?.runtime?.safe_mode ?? false}
+          isRunning={data?.controller?.is_running ?? false}
+          isPaused={data?.controller?.is_paused ?? false}
+          safeModeActive={data?.controller?.safe_mode ?? false}
         />
 
         {/* Runtime Overview */}
@@ -637,6 +725,22 @@ export function Dashboard(): React.ReactElement {
           { header: "Closed", key: "closedAt" },
         ]}
       />
+
+      {/* ── Analytics Dashboard ── */}
+      <AnalyticsDashboard
+        sessions={sessions}
+        analytics={analytics}
+        loading={historicalLoading}
+        offline={historicalOffline}
+      />
+
+      {/* ── Session History ── */}
+      <SessionHistory
+        sessions={sessions}
+        isLoading={historicalLoading}
+        offline={historicalOffline}
+      />
+
     </div>
   );
 }

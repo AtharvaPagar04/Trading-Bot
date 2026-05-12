@@ -6,6 +6,7 @@ from src.runtime.runtime_enums import (
     RuntimeMode,
     RuntimeStatus,
     EmergencyReason,
+    
 )
 
 from src.runtime.runtime_permissions import (
@@ -16,11 +17,10 @@ from src.runtime.event_bus import EventBus
 
 from src.runtime.runtime_heartbeat import (
     heartbeat_expired,
+    synchronize_transport_state
 )
 from datetime import timedelta
-from src.runtime.market_data_health import (
-    MarketDataHealth,
-)
+
 
 from src.core.events import (
     RuntimeEvent,
@@ -78,12 +78,7 @@ class GovernedRuntime:
 
         self.event_bus = event_bus
 
-        self.market_data_health = (
-            MarketDataHealth(
-                last_update=
-                datetime.utcnow()
-            )
-        )
+        
 
         self._register_handlers()
 
@@ -118,7 +113,14 @@ class GovernedRuntime:
     def emergency_stop(
         self,
         reason: EmergencyReason,
-    ):
+    ):  
+        if (
+            self.state.status
+            ==
+            RuntimeStatus.EMERGENCY_STOP
+        ):
+
+            return
 
         self.transition_to(
             RuntimeStatus
@@ -207,9 +209,7 @@ class GovernedRuntime:
             datetime.utcnow()
         )
 
-    def market_data_heartbeat(self):
 
-        self.market_data_health.update()
 
     def validate_heartbeat(self):
 
@@ -224,15 +224,20 @@ class GovernedRuntime:
 
     def validate_market_data(self):
 
+        synchronize_transport_state(
+            self.state
+        )
+
         if (
-            self.market_data_health
-            .is_stale()
+            not self.state.websocket_connected
         ):
 
             self.emergency_stop(
                 EmergencyReason
                 .HEARTBEAT_FAILURE
             )
+
+        return
 
     def execution_allowed(
         self,

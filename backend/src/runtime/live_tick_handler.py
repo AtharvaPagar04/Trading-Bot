@@ -86,6 +86,11 @@ class LiveTickHandler:
         self.runtime_state.latest_price = (
             tick.price
         )
+        self.runtime_state.last_tick_received_at = (
+            datetime.utcnow()
+        )
+
+        
 
         self.runtime_state.runtime_uptime_seconds = int(
         (

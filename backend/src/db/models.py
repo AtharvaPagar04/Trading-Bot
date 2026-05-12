@@ -88,3 +88,8 @@ class CompletedTradeEntity(Base):
     closed_at = Column(
         DateTime,
     )
+    
+    session_id = Column(
+        Integer,
+        nullable=True,
+    )

@@ -1,6 +1,7 @@
 import time
 import uvicorn
 import threading
+from datetime import datetime
 from src.runtime.event_bus import (
     EventBus,
 )
@@ -34,7 +35,16 @@ from src.core.runtime_builder import (
 from src.api.main import (
     runtime_controller,
 )
+from src.db.trading_session_repository import (
+    TradingSessionRepository,
+)
+from src.runtime.runtime_monitor import (
+    RuntimeMonitor,
+)
 
+from src.runtime.runtime_monitor_loop import (
+    RuntimeMonitorLoop,
+)
 def main():
 
     event_bus = EventBus()
@@ -45,6 +55,22 @@ def main():
     )
 
     runtime.start()
+
+    
+    runtime_monitor = (
+        RuntimeMonitor(
+            runtime=runtime,
+        )
+    )
+
+    runtime_monitor_loop = (
+        RuntimeMonitorLoop(
+            monitor=runtime_monitor,
+        )
+    )
+
+    runtime_monitor_loop.start()
+   
 
     runtime_state = (
         build_runtime_state(
@@ -70,9 +96,32 @@ def main():
 
     api_thread.start()
 
+    session_repository = (
+        TradingSessionRepository()
+    )
+
+    recovered_sessions = (
+        session_repository
+        .recover_orphan_sessions()
+    )
+
+    if recovered_sessions > 0:
+
+        print(
+            f"[RECOVERY] "
+            f"Recovered "
+            f"{recovered_sessions} "
+            f"orphan sessions"
+        )
+
+
     exchange = (
         PaperExchange(
-            starting_capital=2000
+            starting_capital=2000,
+
+            active_session_id=
+                runtime_state
+                .active_session_id,
         )
     )
     exchange.load_persisted_positions()
@@ -110,18 +159,80 @@ def main():
             symbol="btcusdt",
         )
     )
-
-    websocket.connect()
-
-    print(
-        "[SYSTEM] "
-        "Live paper trading "
-        "runtime started"
+    runtime_controller.register_runtime_resources(
+        websocket=websocket,
+        runtime=runtime,
+        runtime_state=runtime_state,
+        exchange=exchange,
+        session_repository=session_repository,
     )
+   
 
     try:
 
         while True:
+            if (
+                runtime_state
+                .active_session_id
+                is not None
+            ):
+
+                current_time = (
+                    datetime.utcnow()
+                )
+
+                duration_seconds = int(
+                    (
+                        current_time
+                        -
+                        runtime_state
+                        .session_started_at
+                    )
+                    .total_seconds()
+                )
+
+                portfolio_value = (
+                    exchange.balance
+                    .available_capital
+                )
+
+                if (
+                    runtime_state.latest_price
+                    is not None
+                ):
+
+                    for position in (
+                        exchange.positions
+                        .values()
+                    ):
+
+                        portfolio_value += (
+                            position.quantity
+                            *
+                            runtime_state
+                            .latest_price
+                        )
+
+                session_repository.update_live_session(
+                    session_id=
+                        runtime_state
+                        .active_session_id,
+
+                    duration_seconds=
+                        duration_seconds,
+
+                    total_trades=
+                        runtime_state
+                        .total_trades,
+
+                    realized_pnl=
+                        runtime_state
+                        .current_unrealized_pnl,
+
+                    portfolio_value=
+                        portfolio_value,
+                )
+        
 
             time.sleep(1)
 
@@ -131,6 +242,81 @@ def main():
             "\n[SYSTEM] "
             "Shutdown requested"
         )
+        if (
+            runtime_state.active_session_id
+            is not None
+        ):
+
+            ended_at = (
+                datetime.utcnow()
+            )
+
+            duration_seconds = int(
+                (
+                    ended_at
+                    -
+                    runtime_state
+                    .session_started_at
+                ).total_seconds()
+            )
+
+            portfolio_value = (
+                exchange.balance
+                .available_capital
+            )
+
+            if (
+                runtime_state.latest_price
+                and
+                "BTCUSDT"
+                in exchange.positions
+            ):
+
+                position = (
+                    exchange.positions[
+                        "BTCUSDT"
+                    ]
+                )
+
+                portfolio_value += (
+                    position.quantity
+                    *
+                    runtime_state
+                    .latest_price
+                )
+
+            session_repository.end_session(
+                session_id=
+                    runtime_state
+                    .active_session_id,
+
+                ended_at=
+                ended_at,
+
+                duration_seconds=
+                duration_seconds,
+
+                total_trades=
+                    runtime_state
+                    .total_trades,
+
+                realized_pnl=
+                    runtime_state
+                    .current_unrealized_pnl,
+
+                portfolio_value=
+                    portfolio_value,
+
+                safe_mode_triggered=
+                    runtime_controller
+                    .safe_mode,
+            )
+
+            print(
+                f"[SESSION] "
+                f"Ended session "
+                f"{runtime_state.active_session_id}"
+            )
 
         websocket.disconnect()
 

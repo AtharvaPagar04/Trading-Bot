@@ -52,4 +52,7 @@ def build_runtime_state(
         session_started_at=
         datetime.utcnow(),
         runtime_uptime_seconds=0,
+        last_tick_received_at=None,
+        websocket_connected=False,
+        reconnect_attempts=0,
     )

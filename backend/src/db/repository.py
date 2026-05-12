@@ -1,3 +1,4 @@
+
 from src.db.database import (
     SessionLocal,
 )
@@ -76,6 +77,7 @@ class CompletedTradeRepository:
         fees_paid: float,
         opened_at,
         closed_at,
+        session_id: int | None,
     ):
 
         trade = (
@@ -101,6 +103,9 @@ class CompletedTradeRepository:
 
                 closed_at=
                 closed_at,
+
+                session_id=
+                session_id,
             )
         )
 
@@ -119,3 +124,229 @@ class CompletedTradeRepository:
                 CompletedTradeEntity
             ).all()
         )
+    
+    def get_trade_analytics(
+        self,
+    ):
+
+        db: Session = (
+            SessionLocal()
+        )
+
+        try:
+
+            trades = (
+                db.query(
+                    CompletedTradeEntity
+                ).all()
+            )
+
+            total_trades = (
+                len(trades)
+            )
+
+            if total_trades == 0:
+
+                return {
+                    "total_trades": 0,
+                    "winning_trades": 0,
+                    "losing_trades": 0,
+                    "win_rate": 0.0,
+                    "total_realized_pnl": 0.0,
+                    "average_trade_pnl": 0.0,
+                    "best_trade_pnl": 0.0,
+                    "worst_trade_pnl": 0.0,
+                }
+
+            winning_trades = sum(
+                1
+                for trade
+                in trades
+                if trade.realized_pnl > 0
+            )
+
+            losing_trades = sum(
+                1
+                for trade
+                in trades
+                if trade.realized_pnl < 0
+            )
+
+            total_realized_pnl = sum(
+                trade.realized_pnl
+                for trade in trades
+            )
+
+            average_trade_pnl = (
+                total_realized_pnl
+                / total_trades
+            )
+
+            best_trade_pnl = max(
+                trade.realized_pnl
+                for trade in trades
+            )
+
+            worst_trade_pnl = min(
+                trade.realized_pnl
+                for trade in trades
+            )
+
+            return {
+                "total_trades":
+                total_trades,
+
+                "winning_trades":
+                winning_trades,
+
+                "losing_trades":
+                losing_trades,
+
+                "win_rate":
+                round(
+                    (
+                        winning_trades
+                    /
+                    total_trades
+                    ) * 100,
+                    2,
+                ),
+
+                "total_realized_pnl":
+                total_realized_pnl,
+
+                "average_trade_pnl":
+                average_trade_pnl,
+
+                "best_trade_pnl":
+                best_trade_pnl,
+
+                "worst_trade_pnl":
+                worst_trade_pnl,
+            }
+
+        finally:
+
+            db.close()
+    
+    def get_trades_for_session(
+        self,
+        session_id: int,
+    ):
+
+        return (
+            self.session.query(
+                CompletedTradeEntity
+            ).filter(
+                CompletedTradeEntity.session_id == session_id
+            ).all()
+        )
+        
+    def get_closed_trades_for_session(
+        self,
+        session_id: int,
+    ):
+
+        return (
+            self.session.query(
+                CompletedTradeEntity
+            ).filter(
+                CompletedTradeEntity.session_id == session_id,
+                CompletedTradeEntity.closed_at.isnot(None),
+            ).all()
+        )
+        
+    def get_session_trade_analytics(
+        self,
+        session_id: int,
+    ):
+
+        trades = (
+            self.get_trades_for_session(
+                session_id
+            )
+        )
+
+        total_trades = (
+            len(trades)
+        )
+
+        if total_trades == 0:
+
+            return {
+                "total_trades": 0,
+                "winning_trades": 0,
+                "losing_trades": 0,
+                "win_rate": 0.0,
+                "total_realized_pnl": 0.0,
+                "average_trade_pnl": 0.0,
+                "best_trade_pnl": 0.0,
+                "worst_trade_pnl": 0.0,
+            }
+
+        winning_trades = sum(
+            1
+            for trade
+            in trades
+            if trade.realized_pnl > 0
+        )
+
+        losing_trades = sum(
+            1
+            for trade
+            in trades
+            if trade.realized_pnl < 0
+        )
+
+        total_realized_pnl = sum(
+            trade.realized_pnl
+            for trade in trades
+        )
+
+        average_trade_pnl = (
+            total_realized_pnl
+            / total_trades
+        )
+
+        best_trade_pnl = max(
+            trade.realized_pnl
+            for trade in trades
+        )
+
+        worst_trade_pnl = min(
+            trade.realized_pnl
+            for trade in trades
+        )
+
+        return {
+            "total_trades":
+            total_trades,
+
+            "winning_trades":
+            winning_trades,
+
+            "losing_trades":
+            losing_trades,
+
+            "win_rate":
+            round(
+                (
+                    winning_trades
+                    /
+                    total_trades
+                ) * 100,
+                2,
+            ),
+
+            "total_realized_pnl":
+            total_realized_pnl,
+
+            "average_trade_pnl":
+            average_trade_pnl,
+
+            "best_trade_pnl":
+            best_trade_pnl,
+
+            "worst_trade_pnl":
+            worst_trade_pnl,
+        }

@@ -33,6 +33,7 @@ class PaperExchange:
     def __init__(
         self,
         starting_capital: float,
+        active_session_id: int | None = None,
     ):  
         
 
@@ -59,6 +60,10 @@ class PaperExchange:
         )
 
         self.orders = []
+
+        self.active_session_id = (
+            active_session_id
+        )
 
     def execute_market_order(
         self,
@@ -369,6 +374,9 @@ class PaperExchange:
 
                     closed_at=
                     completed_trade.closed_at,
+                    
+                    session_id=
+                    self.active_session_id,
                 )
 
                 if (

@@ -30,7 +30,16 @@ class RuntimeMonitorLoop:
 
         while self.running:
 
-            self.monitor.tick()
+            try:
+
+                self.monitor.tick()
+
+            except Exception as exc:
+
+                print(
+                    "[RUNTIME MONITOR ERROR]",
+                    str(exc),
+                )
 
             time.sleep(
                 self.interval_seconds

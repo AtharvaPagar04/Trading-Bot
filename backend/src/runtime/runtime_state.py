@@ -16,6 +16,10 @@ class RuntimeState:
 
     started_at: datetime = field(default_factory=datetime.utcnow)
     last_heartbeat: datetime = field(default_factory=datetime.utcnow)
+    last_tick_received_at: Optional[datetime] = None
+    websocket_connected: bool = False
+    reconnect_attempts: int = 0
+
 
     cooldown_until: Optional[datetime] = None
 

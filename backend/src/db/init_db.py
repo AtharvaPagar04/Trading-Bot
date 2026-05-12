@@ -16,6 +16,11 @@ from src.db.balance_models import (
 from src.db.runtime_models import (
     RuntimeStateEntity,
 )
+
+from src.db.trading_session_model import (
+    TradingSessionModel,
+)
+
 def init_db():
 
     Base.metadata.create_all(

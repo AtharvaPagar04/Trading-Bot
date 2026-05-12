@@ -48,3 +48,10 @@ class RuntimeState:
     session_started_at: datetime | None = None
 
     runtime_uptime_seconds: int = 0
+    active_session_id: int | None = None
+
+    last_tick_received_at: datetime | None = None
+
+    websocket_connected: bool = False
+
+    reconnect_attempts: int = 0

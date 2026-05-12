@@ -15,3 +15,7 @@ class RuntimeMonitor:
     def tick(self):
 
         self.runtime.validate_heartbeat()
+
+        self.runtime.validate_market_data()
+
+        self.runtime.validate_cooldown()
