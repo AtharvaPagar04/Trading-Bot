@@ -1,4 +1,4 @@
-from src.runtime.runtime_state import (
+from src.core.runtime import (
     RuntimeState,
 )
 
@@ -24,6 +24,9 @@ def is_execution_allowed(
         return False
 
     if not runtime_state.is_trading_enabled:
+        return False
+
+    if runtime_state.safe_mode:
         return False
 
     return True

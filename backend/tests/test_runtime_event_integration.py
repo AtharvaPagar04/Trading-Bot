@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from datetime import datetime
 
 from src.core.event_bus import EventBus
@@ -20,16 +23,23 @@ def test_runtime_emergency_stop_from_risk_event():
     bus = EventBus()
 
     runtime = GovernedRuntime(
-        mode=RuntimeMode.DRY_RUN,
-        event_bus=bus,
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=bus,
+)
 
     event = RuntimeEvent(
         event_type=RISK_ALERT,
         payload={
             "severity": "critical",
         },
-        timestamp=datetime.utcnow(),
+        emitted_at=datetime.utcnow(),
     )
 
     bus.publish(event)

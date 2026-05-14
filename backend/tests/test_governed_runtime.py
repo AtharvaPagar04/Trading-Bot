@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from src.runtime.governed_runtime import GovernedRuntime
 from src.runtime.runtime_enums import (
     RuntimeMode,
@@ -13,9 +16,17 @@ from datetime import datetime
 
 def test_runtime_starts():
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -24,9 +35,17 @@ def test_runtime_starts():
 
 def test_emergency_stop():
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.emergency_stop(EmergencyReason.MAX_DRAWDOWN)
 
@@ -35,9 +54,17 @@ def test_emergency_stop():
 def test_heartbeat_failure_triggers_emergency_stop():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.state.last_heartbeat = (
         datetime.utcnow()
@@ -67,14 +94,22 @@ def test_heartbeat_failure_triggers_emergency_stop():
 def test_stale_market_data_triggers_emergency_stop():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
 
-    runtime.market_data_health.last_update = (
+    event_bus=
+    EventBus(),
+)
+    runtime.start()
+    runtime.state.last_tick_received_at = (
         datetime.utcnow()
         -
-        timedelta(seconds=16)
+        timedelta(seconds=25)
     )
 
     runtime.validate_market_data()
@@ -88,8 +123,7 @@ def test_stale_market_data_triggers_emergency_stop():
     assert (
         runtime.state.emergency_reason
         ==
-        EmergencyReason
-        .HEARTBEAT_FAILURE
+        EmergencyReason.TRANSPORT_FAILURE
     )
 
     assert (
@@ -99,9 +133,17 @@ def test_stale_market_data_triggers_emergency_stop():
 def test_runtime_recovery():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.emergency_stop(
         EmergencyReason
@@ -128,9 +170,17 @@ def test_runtime_recovery():
 def test_runtime_cooldown_activation():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -157,9 +207,17 @@ def test_runtime_cooldown_activation():
 def test_cooldown_expiry_transitions_to_paused():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 

@@ -117,17 +117,47 @@ class PositionRepository:
 
             self.session.commit()
 
-def get_position(
-    self,
-    symbol: str,
-):
+    def get_position(
+        self,
+        symbol: str,
+    ):
 
-    return (
-        self.session.query(
-            PositionEntity
-        )
-        .filter_by(
-            symbol=symbol
-        )
-        .first()
+        return (
+            self.session.query(
+                PositionEntity
+            )
+            .filter_by(
+                symbol=symbol
+            )
+            .first()
     )
+    def cleanup_duplicate_positions(
+        self,
+    ):
+
+        positions = (
+            self.session.query(
+                PositionEntity
+        ).all()
+        )
+
+        seen_symbols = set()
+
+        for position in positions:
+
+            if (
+                position.symbol
+                in seen_symbols
+            ):
+
+                self.session.delete(
+                    position
+                )
+
+            else:
+
+                seen_symbols.add(
+                    position.symbol
+                )
+
+        self.session.commit()

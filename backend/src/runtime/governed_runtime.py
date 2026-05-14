@@ -28,43 +28,34 @@ from src.core.events import (
     SYSTEM_RECALIBRATION,
 )
 
+from src.runtime.runtime_state_machine import (
+    RuntimeStateMachine,
+)
 
+from src.runtime.runtime_metrics import (
+    runtime_metrics,
+)
+from src.events.runtime_events import (
+    RuntimeEventType,
+)
+
+
+from src.runtime.event_types import (
+    EXECUTION_EVENT,
+)
+
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+)
+from src.runtime.market_data_health import (
+    MarketDataHealth,
+)
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 class GovernedRuntime:
 
-    ALLOWED_TRANSITIONS = {
-        RuntimeStatus.STARTING: {
-            RuntimeStatus.RUNNING,
-            RuntimeStatus.EMERGENCY_STOP,
-            RuntimeStatus.SHUTDOWN,
-        },
-
-        RuntimeStatus.RUNNING: {
-            RuntimeStatus.PAUSED,
-            RuntimeStatus.COOLDOWN,
-            RuntimeStatus.EMERGENCY_STOP,
-            RuntimeStatus.SHUTDOWN,
-        },
-
-        RuntimeStatus.PAUSED: {
-            RuntimeStatus.RUNNING,
-            RuntimeStatus.SHUTDOWN,
-        },
-
-        RuntimeStatus.COOLDOWN: {
-            RuntimeStatus.PAUSED,
-            RuntimeStatus.RUNNING,
-            RuntimeStatus.EMERGENCY_STOP,
-            RuntimeStatus.SHUTDOWN,
-        },
-
-        RuntimeStatus.EMERGENCY_STOP: {
-            RuntimeStatus.PAUSED,
-
-            RuntimeStatus.SHUTDOWN,
-        },
-
-        RuntimeStatus.SHUTDOWN: set(),
-    }
+   
 
     def __init__(
         self,
@@ -72,11 +63,35 @@ class GovernedRuntime:
         event_bus: EventBus,
     ):
 
-        self.state = runtime_state
+        if isinstance(
+            runtime_state,
+            RuntimeState,
+        ):
+            self.state = runtime_state
+
+        else:
+            self.state = build_runtime_state(
+                capital=1000,
+                timeframe="5m",
+                adx_value=20,
+                atr_percent=1.0,
+            )
 
         self.event_bus = event_bus
-
-        
+        self.state_machine = (
+            RuntimeStateMachine(
+                self.state
+            )
+        )
+        self.runtime_event_bus = (
+            event_bus
+        )
+        self.market_data_health = (
+            MarketDataHealth(
+                last_update=
+                datetime.utcnow()
+            )
+        )
 
         self._register_handlers()
 
@@ -91,11 +106,16 @@ class GovernedRuntime:
             SYSTEM_RECALIBRATION,
             self.handle_recalibration,
         )
+        self.event_bus.subscribe(
+            EXECUTION_EVENT,
+            self.handle_execution_event,
+        )
 
     def start(self):
 
-        self.transition_to(
-            RuntimeStatus.RUNNING
+        self.state_machine.transition_to(
+            RuntimeStatus.RUNNING,
+            reason="Runtime start requested",
         )
 
         self.state.last_heartbeat = (
@@ -104,8 +124,9 @@ class GovernedRuntime:
 
     def pause(self):
 
-        self.transition_to(
-            RuntimeStatus.PAUSED
+        self.state_machine.transition_to(
+            RuntimeStatus.PAUSED,
+            reason="Manual runtime pause",
         )
 
     def emergency_stop(
@@ -120,9 +141,12 @@ class GovernedRuntime:
 
             return
 
-        self.transition_to(
-            RuntimeStatus
-            .EMERGENCY_STOP
+        self.state_machine.transition_to(
+            RuntimeStatus.EMERGENCY_STOP,
+            reason=(
+                f"Emergency stop triggered: "
+                f"{reason.value}"
+            ),
         )
 
         self.state.emergency_reason = (
@@ -132,11 +156,58 @@ class GovernedRuntime:
         self.state.is_trading_enabled = (
             False
         )
+        runtime_metrics[
+            "emergency_stops"
+        ] += 1
+
+        event = RuntimeEvent(
+            event_type=
+            RuntimeEventType
+            .EMERGENCY_STOP
+            .value,
+
+            payload={
+                "reason":
+                reason.value,
+
+                "timestamp":
+                datetime.utcnow()
+                .isoformat(),
+            },
+
+            emitted_at=
+            datetime.utcnow(),
+        )
+
+        self.runtime_event_bus.publish(
+            event
+        )
         
+    def activate_safe_mode(
+        self,
+        reason: str,
+    ):
+
+        if self.state.safe_mode:
+            return
+
+        self.state.safe_mode = True
+
+        runtime_log(
+            level=LogLevel.WARNING,
+
+            category=LogCategory.RUNTIME,
+
+            message=(
+                f"Safe mode activated: "
+                f"{reason}"
+            ),
+        )
     def recover(self):
 
-        self.transition_to(
-            RuntimeStatus.PAUSED
+        self.state_machine.transition_to(
+            RuntimeStatus.PAUSED,
+            reason="Runtime recovery initiated",
         )
 
         self.state.emergency_reason = (
@@ -152,8 +223,9 @@ class GovernedRuntime:
         seconds: int = 30,
     ):
 
-        self.transition_to(
-            RuntimeStatus.COOLDOWN
+        self.state_machine.transition_to(
+            RuntimeStatus.COOLDOWN,
+            reason="Cooldown activated",
         )
 
         self.state.cooldown_until = (
@@ -189,15 +261,15 @@ class GovernedRuntime:
             self.state.cooldown_until
         ):
 
-            self.transition_to(
-                RuntimeStatus.PAUSED
+           self.state_machine.transition_to(
+                RuntimeStatus.PAUSED,
+                reason="Cooldown completed",
             )
-
-            self.state.is_trading_enabled = (
+           self.state.is_trading_enabled = (
                 True
             )
 
-            self.state.cooldown_until = (
+           self.state.cooldown_until = (
                 None
             )
 
@@ -221,7 +293,6 @@ class GovernedRuntime:
             )
 
     def validate_market_data(self):
-
         synchronize_transport_state(
             self.state
         )
@@ -232,10 +303,19 @@ class GovernedRuntime:
 
             self.emergency_stop(
                 EmergencyReason
-                .HEARTBEAT_FAILURE
+                .TRANSPORT_FAILURE
             )
 
-        return
+            return
+
+        if (
+            self.state.last_tick_received_at
+            is None
+        ):
+
+            return
+
+
 
     def execution_allowed(
         self,
@@ -247,8 +327,9 @@ class GovernedRuntime:
 
     def shutdown(self):
 
-        self.transition_to(
-            RuntimeStatus.SHUTDOWN
+        self.state_machine.transition_to(
+            RuntimeStatus.SHUTDOWN,
+            reason="Runtime shutdown requested",
         )
 
     def handle_risk_alert(
@@ -275,36 +356,18 @@ class GovernedRuntime:
 
         self.pause()
 
-    def transition_to(
+    def handle_execution_event(
         self,
-        target_status: RuntimeStatus,
+        event_payload,
     ):
 
-        current_status = (
-            self.state.status
-        )
+        runtime_log(
+            level=LogLevel.INFO,
 
-        allowed_targets = (
-            self.ALLOWED_TRANSITIONS
-            .get(
-                current_status,
-                set(),
-            )
-        )
+            category=LogCategory.EXECUTION,
 
-        if (
-            target_status
-            not in allowed_targets
-        ):
-
-            raise RuntimeError(
-                f"Invalid runtime "
-                f"transition: "
-                f"{current_status}"
-                f" -> "
-                f"{target_status}"
-            )
-
-        self.state.status = (
-            target_status
+            message=(
+                f"Execution event received: "
+                f"{event_payload}"
+            ),
         )

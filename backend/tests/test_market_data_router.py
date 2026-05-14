@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from datetime import datetime
 
 from src.runtime.event_bus import (
@@ -8,9 +11,7 @@ from src.runtime.governed_runtime import (
     GovernedRuntime,
 )
 
-from src.runtime.runtime_enums import (
-    RuntimeMode,
-)
+
 
 from src.market_data.market_tick import (
     MarketTick,
@@ -24,9 +25,17 @@ from src.market_data.market_data_router import (
 def test_market_tick_updates_runtime_heartbeat():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     router = MarketDataRouter(
         runtime

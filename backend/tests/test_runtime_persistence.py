@@ -1,7 +1,7 @@
 from src.strategy.strategy_state import (
     StrategyState,
 )
-
+import time
 from src.paper_execution.paper_portfolio import (
     PaperPortfolio,
 )
@@ -41,7 +41,8 @@ from src.risk.session_risk import (
 )
 
 from datetime import datetime
-
+import json
+import tempfile
 
 def test_runtime_snapshot_roundtrip():
 
@@ -145,3 +146,125 @@ def test_runtime_snapshot_roundtrip():
         ==
         1000.0
     )
+
+def test_runtime_snapshot_corruption_detection():
+
+    corrupted_payload = (
+        "{ invalid json"
+    )
+
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        delete=False,
+    ) as temp_file:
+
+        temp_file.write(
+            corrupted_payload
+        )
+
+        temp_path = (
+            temp_file.name
+        )
+
+    with open(temp_path, "r") as file:
+
+        try:
+
+            json.load(file)
+
+            assert False
+
+        except json.JSONDecodeError:
+
+            assert True
+
+def test_runtime_snapshot_persistence_churn():
+
+    runtime = RuntimeState(
+        operating_state="NORMAL",
+
+        market_state=MarketState(
+            timeframe="5m",
+
+            adx=25,
+
+            atr_percent=1.0,
+
+            regime_state=
+            RegimeState.SAFE,
+
+            volatility_state=
+            VolatilityState.NORMAL,
+
+            allow_entries=True,
+        ),
+
+        session=TradingSession(
+            session_id="stress-test",
+
+            start_time=
+            datetime.utcnow(),
+
+            starting_capital=1000,
+
+            current_capital=1000,
+
+            session_pnl_percent=0.0,
+
+            peak_pnl_percent=0.0,
+
+            entries_enabled=True,
+        ),
+
+        safe_mode=False,
+
+        risk_state=RiskSyncState(
+            risk_state=
+            SessionRiskState.NORMAL,
+
+            entries_allowed=True,
+
+            size_multiplier=1.0,
+        ),
+
+        active_events=[],
+
+        event_history=[],
+    )
+
+    strategy_state = (
+        StrategyState()
+    )
+
+    portfolio = (
+        PaperPortfolio()
+    )
+
+    drawdown_state = (
+        DrawdownState(
+            peak_equity=1000.0,
+            current_drawdown_percent=0.0,
+        )
+    )
+
+    for _ in range(100):
+
+        persist_runtime_snapshot(
+            runtime=runtime,
+
+            strategy_state=
+            strategy_state,
+
+            portfolio=portfolio,
+
+            drawdown_state=
+            drawdown_state,
+        )
+
+        restored = (
+            load_runtime_snapshot(
+                full_snapshot=True
+            )
+        )
+
+        assert restored is not None

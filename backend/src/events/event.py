@@ -36,10 +36,8 @@ class EventType(str, Enum):
     )
 
 
+from src.events.base_event import BaseEvent
+
 @dataclass
-class RuntimeEvent:
-    event_type: EventType
-
-    timestamp: datetime
-
+class RuntimeEvent(BaseEvent):
     message: str

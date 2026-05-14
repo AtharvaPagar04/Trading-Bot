@@ -5,7 +5,11 @@ from src.db.database import (
 from src.db.runtime_models import (
     RuntimeStateEntity,
 )
-
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
 
 class RuntimeRepository:
 
@@ -64,6 +68,13 @@ class RuntimeRepository:
             )
 
         self.session.commit()
+        runtime_log(
+            level=LogLevel.DEBUG,
+            category=LogCategory.PERSISTENCE,
+            message=(
+                "Runtime state persisted"
+            ),
+        )
 
     def load_runtime_state(
         self,

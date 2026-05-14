@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from src.runtime.governed_runtime import (
     GovernedRuntime,
 )
@@ -23,9 +26,17 @@ from src.risk.runtime_drawdown_governance import (
 def test_drawdown_triggers_cooldown():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -49,9 +60,17 @@ def test_drawdown_triggers_cooldown():
 def test_drawdown_triggers_pause():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -75,9 +94,17 @@ def test_drawdown_triggers_pause():
 def test_drawdown_triggers_emergency_stop():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 

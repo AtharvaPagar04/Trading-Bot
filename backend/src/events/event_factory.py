@@ -13,7 +13,7 @@ def create_event(
     return RuntimeEvent(
         event_type=event_type,
 
-        timestamp=datetime.utcnow(),
+        emitted_at=datetime.utcnow(),
 
         message=message,
     )

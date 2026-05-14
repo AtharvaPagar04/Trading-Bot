@@ -11,7 +11,7 @@ from src.monitoring.alert_manager import (
 )
 
 from src.logging.runtime_logger import (
-    create_logger,
+    build_logger,
 )
 
 
@@ -21,6 +21,8 @@ class ReconciliationLoop:
         self,
         runtime_portfolio: dict,
         exchange_balances: dict,
+        runtime=None,
+
     ):
 
         self.runtime_portfolio = (
@@ -34,7 +36,7 @@ class ReconciliationLoop:
         self.metrics = (
             MetricsRegistry()
         )
-
+        self.runtime = runtime
         self.alerts = (
             AlertManager()
         )
@@ -65,6 +67,17 @@ class ReconciliationLoop:
         )
 
         if len(drift) > 0:
+            
+            if (
+                self.runtime
+                is not None
+            ):
+
+                self.runtime.activate_safe_mode(
+                    reason=(
+                        "reconciliation drift detected"
+                    ),
+                )
 
             self.metrics.increment(
                 "drift_events"

@@ -20,20 +20,32 @@ from src.runtime.runtime_enums import (
     RuntimeMode,
     RuntimeStatus,
 )
+from src.config.runtime_config import (
+    RuntimeConfig,
+)
 def build_runtime_state(
+   
     capital: float,
     timeframe: str,
     adx_value: float,
     atr_percent: float,
 ) -> RuntimeState:
+    config = (
+        RuntimeConfig()
+    )
+    
     market_state = build_market_state(
-        timeframe=timeframe,
-        adx_value=adx_value,
-        atr_percent=atr_percent,
+        timeframe=
+            config.default_timeframe,
+        adx_value=
+            config.default_adx,
+        atr_percent=
+            config.default_atr_percent,
     )
 
     session = create_trading_session(
-        starting_capital=capital
+    starting_capital=
+    config.starting_capital
     )
 
     risk_state = (
@@ -52,8 +64,7 @@ def build_runtime_state(
 
         active_events=[],
         event_history=[],
-        session_started_at=
-        datetime.utcnow(),
+        session_started_at=None,
         runtime_uptime_seconds=0,
         last_tick_received_at=None,
         websocket_connected=False,

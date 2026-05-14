@@ -1,10 +1,23 @@
 [project]
 name = "grid-trading-bot-v3"
 version = "0.1.0"
-description = "Add your description here"
+description = "Runtime-oriented autonomous trading infrastructure"
 readme = "README.md"
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.10,<3.11"
+
+dependencies = [
+    "requests",
+    "pandas",
+    "sqlalchemy",
+    "websockets",
+    "numpy",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

@@ -20,7 +20,9 @@ class PositionEntity(Base):
     symbol = Column(
         String,
     )
-
+    side = Column(
+        String,
+    )
     quantity = Column(
         Float,
     )

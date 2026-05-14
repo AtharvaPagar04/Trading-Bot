@@ -1,36 +1,57 @@
-from collections import defaultdict
-from collections.abc import Callable
+from src.core.event_bus import (
+    EventBus,
+)
+
+from src.core.events import (
+    RuntimeEvent,
+)
 
 
-class EventBus:
+class RuntimeEventBus(EventBus):
+    """
+    Deprecated compatibility wrapper.
 
-    def __init__(self):
-
-        self.subscribers = defaultdict(list)
-
-    def subscribe(
-        self,
-        event_type: str,
-        handler: Callable,
-    ):
-
-        self.subscribers[
-            event_type
-        ].append(handler)
+    Canonical event bus:
+    src.core.event_bus.EventBus
+    """
 
     def publish(
         self,
-        event_type: str,
-        payload,
+        event_type,
+        payload=None,
     ):
-
-        handlers = (
-            self.subscribers.get(
-                event_type,
-                []
+        if payload is None:
+            # New typed dataclass events
+            event = event_type
+            event_name = type(event).__name__
+            # Wrap into a RuntimeEvent for compatibility, or just publish directly if super expects RuntimeEvent
+            # Actually super().publish expects a RuntimeEvent with an event_type string.
+            # I can convert dataclass to RuntimeEvent here or just broadcast it.
+            super().publish(
+                RuntimeEvent(
+                    event_type=event_name,
+                    payload=event.__dict__,
+                    emitted_at=None,
+                )
             )
+            return
+
+
+        if isinstance(
+            payload,
+            RuntimeEvent,
+        ):
+
+            super().publish(
+                payload
+            )
+
+            return
+
+        event = RuntimeEvent(
+            event_type=event_type,
+            payload=payload,
+            emitted_at=None,
         )
 
-        for handler in handlers:
-
-            handler(payload)
+        super().publish(event)

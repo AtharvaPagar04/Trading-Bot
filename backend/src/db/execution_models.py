@@ -8,35 +8,6 @@ from src.db.database import (
 )
 
 
-class PositionEntity(Base):
-
-    __tablename__ = "positions"
-
-    id = Column(
-        Integer,
-        primary_key=True,
-    )
-
-    symbol = Column(
-        String,
-    )
-
-    side = Column(
-        String,
-    )
-
-    quantity = Column(
-        Float,
-    )
-
-    entry_price = Column(
-        Float,
-    )
-
-    status = Column(
-        String,
-    )
-
 
 class TradeExecutionEntity(Base):
 

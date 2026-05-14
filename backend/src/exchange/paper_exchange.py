@@ -27,7 +27,19 @@ from src.db.position_repository import (
 from src.db.balance_repository import (
     BalanceRepository,
 )
-
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.runtime_metrics import (
+    runtime_metrics,
+)
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
 class PaperExchange:
 
     def __init__(
@@ -399,10 +411,19 @@ class PaperExchange:
         self,
     ):
 
+        self.position_repository\
+            .cleanup_duplicate_positions()
+
         positions = (
             self.position_repository
                 .get_all_positions()
         )
+
+        positions = [
+            position
+            for position in positions
+            if position.symbol == "BTCUSDT"
+        ]
 
         for persisted_position in positions:
 
@@ -419,12 +440,17 @@ class PaperExchange:
                 persisted_position.average_price,
             )
 
-            print(
-                f"[RECOVERY] "
-                f"Loaded position: "
-                f"{persisted_position.symbol}"
+            runtime_log(
+                level=LogLevel.INFO,
+
+                category=LogCategory.PERSISTENCE,
+
+                message=(
+                    f"Recovered position "
+                    f"{persisted_position.symbol}"
+                ),
             )
-    
+
     def load_persisted_balance(
         self,
     ):
@@ -434,7 +460,13 @@ class PaperExchange:
             .load_balance()
         )
 
-        if persisted_balance:
+        if (
+            persisted_balance
+            and
+            persisted_balance.total_capital < 10000
+            and
+            persisted_balance.available_capital < 10000
+        ):
 
             self.balance.total_capital = (
                 persisted_balance
@@ -446,9 +478,129 @@ class PaperExchange:
                 .available_capital
             )
 
-            print(
-                "[RECOVERY] "
-                "Balance restored"
+            runtime_log(
+                level=LogLevel.INFO,
+
+                category=LogCategory.PERSISTENCE,
+
+                message=(
+                    f"Restored balance values | "
+                    f"total={self.balance.total_capital} | "
+                    f"available={self.balance.available_capital}"
+                ),
             )
 
-        
+    def calculate_portfolio_value(
+        self,
+        latest_price: float,
+    ) -> float:
+
+        invested_capital = 0.0
+
+
+        for position in (
+            self.positions.values()
+        ):
+
+            if (
+                position.symbol
+                !=
+                "BTCUSDT"
+            ):
+
+                continue
+
+            invested_capital += (
+                position.quantity
+                * latest_price
+            )
+
+        return (
+            self.balance.available_capital
+            +
+            invested_capital
+        )
+    
+    def portfolio_reconciliation_valid(
+        self,
+        latest_price: float,
+        tolerance: float = 1.0,
+    ) -> bool:
+
+        portfolio_value = (
+            self.calculate_portfolio_value(
+                latest_price
+            )
+        )
+
+        expected_equity = (
+            self.balance.available_capital
+        )
+
+        for position in (
+            self.positions.values()
+        ):
+
+            if (
+                position.symbol
+                !=
+                "BTCUSDT"
+            ):
+
+                continue
+
+            expected_equity += (
+                position.quantity
+                *
+                latest_price
+            )
+
+        runtime_log(
+            level=LogLevel.INFO,
+
+            category=LogCategory.PERSISTENCE,
+
+            message=(
+                f"Reconciliation values | "
+                f"portfolio={portfolio_value} | "
+                f"expected={expected_equity} | "
+                f"available={self.balance.available_capital}"
+            ),
+        )
+
+        difference = abs(
+            portfolio_value
+            -
+            expected_equity
+        )
+
+        if difference > tolerance:
+
+            runtime_metrics[
+                "reconciliation_failures"
+            ] += 1
+
+            runtime_log(
+                level=LogLevel.ERROR,
+
+                category=LogCategory.PERSISTENCE,
+
+                message=(
+                    f"Portfolio reconciliation failed: "
+                    f"difference={difference}"
+                ),
+            )
+
+            runtime_log(
+                level=LogLevel.ERROR,
+
+                category=LogCategory.PERSISTENCE,
+
+                 message=(
+                    f"Portfolio reconciliation "
+                    f"drift detected: "
+                    f"{difference}"
+                ),
+            )
+
+        return difference <= tolerance

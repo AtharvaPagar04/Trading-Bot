@@ -1,5 +1,6 @@
 import json
 import threading
+import time
 
 from websocket import WebSocketApp
 
@@ -12,17 +13,44 @@ from src.market_data.market_tick import (
 )
 
 from datetime import datetime
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.event_bus import (
+    EventBus,
+)
 
 
+WEBSOCKET_CONNECTED_EVENT = (
+    "WEBSOCKET_CONNECTED"
+)
+
+
+WEBSOCKET_DISCONNECTED_EVENT = (
+    "WEBSOCKET_DISCONNECTED"
+)
 class BinanceWebSocketClient:
 
     def __init__(
         self,
         router: MarketDataRouter,
+        event_bus: EventBus,
         symbol: str = "btcusdt",
     ):
 
-        self.router = router
+        self.router = (
+            router
+        )
+        self.event_bus = (
+            event_bus
+        )
 
         self.symbol = (
             symbol.lower()
@@ -50,10 +78,21 @@ class BinanceWebSocketClient:
         self.connected = True
 
         self.reconnect_attempts = 0
+        self.event_bus.publish(
+            WEBSOCKET_CONNECTED_EVENT,
+            {
+                "symbol":
+                self.symbol,
+            },
+        )
 
-        print(
-            f"[WS OPEN] Connected to "
-            f"{self.symbol}"
+        runtime_log(
+            level=LogLevel.INFO,
+            category=LogCategory.WEBSOCKET,
+            message=(
+                f"Connected to "
+                f"{self.symbol}"
+            ),
         )
 
     def on_message(
@@ -105,9 +144,14 @@ class BinanceWebSocketClient:
         error,
     ):
 
-        print(
-            f"[WS ERROR] {error}"
-        )
+        runtime_log(
+            level=LogLevel.ERROR,
+            category=LogCategory.WEBSOCKET,
+            message=(
+                f"Websocket error: "
+                f"{error}"
+            ),
+)
 
     def on_close(
         self,
@@ -117,16 +161,42 @@ class BinanceWebSocketClient:
     ):
 
         self.connected = False
-
-        print(
-            "[WS CLOSED]"
+        self.event_bus.publish(
+            WEBSOCKET_DISCONNECTED_EVENT,
+            {
+                "symbol":
+                self.symbol,
+            },
         )
+
+        runtime_log(
+            level=LogLevel.WARNING,
+            category=LogCategory.WEBSOCKET,
+            message=(
+                f"Websocket connection closed",
+            ),
+        )
+
         if not self.shutdown_requested:
             self.reconnect()
 
     def connect(
         self,
     ):
+        if self.connected:
+
+            runtime_log(
+                level=LogLevel.WARNING,
+
+                category=LogCategory.WEBSOCKET,
+
+                message=(
+                    "Connect ignored because "
+                    "websocket is already connected"
+                ),
+            )
+
+            return
 
         self.ws = WebSocketApp(
             self.url,
@@ -187,12 +257,16 @@ class BinanceWebSocketClient:
 
         self.reconnect_attempts += 1
 
-        print(
-            f"[WS RECONNECT] "
-            f"Attempt "
-            f"{self.reconnect_attempts}"
+        runtime_log(
+            level=LogLevel.WARNING,
+            category=LogCategory.WEBSOCKET,
+            message=(
+                f"Reconnect attempt "
+                f"{self.reconnect_attempts}"
+            ),
         )
 
+        time.sleep(2)
         self.connect()
 
         return True

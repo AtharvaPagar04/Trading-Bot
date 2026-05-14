@@ -27,7 +27,7 @@ def test_event_publish():
         payload={
             "price": 50000,
         },
-        timestamp=datetime.utcnow(),
+        emitted_at=datetime.utcnow(),
     )
 
     bus.publish(event)

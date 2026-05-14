@@ -1,15 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+from src.events.base_event import BaseEvent
 
 @dataclass
-class RuntimeEvent:
-
-    event_type: str
-
+class RuntimeEvent(BaseEvent):
     payload: dict
-
-    timestamp: datetime
 
 
 MARKET_TICK = (

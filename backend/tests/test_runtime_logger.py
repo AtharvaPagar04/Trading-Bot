@@ -1,12 +1,12 @@
 from src.logging.runtime_logger import (
-    create_logger,
+    build_logger,
 )
 
 
-def test_create_logger():
+def test_build_logger():
 
     logger = (
-        create_logger(
+        build_logger(
             "runtime"
         )
     )

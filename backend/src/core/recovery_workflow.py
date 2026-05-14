@@ -7,7 +7,9 @@ from src.core.runtime import (
 from src.risk.recovery import (
     validate_reentry_conditions,
 )
-
+from src.runtime.runtime_enums import (
+    RuntimeStatus,
+)
 
 @dataclass
 class RecoveryWorkflowResult:
@@ -34,7 +36,45 @@ def evaluate_recovery_workflow(
             "Runtime still "
             "in safe mode",
         )
+    if (
+        runtime.status
+        ==
+        RuntimeStatus.EMERGENCY_STOP
+    ):
 
+        return RecoveryWorkflowResult(
+            recovery_allowed=False,
+
+            reason=
+            "Runtime emergency stop "
+            "active",
+        )
+
+    if (
+        runtime.status
+        ==
+        RuntimeStatus.SHUTDOWN
+    ):
+
+        return RecoveryWorkflowResult(
+            recovery_allowed=False,
+
+            reason=
+            "Runtime shutdown "
+            "active",
+        )
+
+    if (
+        not runtime.is_trading_enabled
+    ):
+
+        return RecoveryWorkflowResult(
+            recovery_allowed=False,
+
+            reason=
+            "Trading currently "
+            "disabled",
+        )
     reentry = (
         validate_reentry_conditions(
             adx_value=adx_value,

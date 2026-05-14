@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from datetime import datetime
 from datetime import timedelta
 
@@ -21,12 +24,21 @@ from src.runtime.runtime_enums import (
 def test_monitor_detects_expired_heartbeat():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     monitor = RuntimeMonitor(
-        runtime
+        runtime=runtime,
+        exchange=MockExchange(),
     )
 
     runtime.state.last_heartbeat = (
@@ -49,3 +61,11 @@ def test_monitor_detects_expired_heartbeat():
         EmergencyReason
         .HEARTBEAT_FAILURE
     )
+
+class MockExchange:
+
+    def portfolio_reconciliation_valid(
+        self,
+        latest_price,
+    ):
+        return True

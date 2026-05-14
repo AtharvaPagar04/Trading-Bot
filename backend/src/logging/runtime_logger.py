@@ -1,41 +1,40 @@
 import logging
 
 
-def create_logger(
+def build_logger(
     name: str,
-):
+) -> logging.Logger:
 
     logger = logging.getLogger(
         name
     )
 
+    if logger.handlers:
+        return logger
+
     logger.setLevel(
         logging.INFO
     )
 
-    if not logger.handlers:
-
-        handler = (
-            logging.StreamHandler()
-        )
-
-        formatter = (
-            logging.Formatter(
-                (
-                    "%(asctime)s "
-                    "%(levelname)s "
-                    "%(name)s "
-                    "%(message)s"
-                )
+    formatter = (
+        logging.Formatter(
+            (
+                "[%(asctime)s] "
+                "[%(levelname)s] "
+                "[%(name)s] "
+                "%(message)s"
             )
         )
+    )
 
-        handler.setFormatter(
-            formatter
-        )
+    handler = logging.StreamHandler()
 
-        logger.addHandler(
-            handler
-        )
+    handler.setFormatter(
+        formatter
+    )
+
+    logger.addHandler(
+        handler
+    )
 
     return logger

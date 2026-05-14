@@ -28,22 +28,32 @@ from src.runtime.runtime_enums import (
     RuntimeStatus,
     EmergencyReason,
 )
-
+from src.runtime.runtime_transition_models import (
+    RuntimeTransitionRecord,
+)
 @dataclass
 class RuntimeState:
     market_state: MarketState
     
     session: TradingSession
 
+
     risk_state: RiskSyncState
     safe_mode: bool
-    operating_state: str
+    
     active_events: List[RuntimeEvent]
     event_history: List[RuntimeEvent]
+    transition_history: List[
+        RuntimeTransitionRecord
+    ] = field(
+        default_factory=list
+    )
+    
     total_trades: int = 0
     winning_trades: int = 0
     losing_trades: int = 0
     latest_price: float = 0.0
+    operating_state: str | None = None  # depriciated
     last_execution_price: float = 0.0
     last_execution_time: Optional[datetime] = None
     latest_candle_close: float = 0.0

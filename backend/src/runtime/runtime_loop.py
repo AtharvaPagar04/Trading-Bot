@@ -45,15 +45,12 @@ class RuntimeLoop:
                     100000,
                 },
 
-                timestamp=
+                emitted_at=
                 datetime.utcnow(),
             )
 
             self.event_bus.publish(
-                event_type=
-                event.event_type,
-
-                payload=event,
+                event
             )
 
             time.sleep(1)

@@ -41,6 +41,18 @@ from datetime import (
     datetime,
 )
 
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.event_bus import (
+    EventBus,
+)
+
+
+
+
 class LiveTickHandler:
 
     def __init__(
@@ -48,11 +60,13 @@ class LiveTickHandler:
         runtime_state,
         exchange,
         runtime_controller,
+        event_bus: EventBus,
     ):
 
         self.runtime_state = (
             runtime_state
         )
+        
         self.runtime_repository = (
             RuntimeRepository()
         )
@@ -70,6 +84,9 @@ class LiveTickHandler:
         self.runtime_controller = (
             runtime_controller
         )
+        self.event_bus = (
+            event_bus
+        )
 
     def process_tick(
         self,
@@ -78,7 +95,7 @@ class LiveTickHandler:
         if (
             not
             self.runtime_controller
-            .is_running
+            .is_running()
         ):
 
             return
@@ -86,6 +103,9 @@ class LiveTickHandler:
         self.runtime_state.latest_price = (
             tick.price
         )
+        
+       
+       
         self.runtime_state.last_tick_received_at = (
             datetime.utcnow()
         )
@@ -109,6 +129,176 @@ class LiveTickHandler:
             )
         )
 
+        self.handle_position_exit(
+            tick
+        )
+        
+        if completed_candle is None:
+
+            return
+
+        self.runtime_state.latest_candle_close = (
+            completed_candle.close
+        )
+
+        self.runtime_state.latest_candle_timestamp = (
+            completed_candle.timestamp
+        )
+
+        runtime_log(
+            level=LogLevel.DEBUG,
+
+            category=LogCategory.RUNTIME,
+
+            message=(
+                f"Candle closed "
+                f"O={completed_candle.open} "
+                f"H={completed_candle.high} "
+                f"L={completed_candle.low} "
+                f"C={completed_candle.close}"
+            ),
+        )
+
+        snapshot = (
+            MarketDataSnapshot(
+                symbol=tick.symbol,
+
+                timeframe="1m",
+
+                candles=[completed_candle],
+            )
+        )
+
+        if (
+            self.runtime_controller
+            .is_paused()
+        ):
+            runtime_log(
+                level=LogLevel.INFO,
+
+                category=LogCategory.RUNTIME,
+
+                message=(
+                    "Tick processing skipped "
+                    "because runtime is paused"
+                ),
+            )
+
+            return
+
+        result = (
+            execute_autonomous_cycle(
+                runtime=
+                self.runtime_state,
+
+                exchange=
+                self.exchange,
+
+                snapshot=
+                snapshot,
+
+                candle=
+                completed_candle,
+                
+                event_bus=
+                self.event_bus,
+
+                trade_side=
+                "BUY",
+            )
+        )
+        
+        self.runtime_repository.save_runtime_state(
+            operating_state=
+                self.runtime_state
+                .operating_state,
+
+            safe_mode=
+                self.runtime_state
+                .safe_mode,
+
+            total_trades=
+                self.runtime_state
+                .total_trades,
+        )
+
+        if result.executed:
+
+            self.runtime_state.total_trades += 1
+
+            self.runtime_state.last_execution_price = (
+                tick.price
+            )
+
+            self.runtime_state.last_execution_time = (
+                tick.timestamp
+            )
+        self.update_runtime_snapshot()
+        
+    def load_persisted_runtime_state(
+        self,
+    ):
+
+        persisted_runtime = (
+            self.runtime_repository
+            .load_runtime_state()
+        )
+
+        if persisted_runtime:
+
+            self.runtime_state.operating_state = (
+                persisted_runtime
+                .operating_state
+            )
+
+            self.runtime_state.safe_mode = (
+                persisted_runtime
+                .safe_mode
+            )
+
+            self.runtime_state.total_trades = (
+                persisted_runtime
+                .total_trades
+            )
+
+            runtime_log(
+                level=LogLevel.INFO,
+
+                category=LogCategory.RUNTIME,
+
+                message="Runtime state restored",
+            )
+    def update_runtime_snapshot(
+        self,
+    ):
+
+        snapshot_data = (
+            build_runtime_snapshot(
+                runtime=
+                self.runtime_state,
+
+                exchange=
+                self.exchange,
+
+                runtime_controller=
+                self.runtime_controller,
+            )
+        )
+
+        runtime_snapshot.clear()
+
+        runtime_snapshot.update(
+            snapshot_data
+        )
+
+        render_runtime_snapshot(
+            snapshot_data
+        )
+
+    def handle_position_exit(
+        self,
+        tick,
+    ):
         if (
             tick.symbol
             in self.exchange.positions
@@ -166,148 +356,15 @@ class LiveTickHandler:
                     price=tick.price,
                 )
 
-                print(
-                    f"[SELL] "
-                    f"{tick.symbol} "
-                    f"Profit Target Hit"
+                runtime_log(
+                    level=LogLevel.INFO,
+
+                    category=LogCategory.EXECUTION,
+
+                    message=(
+                        f"{tick.symbol} "
+                        f"profit target hit"
+                    ),
                 )
 
                 return
-
-        if completed_candle is None:
-
-            return
-
-        self.runtime_state.latest_candle_close = (
-            completed_candle.close
-        )
-
-        self.runtime_state.latest_candle_timestamp = (
-            completed_candle.timestamp
-        )
-
-        print(
-            f"[CANDLE CLOSED] "
-            f"O={completed_candle.open} "
-            f"H={completed_candle.high} "
-            f"L={completed_candle.low} "
-            f"C={completed_candle.close}"
-        )
-
-        snapshot = (
-            MarketDataSnapshot(
-                symbol=tick.symbol,
-
-                timeframe="1m",
-
-                candles=[completed_candle],
-            )
-        )
-
-        if (
-            self.runtime_controller
-            .is_paused
-        ):
-
-            return
-
-        result = (
-            execute_autonomous_cycle(
-                runtime=
-                self.runtime_state,
-
-                exchange=
-                self.exchange,
-
-                snapshot=
-                snapshot,
-
-                candle=
-                completed_candle,
-
-                trade_side=
-                "BUY",
-            )
-        )
-        self.runtime_state = (
-            result.runtime
-        )
-        self.runtime_repository.save_runtime_state(
-            operating_state=
-                self.runtime_state
-                .operating_state,
-
-            safe_mode=
-                self.runtime_state
-                .safe_mode,
-
-            total_trades=
-                self.runtime_state
-                .total_trades,
-        )
-
-        if result.executed:
-
-            self.runtime_state.total_trades += 1
-
-            self.runtime_state.last_execution_price = (
-                tick.price
-            )
-
-            self.runtime_state.last_execution_time = (
-                tick.timestamp
-            )
-
-        snapshot_data = (
-            build_runtime_snapshot(
-                runtime=
-                self.runtime_state,
-
-                exchange=
-                self.exchange,
-
-                runtime_controller=
-                self.runtime_controller,
-            )
-        )
-
-        runtime_snapshot.clear()
-
-        runtime_snapshot.update(
-            snapshot_data
-        )
-
-        render_runtime_snapshot(
-            snapshot_data
-        )
-        
-    def load_persisted_runtime_state(
-        self,
-    ):
-
-        persisted_runtime = (
-            self.runtime_repository
-            .load_runtime_state()
-        )
-
-        if persisted_runtime:
-
-            self.runtime_state.operating_state = (
-                persisted_runtime
-                .operating_state
-            )
-
-            self.runtime_state.safe_mode = (
-                persisted_runtime
-                .safe_mode
-            )
-
-            self.runtime_state.total_trades = (
-                persisted_runtime
-                .total_trades
-            )
-
-            print(
-                "[RECOVERY] "
-                "Runtime state restored"
-            )

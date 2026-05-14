@@ -5,7 +5,11 @@ from src.runtime.runtime_monitor import (
     RuntimeMonitor,
 )
 
-
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
 class RuntimeMonitorLoop:
 
     def __init__(
@@ -36,9 +40,13 @@ class RuntimeMonitorLoop:
 
             except Exception as exc:
 
-                print(
-                    "[RUNTIME MONITOR ERROR]",
-                    str(exc),
+                runtime_log(
+                    level=LogLevel.ERROR,
+                    category=LogCategory.RUNTIME,
+                    message=(
+                        f"Runtime monitor failure: "
+                        f"{exc}"
+                    ),
                 )
 
             time.sleep(

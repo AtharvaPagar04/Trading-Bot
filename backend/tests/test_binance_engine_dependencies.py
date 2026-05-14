@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from src.core.event_bus import (
     EventBus,
 )
@@ -6,9 +9,7 @@ from src.runtime.governed_runtime import (
     GovernedRuntime,
 )
 
-from src.runtime.runtime_enums import (
-    RuntimeMode,
-)
+
 
 from src.execution.binance_execution_engine import (
     BinanceExecutionEngine,
@@ -22,9 +23,17 @@ from src.exchange.binance_rest_client import (
 def test_binance_engine_has_rest_client():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 

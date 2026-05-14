@@ -38,8 +38,8 @@ def persist_runtime_events(
     for event in events:
         event_dict = asdict(event)
 
-        event_dict["timestamp"] = (
-            event.timestamp.isoformat()
+        event_dict["emitted_at"] = (
+            event.emitted_at.isoformat()
         )
 
         serialized_events.append(

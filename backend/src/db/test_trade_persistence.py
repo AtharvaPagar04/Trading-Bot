@@ -11,7 +11,7 @@ repository = (
 
 repository.save_completed_trade(
     symbol="BTCUSDT",
-
+    session_id="test-session",
     quantity=0.01,
 
     entry_price=80000,

@@ -1,3 +1,6 @@
+BALANCE_DRIFT_TOLERANCE = 0.0001
+
+
 def detect_balance_drift(
     runtime_balances: dict,
     exchange_balances: dict,
@@ -31,7 +34,11 @@ def detect_balance_drift(
             exchange_total
         )
 
-        if difference > 0:
+        if (
+            difference
+            >
+            BALANCE_DRIFT_TOLERANCE
+        ):
 
             drift[asset] = {
                 "runtime":

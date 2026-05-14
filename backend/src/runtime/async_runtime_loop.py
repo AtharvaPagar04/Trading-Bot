@@ -46,7 +46,7 @@ class AsyncRuntimeLoop:
                     100000,
                 },
 
-                timestamp=
+                emitted_at=
                 datetime.utcnow(),
             )
 

@@ -1,5 +1,6 @@
 import json
-
+import os
+import tempfile
 from datetime import datetime
 
 from dataclasses import asdict
@@ -122,10 +123,29 @@ def persist_runtime_snapshot(
         )
     )
 
-    with open(path, "w") as file:
+    with tempfile.NamedTemporaryFile(
+        mode="w",
+        delete=False,
+        dir=path.parent,
+    ) as temp_file:
 
         json.dump(
             snapshot,
-            file,
+            temp_file,
             indent=4,
+        )
+
+        temp_file.flush()
+
+        os.fsync(
+            temp_file.fileno()
+        )
+
+        temp_path = (
+            temp_file.name
+        )
+
+        os.replace(
+            temp_path,
+            path,
         )

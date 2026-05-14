@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from src.runtime.event_bus import (
     EventBus,
 )
@@ -23,9 +26,17 @@ from datetime import datetime
 def test_runtime_starts_running():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -44,9 +55,17 @@ def test_runtime_starts_running():
 def test_emergency_stop_disables_trading():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -86,15 +105,12 @@ def test_critical_risk_event_triggers_stop():
             "critical"
         },
 
-        timestamp=
+        emitted_at=
         datetime.utcnow(),
     )
 
     bus.publish(
-        event_type=
-        RISK_ALERT,
-
-        payload=event,
+        event
     )
 
     assert (
@@ -110,9 +126,17 @@ def test_critical_risk_event_triggers_stop():
 def test_runtime_can_recover_after_pause():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 

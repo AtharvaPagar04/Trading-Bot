@@ -2,14 +2,13 @@ from src.db.database import (
     SessionLocal,
 )
 
-from src.db.execution_models import (
+from src.db.position_models import (
     PositionEntity,
 )
 
 from src.db.execution_models import (
     TradeExecutionEntity,
 )
-
 
 class ExecutionEngine:
 
@@ -35,7 +34,7 @@ class ExecutionEngine:
 
                 quantity=quantity,
 
-                entry_price=
+                average_price=
                 entry_price,
 
                 status="OPEN",
@@ -74,7 +73,7 @@ class ExecutionEngine:
             (
                 exit_price
                 -
-                position.entry_price
+                position.average_price
             )
             *
             position.quantity

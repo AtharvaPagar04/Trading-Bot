@@ -5,7 +5,13 @@ from src.market_data.market_tick import (
 from src.runtime.governed_runtime import (
     GovernedRuntime,
 )
-
+from src.runtime.event_types import (
+    TICK_EVENT,
+)
+from datetime import datetime
+from src.core.events import (
+    RuntimeEvent,
+)
 
 class MarketDataRouter:
 
@@ -27,7 +33,27 @@ class MarketDataRouter:
         tick: MarketTick,
     ):
 
-        
+        event = RuntimeEvent(
+            event_type=TICK_EVENT,
+
+            payload={
+                "symbol":
+                tick.symbol,
+
+                "price":
+                tick.price,
+
+                "exchange":
+                tick.exchange,
+            },
+
+            emitted_at=
+            datetime.utcnow(),
+        )
+
+        self.runtime.event_bus.publish(
+            event
+        )
 
         if (
             self.tick_handler

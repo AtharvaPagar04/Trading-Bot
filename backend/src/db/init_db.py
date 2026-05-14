@@ -20,6 +20,10 @@ from src.db.runtime_models import (
 from src.db.trading_session_model import (
     TradingSessionModel,
 )
+from src.db.execution_models import (
+    TradeExecutionEntity,
+)
+
 
 def init_db():
 

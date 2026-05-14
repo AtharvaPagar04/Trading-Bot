@@ -88,7 +88,7 @@ class BinanceWebsocketClient:
                                 ),
                             },
 
-                            timestamp=
+                            emitted_at=
                             datetime.utcnow(),
                         )
 

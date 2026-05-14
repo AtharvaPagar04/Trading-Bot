@@ -1,3 +1,6 @@
+from src.core.runtime_builder import (
+    build_runtime_state,
+)
 from datetime import datetime
 
 from src.runtime.governed_runtime import (
@@ -7,9 +10,7 @@ from src.paper_execution.portfolio_valuation import (
     calculate_total_equity,
 )
 
-from src.runtime.runtime_enums import (
-    RuntimeMode,
-)
+
 
 from src.runtime.event_bus import (
     EventBus,
@@ -31,9 +32,17 @@ from src.paper_execution.portfolio_valuation import (
 def test_unrealized_pnl_updates():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 
@@ -70,9 +79,17 @@ def test_unrealized_pnl_updates():
 def test_total_equity_calculation():
 
     runtime = GovernedRuntime(
-        RuntimeMode.DRY_RUN,
-        EventBus(),
-    )
+    runtime_state=
+    build_runtime_state(
+        capital=1000,
+        timeframe="5m",
+        adx_value=20,
+        atr_percent=1.0,
+    ),
+
+    event_bus=
+    EventBus(),
+)
 
     runtime.start()
 

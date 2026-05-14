@@ -45,6 +45,19 @@ from src.runtime.runtime_monitor import (
 from src.runtime.runtime_monitor_loop import (
     RuntimeMonitorLoop,
 )
+from src.runtime.runtime_recovery import (
+    recover_runtime_state,
+)
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.runtime_validation import (
+    validate_runtime_dependencies,
+)
+
+
 def main():
 
     event_bus = EventBus()
@@ -59,28 +72,50 @@ def main():
             atr_percent=1.5,
         )
     )
+    recovery_result = (
+        recover_runtime_state(
+            runtime_state=
+            runtime_state,
+        )
+    )
+    runtime_log(
+        level=LogLevel.INFO,
 
+        category=LogCategory.RUNTIME,
+
+        message=
+        recovery_result.recovery_message,
+    )
     runtime = GovernedRuntime(
         runtime_state=runtime_state,
         event_bus=event_bus,
+    )
+    event_bus.subscribe(
+        "WEBSOCKET_CONNECTED",
+
+        lambda payload:
+        setattr(
+            runtime_state,
+            "websocket_connected",
+        True,
+        ),
+    )
+    event_bus.subscribe(
+        "WEBSOCKET_DISCONNECTED",
+        lambda payload:
+        setattr(
+            runtime_state,
+            "websocket_connected",
+        False,
+        ),
     )
 
     runtime.start()
 
     
-    runtime_monitor = (
-        RuntimeMonitor(
-            runtime=runtime,
-        )
-    )
+    
 
-    runtime_monitor_loop = (
-        RuntimeMonitorLoop(
-            monitor=runtime_monitor,
-        )
-    )
 
-    runtime_monitor_loop.start()
    
 
     
@@ -107,11 +142,16 @@ def main():
 
     if recovered_sessions > 0:
 
-        print(
-            f"[RECOVERY] "
-            f"Recovered "
-            f"{recovered_sessions} "
-            f"orphan sessions"
+        runtime_log(
+            level=LogLevel.INFO,
+
+            category=LogCategory.PERSISTENCE,
+
+            message=(
+                f"Recovered "
+                f"{recovered_sessions} "
+                f"orphan sessions"
+            ),
         )
 
 
@@ -124,8 +164,14 @@ def main():
                 .active_session_id,
         )
     )
+    exchange.load_persisted_balance()
     exchange.load_persisted_positions()
-    
+    runtime_monitor = (
+        RuntimeMonitor(
+            runtime=runtime,
+            exchange=exchange,
+        )
+    )
     tick_handler = (
         LiveTickHandler(
             runtime_state=
@@ -136,9 +182,19 @@ def main():
 
             runtime_controller=
             runtime_controller,
+            
+            event_bus=
+            event_bus,
         )
     )
-    exchange.load_persisted_balance()
+    
+
+    runtime_monitor_loop = (
+        RuntimeMonitorLoop(
+            monitor=runtime_monitor,
+        )
+    )
+    runtime_monitor_loop.start()
     
 
     router = (
@@ -154,7 +210,10 @@ def main():
     websocket = (
         BinanceWebSocketClient(
             router=
-            router,
+                router,
+
+            event_bus=
+                event_bus,
 
             symbol="btcusdt",
         )
@@ -165,8 +224,20 @@ def main():
         runtime_state=runtime_state,
         exchange=exchange,
         session_repository=session_repository,
+        event_bus=event_bus,
     )
-   
+    
+    from src.api.websocket.websocket_events import register_websocket_events
+    register_websocket_events(event_bus)
+
+    validate_runtime_dependencies(
+        exchange=exchange,
+        websocket=websocket,
+        runtime_monitor=
+        runtime_monitor,
+        event_bus=
+        event_bus,
+    )
 
     try:
 
@@ -238,9 +309,12 @@ def main():
 
     except KeyboardInterrupt:
 
-        print(
-            "\n[SYSTEM] "
-            "Shutdown requested"
+        runtime_log(
+            level=LogLevel.INFO,
+
+            category=LogCategory.RUNTIME,
+
+            message="Shutdown requested",
         )
         if (
             runtime_state.active_session_id
@@ -312,19 +386,28 @@ def main():
                     .safe_mode,
             )
 
-            print(
-                f"[SESSION] "
-                f"Ended session "
-                f"{runtime_state.active_session_id}"
+            runtime_log(
+                level=LogLevel.INFO,
+
+                category=LogCategory.RUNTIME,
+
+                message=(
+                    f"Ended session "
+                    f"{runtime_state.active_session_id}"
+                ),
             )
+        runtime_monitor_loop.stop()
 
         websocket.disconnect()
 
         runtime.shutdown()
 
-        print(
-            "[SYSTEM] "
-            "Runtime stopped cleanly"
+        runtime_log(
+            level=LogLevel.INFO,
+
+            category=LogCategory.RUNTIME,
+
+            message="Runtime stopped cleanly",
         )
 
 

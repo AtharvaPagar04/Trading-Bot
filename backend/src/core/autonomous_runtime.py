@@ -48,6 +48,20 @@ from src.market.market_data import (
 from src.market.streaming_runtime import (
     process_incoming_candle,
 )
+from src.runtime.runtime_isolation import (
+    isolate_runtime_failure,
+)
+from src.runtime.logging.runtime_logger import (
+    runtime_log,
+    LogLevel,
+    LogCategory,
+)
+from src.runtime.event_types import (
+    EXECUTION_EVENT,
+)
+from src.runtime.event_bus import (
+    EventBus,
+)
 
 
 @dataclass
@@ -66,17 +80,23 @@ def execute_autonomous_cycle(
     candle: Candle,
 
     trade_side: str,
+
+    event_bus: EventBus,
 ) -> AutonomousCycleResult:
 
     # Streaming update
 
     streaming = (
-        process_incoming_candle(
-            runtime=runtime,
+        isolate_runtime_failure(
+            subsystem=
+            "streaming_runtime",
 
-            snapshot=snapshot,
-
-            candle=candle,
+            operation=lambda:
+            process_incoming_candle(
+                runtime=runtime,
+                snapshot=snapshot,
+                candle=candle,
+            ),
         )
     )
 
@@ -85,34 +105,51 @@ def execute_autonomous_cycle(
     # Portfolio state
 
     portfolio = (
-        synchronize_portfolio(
-            exchange=exchange,
+        isolate_runtime_failure(
+            subsystem=
+            "portfolio_sync",
 
-            market_prices={
-                snapshot.symbol:
-                candle.close
-            },
+            operation=lambda:
+            synchronize_portfolio(
+                exchange=exchange,
+                market_prices={
+                    snapshot.symbol:
+                    candle.close
+                },
+            ),
         )
     )
 
     # Portfolio risk
 
     portfolio_risk = (
-        evaluate_portfolio_risk(
-            portfolio
+        isolate_runtime_failure(
+            subsystem=
+            "portfolio_risk",
+
+            operation=lambda:
+            evaluate_portfolio_risk(
+                portfolio
+            ),
         )
     )
 
     # Runtime integration
 
     risk_integration = (
-        integrate_portfolio_risk(
-            runtime=runtime,
+        isolate_runtime_failure(
+            subsystem=
+            "risk_integration",
 
-            portfolio_risk=
-            portfolio_risk,
+            operation=lambda:
+            integrate_portfolio_risk(
+                runtime=runtime,
+                portfolio_risk=
+                portfolio_risk,
+            ),
         )
     )
+
 
     runtime = (
         risk_integration.runtime
@@ -121,47 +158,59 @@ def execute_autonomous_cycle(
     # Position sizing
 
     position_size = (
-        calculate_position_size(
-            available_capital=
-            portfolio.balance
-            .available_capital,
+        isolate_runtime_failure(
+            subsystem=
+            "position_sizing",
 
-            asset_price=
-            candle.close,
+            operation=lambda:
+            calculate_position_size(
+                available_capital=
+                portfolio.balance
+                .available_capital,
 
-            runtime_state=
-            runtime.operating_state,
+                asset_price=
+                candle.close,
 
-            portfolio_risk=
-            portfolio_risk,
+                runtime_state=
+                runtime.operating_state,
 
-            volatility_percent=
-            runtime.market_state
-            .atr_percent,
+                portfolio_risk=
+                portfolio_risk,
+
+                volatility_percent=
+                runtime.market_state
+                .atr_percent,
+            ),
         )
     )
 
     # Execution decision
 
     decision = (
-        evaluate_execution_decision(
-            runtime_state=
-            runtime.operating_state,
+        isolate_runtime_failure(
+            subsystem=
+            "execution_decision",
 
-            entries_allowed=
-            runtime.session
-            .entries_enabled,
+            operation=lambda:
+            evaluate_execution_decision(
+                runtime_state=
+                runtime.operating_state,
 
-            market_entries_allowed=
-            runtime.market_state
-            .allow_entries,
+                entries_allowed=
+                runtime.session
+                .entries_enabled,
 
-            portfolio_entries_allowed=
-            portfolio_risk
-            .allow_new_entries,
+                market_entries_allowed=
+                runtime.market_state
+                .allow_entries,
 
-            position_size=
-            position_size,
+                portfolio_entries_allowed=
+                portfolio_risk
+                .allow_new_entries,
+
+                position_size=
+                position_size,
+            ),
         )
     )
 
@@ -171,46 +220,86 @@ def execute_autonomous_cycle(
 
     if decision.allowed:
 
-        exchange.execute_market_order(
-            symbol=
-            snapshot.symbol,
+        isolate_runtime_failure(
+            subsystem=
+            "exchange_execution",
 
-            side=(
-                OrderSide.BUY
-                if trade_side == "BUY"
-                else OrderSide.SELL
+            operation=lambda:
+            exchange.execute_market_order(
+                symbol=
+                snapshot.symbol,
+
+                side=(
+                    OrderSide.BUY
+                    if trade_side == "BUY"
+                    else OrderSide.SELL
+                ),
+
+                quantity=
+                decision
+                .position_size
+                .final_order_quantity,
+
+                price=
+                candle.close,
             ),
-
-            quantity=
-            decision
-            .position_size
-            .final_order_quantity,
-
-            price=
-            candle.close,
         )
+    
 
         executed = True
+        event_bus.publish(
+            event_type=
+            EXECUTION_EVENT,
+
+            event_payload={
+                "symbol":
+                snapshot.symbol,
+
+                "side":
+                trade_side,
+
+                "price":
+                candle.close,
+
+                "quantity":
+                decision
+                .position_size
+                .final_order_quantity,
+            },
+        )
+    
 
     # Sync updated portfolio
 
     updated_portfolio = (
-        synchronize_portfolio(
-            exchange=exchange,
+        isolate_runtime_failure(
+            subsystem=
+            "post_trade_portfolio_sync",
 
-            market_prices={
-                snapshot.symbol:
-                candle.close
-            },
+            operation=lambda:
+            synchronize_portfolio(
+                exchange=exchange,
+
+                market_prices={
+                    snapshot.symbol:
+                    candle.close
+                },
+            ),
         )
     )
 
     runtime = (
-        synchronize_runtime_portfolio(
-            runtime=runtime,
+        isolate_runtime_failure(
+            subsystem=
+            "runtime_portfolio_sync",
 
-            portfolio=
-            updated_portfolio,
+            operation=lambda:
+            synchronize_runtime_portfolio(
+                runtime=runtime,
+
+                portfolio=
+                updated_portfolio,
+            ),
         )
     )
 

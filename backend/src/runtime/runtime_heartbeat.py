@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from src.runtime.runtime_state import (
+from src.core.runtime import (
     RuntimeState,
 )
 
@@ -33,7 +33,18 @@ def market_feed_stale(
         runtime_state.last_tick_received_at
         is None
     ):
-        return True
+
+        startup_grace_threshold = (
+            runtime_state.started_at
+            +
+            timedelta(seconds=30)
+        )
+
+        return (
+            datetime.utcnow()
+            >
+            startup_grace_threshold
+        )
 
     now = datetime.utcnow()
 

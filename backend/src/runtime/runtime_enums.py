@@ -11,9 +11,11 @@ class RuntimeStatus(str, Enum):
     STARTING = "starting"
     RUNNING = "running"
     PAUSED = "paused"
+    SAFE_MODE = "safe_mode"
     COOLDOWN = "cooldown"
     EMERGENCY_STOP = "emergency_stop"
     SHUTDOWN = "shutdown"
+    
 
 
 class EmergencyReason(str, Enum):
@@ -22,3 +24,7 @@ class EmergencyReason(str, Enum):
     ATR_SPIKE = "atr_spike"
     POSITION_MISMATCH = "position_mismatch"
     MANUAL_STOP = "manual_stop"
+    TRANSPORT_FAILURE = (
+        "TRANSPORT_FAILURE"
+    )
+   

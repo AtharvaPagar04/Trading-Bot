@@ -1,33 +1,15 @@
-from src.runtime.runtime_enums import RuntimeStatus
+"""
+Deprecated compatibility layer.
 
+Runtime transition rules were moved to:
 
-ALLOWED_TRANSITIONS = {
-    RuntimeStatus.STARTING: {
-        RuntimeStatus.RUNNING,
-        RuntimeStatus.SHUTDOWN,
-    },
+src.runtime.runtime_transition_rules
 
-    RuntimeStatus.RUNNING: {
-        RuntimeStatus.PAUSED,
-        RuntimeStatus.COOLDOWN,
-        RuntimeStatus.EMERGENCY_STOP,
-        RuntimeStatus.SHUTDOWN,
-    },
+This module remains temporarily for
+backward compatibility during
+architecture consolidation.
+"""
 
-    RuntimeStatus.PAUSED: {
-        RuntimeStatus.RUNNING,
-        RuntimeStatus.SHUTDOWN,
-    },
-
-    RuntimeStatus.COOLDOWN: {
-        RuntimeStatus.RUNNING,
-        RuntimeStatus.EMERGENCY_STOP,
-        RuntimeStatus.SHUTDOWN,
-    },
-
-    RuntimeStatus.EMERGENCY_STOP: {
-        RuntimeStatus.SHUTDOWN,
-    },
-
-    RuntimeStatus.SHUTDOWN: set(),
-}
+from src.runtime.runtime_transition_rules import (
+    ALLOWED_TRANSITIONS,
+)
