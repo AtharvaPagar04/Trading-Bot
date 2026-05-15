@@ -42,7 +42,7 @@ class ReconciliationLoop:
         )
 
         self.logger = (
-            create_logger(
+            build_logger(
                 "reconciliation"
             )
         )

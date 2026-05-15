@@ -301,10 +301,7 @@ class GovernedRuntime:
             not self.state.websocket_connected
         ):
 
-            self.emergency_stop(
-                EmergencyReason
-                .TRANSPORT_FAILURE
-            )
+            self.state.is_trading_enabled = False
 
             return
 

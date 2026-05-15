@@ -11,7 +11,7 @@ class RuntimeStatus(str, Enum):
     STARTING = "starting"
     RUNNING = "running"
     PAUSED = "paused"
-    SAFE_MODE = "safe_mode"
+
     COOLDOWN = "cooldown"
     EMERGENCY_STOP = "emergency_stop"
     SHUTDOWN = "shutdown"

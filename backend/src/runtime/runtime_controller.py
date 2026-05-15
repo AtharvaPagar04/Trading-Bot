@@ -1,3 +1,4 @@
+from fastapi import status
 from datetime import datetime
 from datetime import datetime
 from src.runtime.runtime_state_machine import (
@@ -284,23 +285,13 @@ class RuntimeController:
                 )
             )
         
-        if self.state_machine is None:
-
-            return
-
-        self.state_machine.transition_to(
-            RuntimeStatus.SAFE_MODE,
-            reason="Safe mode activated",
-        )
+        
         
     def disable_safe_mode(
         self,
     ):
 
-        self.state_machine.transition_to(
-            RuntimeStatus.RUNNING,
-            reason="Safe mode disabled",
-        )
+        
 
         self.runtime_state.safe_mode = False
 
@@ -450,17 +441,39 @@ class RuntimeController:
         active_id = self.runtime_state.active_session_id
         status = self.runtime_state.status.value
 
-        # Determine blocking conditions
-        blocking_states = {"safe_mode", "emergency_stop", "cooldown", "paused", "shutdown", "starting"}
-        blocked = status in blocking_states or not self.runtime_state.is_trading_enabled
+        blocked = (
+            not self.runtime_state.is_trading_enabled
+        )
 
-        reason = None
-        if status in blocking_states:
-            reason = f"Session blocked: runtime in {status}"
-        elif not self.runtime_state.is_trading_enabled:
-            reason = "Session blocked: trading disabled by governance"
+        if (
+            self.runtime_state.status
+            in {
+                RuntimeStatus.SHUTDOWN,
+                RuntimeStatus.STARTING,
+            }
+        ):
+            blocked = True
 
-        result: dict = {
+            reason = None
+
+            if (
+                self.runtime_state.status
+                in {
+                    RuntimeStatus.SHUTDOWN,
+                    RuntimeStatus.STARTING,
+                }
+            ):
+                reason = (
+                    f"Session blocked: runtime in "
+                    f"{status}"
+                )
+            elif not self.runtime_state.is_trading_enabled:
+                reason = (
+                    "Session blocked: trading "
+                    "disabled by governance"
+                )
+
+            result: dict = {
             "session_active": active_id is not None,
             "active_session_id": active_id,
             "session_started_at": (

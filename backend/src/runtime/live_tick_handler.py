@@ -40,6 +40,9 @@ from src.db.runtime_repository import (
 from datetime import (
     datetime,
 )
+from src.core.runtime_operating_state import (
+    get_operating_state,
+)
 
 from src.runtime.logging.runtime_logger import (
     runtime_log,
@@ -210,8 +213,9 @@ class LiveTickHandler:
         
         self.runtime_repository.save_runtime_state(
             operating_state=
+                get_operating_state(
                 self.runtime_state
-                .operating_state,
+                ),
 
             safe_mode=
                 self.runtime_state
@@ -246,11 +250,7 @@ class LiveTickHandler:
 
         if persisted_runtime:
 
-            self.runtime_state.operating_state = (
-                persisted_runtime
-                .operating_state
-            )
-
+           
             self.runtime_state.safe_mode = (
                 persisted_runtime
                 .safe_mode

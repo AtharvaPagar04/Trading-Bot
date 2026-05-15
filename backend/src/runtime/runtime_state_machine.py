@@ -20,7 +20,7 @@ class RuntimeStateMachine:
 
         RuntimeStatus.RUNNING: {
             RuntimeStatus.PAUSED,
-            RuntimeStatus.SAFE_MODE,
+            
             RuntimeStatus.COOLDOWN,
             RuntimeStatus.EMERGENCY_STOP,
             RuntimeStatus.SHUTDOWN,
@@ -28,16 +28,12 @@ class RuntimeStateMachine:
 
         RuntimeStatus.PAUSED: {
             RuntimeStatus.RUNNING,
-            RuntimeStatus.SAFE_MODE,
+            
             RuntimeStatus.EMERGENCY_STOP,
             RuntimeStatus.SHUTDOWN,
         },
 
-        RuntimeStatus.SAFE_MODE: {
-            RuntimeStatus.PAUSED,
-            RuntimeStatus.EMERGENCY_STOP,
-            RuntimeStatus.SHUTDOWN,
-        },
+        
 
         RuntimeStatus.COOLDOWN: {
             RuntimeStatus.PAUSED,

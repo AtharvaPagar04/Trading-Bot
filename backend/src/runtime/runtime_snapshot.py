@@ -1,6 +1,9 @@
 from src.exchange.paper_exchange import (
     PaperExchange,
 )
+from src.core.runtime_operating_state import (
+    get_operating_state,
+)
 
 
 def build_runtime_snapshot(
@@ -148,7 +151,7 @@ def build_runtime_snapshot(
             runtime.safe_mode,
 
             "operating_state":
-            runtime.operating_state,
+            get_operating_state(runtime),
         },
 
         "telemetry": {

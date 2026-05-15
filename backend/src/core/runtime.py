@@ -53,7 +53,11 @@ class RuntimeState:
     winning_trades: int = 0
     losing_trades: int = 0
     latest_price: float = 0.0
-    operating_state: str | None = None  # depriciated
+    operating_state: str | None = None
+# Deprecated synchronized projection state.
+# Use get_operating_state(runtime) for computed access.
+# Remaining mutable usage exists only for staged
+# recovery/deescalation workflow compatibility.
     last_execution_price: float = 0.0
     last_execution_time: Optional[datetime] = None
     latest_candle_close: float = 0.0

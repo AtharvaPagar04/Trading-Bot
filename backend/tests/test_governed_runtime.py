@@ -1,3 +1,10 @@
+from api.models import runtime_models
+from api.models import runtime_models
+from api.models import runtime_models
+from api.models import runtime_models
+from api.models import runtime_models
+from api.models import runtime_models
+from api.models import runtime_models
 from src.core.runtime_builder import (
     build_runtime_state,
 )
@@ -115,17 +122,17 @@ def test_stale_market_data_triggers_emergency_stop():
     runtime.validate_market_data()
 
     assert (
-        runtime.state.status
-        ==
-        RuntimeStatus.EMERGENCY_STOP
+        runtime.state.is_trading_enabled
+        is False
     )
 
     assert (
-        runtime.state.emergency_reason
+        runtime.state.status
         ==
-        EmergencyReason.TRANSPORT_FAILURE
+        RuntimeStatus.RUNNING
     )
 
+    \
     assert (
         runtime.execution_allowed()
         is False

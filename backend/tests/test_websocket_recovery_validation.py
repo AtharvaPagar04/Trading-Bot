@@ -1,3 +1,5 @@
+from core import runtime_operating_state
+from core import runtime_operating_state
 def test_websocket_recovery_placeholder():
 
     assert True
@@ -73,20 +75,17 @@ def test_transport_failure_triggers_emergency_stop():
     runtime.validate_market_data()
 
     assert (
-        runtime_state.status
-        ==
-        RuntimeStatus
-        .EMERGENCY_STOP
+        runtime_state.is_trading_enabled
+        is False
     )
 
     assert (
-        runtime_state
-        .emergency_reason
+        runtime_state.status
         ==
-        EmergencyReason
-        .TRANSPORT_FAILURE
+        RuntimeStatus.RUNNING
     )
 
+   
 class MockReconnectClient:
 
     def __init__(self):

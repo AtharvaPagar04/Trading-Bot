@@ -56,7 +56,10 @@ def execute_runtime_transition(
 
             reason=validation.reason,
         )
-
+# Compatibility mutation layer.
+# operating_state is being phased out as
+# authoritative runtime state in favor of
+# computed governance projection access.
     runtime.operating_state = (
         target_state.value
     )

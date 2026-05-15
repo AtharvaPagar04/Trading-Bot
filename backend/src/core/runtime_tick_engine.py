@@ -12,7 +12,9 @@ from src.core.runtime_governance_loop import (
 from src.core.runtime_tick_actions import (
     execute_tick_actions,
 )
-
+from src.core.runtime_operating_state import (
+    get_operating_state,
+)
 @dataclass
 class TickEngineConfig:
     tick_interval_seconds: int
@@ -64,7 +66,9 @@ def start_runtime_tick_engine(
         )
         print(
             "STATE:",
-            runtime.operating_state,
+            get_operating_state(
+            runtime
+            ),
         )
 
         print(
