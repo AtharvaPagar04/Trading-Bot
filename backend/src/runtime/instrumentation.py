@@ -1,14 +1,13 @@
 from src.runtime.event_journal import (
     EventJournal,
 )
-
-from src.runtime.logger import (
-    setup_logger,
+from src.runtime.logging.runtime_loggers import (
+    runtime_logger as logger,
 )
 
 journal = EventJournal()
 
-logger = setup_logger()
+
 
 
 class RuntimeInstrumentation:
