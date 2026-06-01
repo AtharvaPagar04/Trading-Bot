@@ -1,0 +1,2002 @@
+{
+  "backend/config/runtime_config.py": {
+    "mtime_ns": 1780321953890039723,
+    "size_bytes": 397
+  },
+  "backend/refactor_tests.py": {
+    "mtime_ns": 1780321953890451172,
+    "size_bytes": 2374
+  },
+  "backend/scripts/analytics/performance_analytics_demo.py": {
+    "mtime_ns": 1780321953890522893,
+    "size_bytes": 1017
+  },
+  "backend/scripts/runtime/autonomous_runtime_demo.py": {
+    "mtime_ns": 1780321953890522893,
+    "size_bytes": 1145
+  },
+  "backend/scripts/runtime/runtime_update_demo.py": {
+    "mtime_ns": 1780321953890551494,
+    "size_bytes": 611
+  },
+  "backend/scripts/strategy/mean_reversion_demo.py": {
+    "mtime_ns": 1780321953890551494,
+    "size_bytes": 406
+  },
+  "backend/scripts/strategy/online_learning_demo.py": {
+    "mtime_ns": 1780321953890573614,
+    "size_bytes": 1054
+  },
+  "backend/scripts/strategy/strategy_attribution_demo.py": {
+    "mtime_ns": 1780321953890573614,
+    "size_bytes": 755
+  },
+  "backend/src/analytics/montecarlo.py": {
+    "mtime_ns": 1780321953890593233,
+    "size_bytes": 1138
+  },
+  "backend/src/analytics/montecarlo_models.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 183
+  },
+  "backend/src/analytics/performance.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 1481
+  },
+  "backend/src/analytics/performance_models.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 210
+  },
+  "backend/src/analytics/risk_of_ruin.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 1116
+  },
+  "backend/src/analytics/risk_of_ruin_models.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 168
+  },
+  "backend/src/api/main.py": {
+    "mtime_ns": 1780321953890607534,
+    "size_bytes": 17893
+  },
+  "backend/src/api/models/governance_models.py": {
+    "mtime_ns": 1780321953890683771,
+    "size_bytes": 406
+  },
+  "backend/src/api/models/runtime_models.py": {
+    "mtime_ns": 1780321953890695892,
+    "size_bytes": 1342
+  },
+  "backend/src/api/models/session_models.py": {
+    "mtime_ns": 1780321953890695892,
+    "size_bytes": 324
+  },
+  "backend/src/api/routes/monitoring_routes.py": {
+    "mtime_ns": 1780321953890695892,
+    "size_bytes": 824
+  },
+  "backend/src/api/websocket/runtime_stream.py": {
+    "mtime_ns": 1780321953890695892,
+    "size_bytes": 485
+  },
+  "backend/src/api/websocket/websocket_events.py": {
+    "mtime_ns": 1780321953890740822,
+    "size_bytes": 648
+  },
+  "backend/src/api/websocket/websocket_manager.py": {
+    "mtime_ns": 1780321953890740822,
+    "size_bytes": 971
+  },
+  "backend/src/backtest/analytics.py": {
+    "mtime_ns": 1780321953890740822,
+    "size_bytes": 1670
+  },
+  "backend/src/backtest/analytics_models.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 271
+  },
+  "backend/src/backtest/engine.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 3470
+  },
+  "backend/src/backtest/equity_curve.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 1125
+  },
+  "backend/src/backtest/equity_models.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 183
+  },
+  "backend/src/backtest/models.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 334
+  },
+  "backend/src/backtest/walkforward.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 937
+  },
+  "backend/src/backtest/walkforward_models.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 153
+  },
+  "backend/src/config/env_loader.py": {
+    "mtime_ns": 1780321953890774344,
+    "size_bytes": 129
+  },
+  "backend/src/config/runtime_config.py": {
+    "mtime_ns": 1780321953890849961,
+    "size_bytes": 443
+  },
+  "backend/src/core/autonomous_runtime.py": {
+    "mtime_ns": 1780321953890849961,
+    "size_bytes": 6153
+  },
+  "backend/src/core/candle.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 196
+  },
+  "backend/src/core/config.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 697
+  },
+  "backend/src/core/event_bus.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1041
+  },
+  "backend/src/core/events.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 522
+  },
+  "backend/src/core/evolution.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1142
+  },
+  "backend/src/core/evolution_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 218
+  },
+  "backend/src/core/execution_gate.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1287
+  },
+  "backend/src/core/heartbeat.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 799
+  },
+  "backend/src/core/hierarchy.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1090
+  },
+  "backend/src/core/hierarchy_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 564
+  },
+  "backend/src/core/integrated_runtime.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1455
+  },
+  "backend/src/core/integrated_runtime_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 616
+  },
+  "backend/src/core/live_governance.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1090
+  },
+  "backend/src/core/meta_governance.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 935
+  },
+  "backend/src/core/meta_governance_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 192
+  },
+  "backend/src/core/monitoring.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1073
+  },
+  "backend/src/core/population.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 739
+  },
+  "backend/src/core/population_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 284
+  },
+  "backend/src/core/portfolio_intelligence.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1027
+  },
+  "backend/src/core/portfolio_intelligence_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 499
+  },
+  "backend/src/core/recovery_coordinator.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1392
+  },
+  "backend/src/core/recovery_policy.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1856
+  },
+  "backend/src/core/recovery_workflow.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1932
+  },
+  "backend/src/core/runtime.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 2343
+  },
+  "backend/src/core/runtime_auto_escalation.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1424
+  },
+  "backend/src/core/runtime_builder.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1601
+  },
+  "backend/src/core/runtime_clearance.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 238
+  },
+  "backend/src/core/runtime_deescalation.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1699
+  },
+  "backend/src/core/runtime_governance_loop.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1021
+  },
+  "backend/src/core/runtime_integrity.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1183
+  },
+  "backend/src/core/runtime_operating_state.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 271
+  },
+  "backend/src/core/runtime_portfolio_sync.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 785
+  },
+  "backend/src/core/runtime_risk_integration.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1624
+  },
+  "backend/src/core/runtime_state_machine.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1935
+  },
+  "backend/src/core/runtime_tick_actions.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1539
+  },
+  "backend/src/core/runtime_tick_engine.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1754
+  },
+  "backend/src/core/runtime_transition_engine.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1639
+  },
+  "backend/src/core/runtime_transition_rules.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 1695
+  },
+  "backend/src/core/runtime_update.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 911
+  },
+  "backend/src/core/safe_mode.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 521
+  },
+  "backend/src/core/session.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 288
+  },
+  "backend/src/core/session_builder.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 492
+  },
+  "backend/src/core/session_update.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 725
+  },
+  "backend/src/core/state.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 323
+  },
+  "backend/src/core/state_builder.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 726
+  },
+  "backend/src/core/strategy_runtime.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 3525
+  },
+  "backend/src/db/balance_models.py": {
+    "mtime_ns": 1780321953890890601,
+    "size_bytes": 363
+  },
+  "backend/src/db/balance_repository.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 1199
+  },
+  "backend/src/db/database.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 380
+  },
+  "backend/src/db/event_models.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 450
+  },
+  "backend/src/db/execution_models.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 522
+  },
+  "backend/src/db/init_db.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 609
+  },
+  "backend/src/db/models.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 1229
+  },
+  "backend/src/db/position_models.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 617
+  },
+  "backend/src/db/position_repository.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 3009
+  },
+  "backend/src/db/repository.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 7137
+  },
+  "backend/src/db/runtime_models.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 454
+  },
+  "backend/src/db/runtime_repository.py": {
+    "mtime_ns": 1780321953891368469,
+    "size_bytes": 1674
+  },
+  "backend/src/db/src/db/test_db_runtime_persistence.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 376
+  },
+  "backend/src/db/test_balance_persistence.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 300
+  },
+  "backend/src/db/test_position_persistence.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 461
+  },
+  "backend/src/db/test_trade_persistence.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 555
+  },
+  "backend/src/db/trading_session_model.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 809
+  },
+  "backend/src/db/trading_session_repository.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 8782
+  },
+  "backend/src/events/base_event.py": {
+    "mtime_ns": 1780321953891475174,
+    "size_bytes": 141
+  },
+  "backend/src/events/event.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 697
+  },
+  "backend/src/events/event_dispatcher.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 802
+  },
+  "backend/src/events/event_factory.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 307
+  },
+  "backend/src/events/event_serializer.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 761
+  },
+  "backend/src/events/runtime_event_bus.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 237
+  },
+  "backend/src/events/runtime_event_logger.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 317
+  },
+  "backend/src/events/runtime_events.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 1237
+  },
+  "backend/src/exchange/__init__.py": {
+    "mtime_ns": 1780321953891551906,
+    "size_bytes": 0
+  },
+  "backend/src/exchange/binance_balance_parser.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 769
+  },
+  "backend/src/exchange/binance_config.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 159
+  },
+  "backend/src/exchange/binance_event_parser.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 541
+  },
+  "backend/src/exchange/binance_order_parser.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 1024
+  },
+  "backend/src/exchange/binance_portfolio_sync.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 326
+  },
+  "backend/src/exchange/binance_rest_client.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 4788
+  },
+  "backend/src/exchange/binance_user_stream.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 578
+  },
+  "backend/src/exchange/binance_websocket_client.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 4965
+  },
+  "backend/src/exchange/consistency_state.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 163
+  },
+  "backend/src/exchange/drift_detector.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 956
+  },
+  "backend/src/exchange/dynamic_scaling.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 476
+  },
+  "backend/src/exchange/dynamic_scaling_models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 165
+  },
+  "backend/src/exchange/event_reconciliation.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 156
+  },
+  "backend/src/exchange/execution_decision.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 1687
+  },
+  "backend/src/exchange/execution_engine.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 2161
+  },
+  "backend/src/exchange/execution_simulator.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 1939
+  },
+  "backend/src/exchange/execution_simulator_models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 294
+  },
+  "backend/src/exchange/fee_models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 108
+  },
+  "backend/src/exchange/fees.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 397
+  },
+  "backend/src/exchange/fill_reconciliation.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 646
+  },
+  "backend/src/exchange/filter_validator.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 228
+  },
+  "backend/src/exchange/models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 854
+  },
+  "backend/src/exchange/order_reconciliation.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 378
+  },
+  "backend/src/exchange/paper_exchange.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 13665
+  },
+  "backend/src/exchange/portfolio.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 352
+  },
+  "backend/src/exchange/portfolio_risk.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 2983
+  },
+  "backend/src/exchange/portfolio_sync.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 1420
+  },
+  "backend/src/exchange/position_sizing.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 2087
+  },
+  "backend/src/exchange/reconciliation_loop.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 1792
+  },
+  "backend/src/exchange/reconnect_policy.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 212
+  },
+  "backend/src/exchange/reconnect_state.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 170
+  },
+  "backend/src/exchange/slippage.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 802
+  },
+  "backend/src/exchange/slippage_models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 150
+  },
+  "backend/src/exchange/spread.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 905
+  },
+  "backend/src/exchange/spread_models.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 152
+  },
+  "backend/src/execution/__init__.py": {
+    "mtime_ns": 1780321953891648539,
+    "size_bytes": 0
+  },
+  "backend/src/execution/binance_execution_engine.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 876
+  },
+  "backend/src/execution/exchange_type.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 112
+  },
+  "backend/src/execution/execution_factory.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 734
+  },
+  "backend/src/execution/execution_interface.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 473
+  },
+  "backend/src/execution/order_deduplicator.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 347
+  },
+  "backend/src/indicators/adx.py": {
+    "mtime_ns": 1780321953892028521,
+    "size_bytes": 964
+  },
+  "backend/src/indicators/atr.py": {
+    "mtime_ns": 1780321953892097559,
+    "size_bytes": 421
+  },
+  "backend/src/logging/logger.py": {
+    "mtime_ns": 1780321953892097559,
+    "size_bytes": 909
+  },
+  "backend/src/logging/runtime_logger.py": {
+    "mtime_ns": 1780321953892120410,
+    "size_bytes": 592
+  },
+  "backend/src/main.py": {
+    "mtime_ns": 1780321953892120410,
+    "size_bytes": 8775
+  },
+  "backend/src/market/binance_ws.py": {
+    "mtime_ns": 1780321953892120410,
+    "size_bytes": 2517
+  },
+  "backend/src/market/candle_aggregator.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 925
+  },
+  "backend/src/market/candle_feed_engine.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 1394
+  },
+  "backend/src/market/candle_models.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 202
+  },
+  "backend/src/market/csv_provider.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 775
+  },
+  "backend/src/market/market_data.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 303
+  },
+  "backend/src/market/market_state_pipeline.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 1536
+  },
+  "backend/src/market/models.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 223
+  },
+  "backend/src/market/streaming_runtime.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 971
+  },
+  "backend/src/market/timeframe_aggregator.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 1962
+  },
+  "backend/src/market_data/market_data_router.py": {
+    "mtime_ns": 1780321953892175383,
+    "size_bytes": 1122
+  },
+  "backend/src/market_data/market_tick.py": {
+    "mtime_ns": 1780321953892266273,
+    "size_bytes": 173
+  },
+  "backend/src/market_data/websocket_client.py": {
+    "mtime_ns": 1780321953892266273,
+    "size_bytes": 1277
+  },
+  "backend/src/monitoring/alert_manager.py": {
+    "mtime_ns": 1780321953892266273,
+    "size_bytes": 309
+  },
+  "backend/src/monitoring/metrics_history.py": {
+    "mtime_ns": 1780321953892298328,
+    "size_bytes": 403
+  },
+  "backend/src/monitoring/metrics_registry.py": {
+    "mtime_ns": 1780321953892298328,
+    "size_bytes": 525
+  },
+  "backend/src/monitoring/runtime_metrics.py": {
+    "mtime_ns": 1780321953892298328,
+    "size_bytes": 2382
+  },
+  "backend/src/paper_execution/order_status.py": {
+    "mtime_ns": 1780321953892298328,
+    "size_bytes": 227
+  },
+  "backend/src/paper_execution/order_utils.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 207
+  },
+  "backend/src/paper_execution/paper_execution_engine.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 9571
+  },
+  "backend/src/paper_execution/paper_order.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 516
+  },
+  "backend/src/paper_execution/paper_portfolio.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 402
+  },
+  "backend/src/paper_execution/paper_position.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 149
+  },
+  "backend/src/paper_execution/portfolio_valuation.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 1233
+  },
+  "backend/src/persistence/event_store.py": {
+    "mtime_ns": 1780321953892335234,
+    "size_bytes": 1061
+  },
+  "backend/src/persistence/metrics_store.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 116
+  },
+  "backend/src/persistence/runtime_deserializer.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 3065
+  },
+  "backend/src/persistence/runtime_loader.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 8544
+  },
+  "backend/src/persistence/runtime_snapshot.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 2191
+  },
+  "backend/src/persistence/runtime_store.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 821
+  },
+  "backend/src/portfolio/accounting_engine.py": {
+    "mtime_ns": 1780321953892397845,
+    "size_bytes": 3065
+  },
+  "backend/src/portfolio/accounting_models.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 375
+  },
+  "backend/src/portfolio/correlation.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 916
+  },
+  "backend/src/portfolio/correlation_models.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 242
+  },
+  "backend/src/portfolio/diversification.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 768
+  },
+  "backend/src/portfolio/diversification_models.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 204
+  },
+  "backend/src/portfolio/multi_asset.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 1146
+  },
+  "backend/src/portfolio/multi_asset_models.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 260
+  },
+  "backend/src/portfolio/rebalance.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 1307
+  },
+  "backend/src/portfolio/rebalance_models.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 249
+  },
+  "backend/src/risk/capital_governance.py": {
+    "mtime_ns": 1780321953892472109,
+    "size_bytes": 1538
+  },
+  "backend/src/risk/capital_governance_models.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 206
+  },
+  "backend/src/risk/circuit_breaker.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 400
+  },
+  "backend/src/risk/cooldown.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 937
+  },
+  "backend/src/risk/daily_loss_guard.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 159
+  },
+  "backend/src/risk/drawdown_tracker.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 545
+  },
+  "backend/src/risk/dynamic_position_sizer.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 944
+  },
+  "backend/src/risk/exposure.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 691
+  },
+  "backend/src/risk/grid_protection.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 901
+  },
+  "backend/src/risk/kill_switch.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 1475
+  },
+  "backend/src/risk/kill_switch_models.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 174
+  },
+  "backend/src/risk/position_limit_guard.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 165
+  },
+  "backend/src/risk/profit_protection.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 763
+  },
+  "backend/src/risk/recovery.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 732
+  },
+  "backend/src/risk/regime.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 661
+  },
+  "backend/src/risk/risk_budget_models.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 220
+  },
+  "backend/src/risk/risk_budgeting.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 728
+  },
+  "backend/src/risk/risk_events.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 1585
+  },
+  "backend/src/risk/risk_sync.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 1114
+  },
+  "backend/src/risk/runtime_drawdown_governance.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 674
+  },
+  "backend/src/risk/session_risk.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 852
+  },
+  "backend/src/risk/volatility.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 487
+  },
+  "backend/src/runtime/async_event_bus.py": {
+    "mtime_ns": 1780321953892560836,
+    "size_bytes": 781
+  },
+  "backend/src/runtime/async_runtime_loop.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 1167
+  },
+  "backend/src/runtime/cognitive_runtime.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 1226
+  },
+  "backend/src/runtime/event_bus.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 1327
+  },
+  "backend/src/runtime/event_journal.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 930
+  },
+  "backend/src/runtime/event_types.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 215
+  },
+  "backend/src/runtime/financial_runtime.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 1800
+  },
+  "backend/src/runtime/governed_runtime.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 7209
+  },
+  "backend/src/runtime/handlers/execution_handler.py": {
+    "mtime_ns": 1780321953892750889,
+    "size_bytes": 976
+  },
+  "backend/src/runtime/handlers/market_handler.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 108
+  },
+  "backend/src/runtime/handlers/risk_handler.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 493
+  },
+  "backend/src/runtime/handlers/strategy_handler.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 1457
+  },
+  "backend/src/runtime/instrumentation.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 544
+  },
+  "backend/src/runtime/live_tick_handler.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 7565
+  },
+  "backend/src/runtime/logger.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 746
+  },
+  "backend/src/runtime/logging/runtime_logger.py": {
+    "mtime_ns": 1780321953892855179,
+    "size_bytes": 745
+  },
+  "backend/src/runtime/logging/runtime_loggers.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 261
+  },
+  "backend/src/runtime/market_data_health.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 595
+  },
+  "backend/src/runtime/metrics.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 514
+  },
+  "backend/src/runtime/runtime_console_renderer.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 3725
+  },
+  "backend/src/runtime/runtime_controller.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 14465
+  },
+  "backend/src/runtime/runtime_enums.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 599
+  },
+  "backend/src/runtime/runtime_events.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 292
+  },
+  "backend/src/runtime/runtime_heartbeat.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1277
+  },
+  "backend/src/runtime/runtime_isolation.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1071
+  },
+  "backend/src/runtime/runtime_loop.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1030
+  },
+  "backend/src/runtime/runtime_metrics.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 180
+  },
+  "backend/src/runtime/runtime_monitor.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1574
+  },
+  "backend/src/runtime/runtime_monitor_loop.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1270
+  },
+  "backend/src/runtime/runtime_permissions.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 504
+  },
+  "backend/src/runtime/runtime_recovery.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 1580
+  },
+  "backend/src/runtime/runtime_registry.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 21
+  },
+  "backend/src/runtime/runtime_snapshot.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 5103
+  },
+  "backend/src/runtime/runtime_state.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 76
+  },
+  "backend/src/runtime/runtime_state_machine.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 3866
+  },
+  "backend/src/runtime/runtime_transition_models.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 406
+  },
+  "backend/src/runtime/runtime_transition_rules.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 699
+  },
+  "backend/src/runtime/runtime_validation.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 748
+  },
+  "backend/src/strategies/__init__.py": {
+    "mtime_ns": 1780321953892919067,
+    "size_bytes": 0
+  },
+  "backend/src/strategies/base_strategy.py": {
+    "mtime_ns": 1780321953893166859,
+    "size_bytes": 469
+  },
+  "backend/src/strategy/adaptive_ensemble.py": {
+    "mtime_ns": 1780321953893166859,
+    "size_bytes": 1205
+  },
+  "backend/src/strategy/adaptive_orchestrator.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1967
+  },
+  "backend/src/strategy/adaptive_weighting.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1040
+  },
+  "backend/src/strategy/asymmetric_grid.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 534
+  },
+  "backend/src/strategy/attribution.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 693
+  },
+  "backend/src/strategy/attribution_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 237
+  },
+  "backend/src/strategy/autonomous_decay.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 613
+  },
+  "backend/src/strategy/diagnostics.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 639
+  },
+  "backend/src/strategy/diagnostics_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 196
+  },
+  "backend/src/strategy/ensemble.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1807
+  },
+  "backend/src/strategy/ensemble_selection.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 371
+  },
+  "backend/src/strategy/evolution.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 770
+  },
+  "backend/src/strategy/grid_anchor.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1102
+  },
+  "backend/src/strategy/interface.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 299
+  },
+  "backend/src/strategy/live_regime_detector.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1112
+  },
+  "backend/src/strategy/mean_reversion.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1398
+  },
+  "backend/src/strategy/meta_learning.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 411
+  },
+  "backend/src/strategy/meta_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 176
+  },
+  "backend/src/strategy/models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 251
+  },
+  "backend/src/strategy/momentum.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1166
+  },
+  "backend/src/strategy/online_learning.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 870
+  },
+  "backend/src/strategy/orchestrator.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 923
+  },
+  "backend/src/strategy/performance_tracker.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1582
+  },
+  "backend/src/strategy/regime.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 435
+  },
+  "backend/src/strategy/regime_adaptive_orchestrator.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 2360
+  },
+  "backend/src/strategy/regime_decay.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 568
+  },
+  "backend/src/strategy/regime_router.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 492
+  },
+  "backend/src/strategy/regime_shift_detection.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 699
+  },
+  "backend/src/strategy/regime_shift_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 176
+  },
+  "backend/src/strategy/regime_stability.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 848
+  },
+  "backend/src/strategy/regime_stability_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 169
+  },
+  "backend/src/strategy/routing.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 349
+  },
+  "backend/src/strategy/routing_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 209
+  },
+  "backend/src/strategy/spacing.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 228
+  },
+  "backend/src/strategy/stability_execution.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1159
+  },
+  "backend/src/strategy/stability_execution_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 158
+  },
+  "backend/src/strategy/strategy_registry.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 434
+  },
+  "backend/src/strategy/strategy_signal.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 256
+  },
+  "backend/src/strategy/strategy_state.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 345
+  },
+  "backend/src/strategy/volatility.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 441
+  },
+  "backend/src/strategy/weighted_models.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 237
+  },
+  "backend/src/strategy/weighted_orchestrator.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 1547
+  },
+  "backend/src/utils/logger.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 239
+  },
+  "backend/src/validation/breakeven.py": {
+    "mtime_ns": 1780321953893187657,
+    "size_bytes": 299
+  },
+  "backend/src/validation/data_loader.py": {
+    "mtime_ns": 1780321953893567218,
+    "size_bytes": 755
+  },
+  "backend/src/validation/oscillation.py": {
+    "mtime_ns": 1780321953893567218,
+    "size_bytes": 635
+  },
+  "backend/tests/fixtures/trades.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 383
+  },
+  "backend/tests/test_account_balance_structure.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 659
+  },
+  "backend/tests/test_account_info_method.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 219
+  },
+  "backend/tests/test_accounting_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 557
+  },
+  "backend/tests/test_adaptive_ensemble.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1475
+  },
+  "backend/tests/test_adaptive_orchestrator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1323
+  },
+  "backend/tests/test_adaptive_weighting.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 439
+  },
+  "backend/tests/test_adjusted_timestamp.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 367
+  },
+  "backend/tests/test_advanced_performance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 216
+  },
+  "backend/tests/test_alert_manager.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 292
+  },
+  "backend/tests/test_asymmetric_grid.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 265
+  },
+  "backend/tests/test_async_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 599
+  },
+  "backend/tests/test_async_runtime_loop_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 665
+  },
+  "backend/tests/test_async_runtime_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 524
+  },
+  "backend/tests/test_auth_headers.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 264
+  },
+  "backend/tests/test_authenticated_get.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 222
+  },
+  "backend/tests/test_autonomous_decay.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 830
+  },
+  "backend/tests/test_backtest_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 700
+  },
+  "backend/tests/test_balance_parser.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 639
+  },
+  "backend/tests/test_binance_account_info.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 670
+  },
+  "backend/tests/test_binance_engine_dependencies.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 786
+  },
+  "backend/tests/test_binance_execution_factory.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 873
+  },
+  "backend/tests/test_binance_ping.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 267
+  },
+  "backend/tests/test_binance_rest_client.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 319
+  },
+  "backend/tests/test_binance_server_time.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 366
+  },
+  "backend/tests/test_binance_signature.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 451
+  },
+  "backend/tests/test_binance_time_sync.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 269
+  },
+  "backend/tests/test_binance_ws.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 687
+  },
+  "backend/tests/test_binance_ws_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 721
+  },
+  "backend/tests/test_breakeven.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 327
+  },
+  "backend/tests/test_candle_feed_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1038
+  },
+  "backend/tests/test_capital_governance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 310
+  },
+  "backend/tests/test_circuit_breaker.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 300
+  },
+  "backend/tests/test_cognitive_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1459
+  },
+  "backend/tests/test_consistency_state.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 305
+  },
+  "backend/tests/test_cooldown.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 760
+  },
+  "backend/tests/test_correlation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 250
+  },
+  "backend/tests/test_credentials_configured.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 240
+  },
+  "backend/tests/test_daily_loss_guard.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 273
+  },
+  "backend/tests/test_diversification.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 416
+  },
+  "backend/tests/test_drawdown_tracker.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 775
+  },
+  "backend/tests/test_drift_detector.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 496
+  },
+  "backend/tests/test_dynamic_position_sizer.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 403
+  },
+  "backend/tests/test_dynamic_scaling.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 196
+  },
+  "backend/tests/test_empty_balance_payload.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 240
+  },
+  "backend/tests/test_empty_order_payload.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 238
+  },
+  "backend/tests/test_ensemble_selection.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 637
+  },
+  "backend/tests/test_ensemble_strategy.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 876
+  },
+  "backend/tests/test_env_loader.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 270
+  },
+  "backend/tests/test_equity_curve.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 257
+  },
+  "backend/tests/test_event_bus.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 588
+  },
+  "backend/tests/test_event_dispatcher.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 757
+  },
+  "backend/tests/test_event_journal.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 692
+  },
+  "backend/tests/test_event_journal_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 419
+  },
+  "backend/tests/test_event_parser.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 561
+  },
+  "backend/tests/test_event_reconciliation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 283
+  },
+  "backend/tests/test_event_store.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 701
+  },
+  "backend/tests/test_events.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 511
+  },
+  "backend/tests/test_evolution.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 419
+  },
+  "backend/tests/test_execution_decision.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 983
+  },
+  "backend/tests/test_execution_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 798
+  },
+  "backend/tests/test_execution_factory.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 869
+  },
+  "backend/tests/test_execution_fees.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 191
+  },
+  "backend/tests/test_execution_gate.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 756
+  },
+  "backend/tests/test_execution_latency.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1190
+  },
+  "backend/tests/test_execution_simulator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 286
+  },
+  "backend/tests/test_exposure.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 413
+  },
+  "backend/tests/test_fill_reconciliation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 381
+  },
+  "backend/tests/test_filter_validator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 303
+  },
+  "backend/tests/test_financial_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 300
+  },
+  "backend/tests/test_governance_runtime_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 2496
+  },
+  "backend/tests/test_governed_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 4515
+  },
+  "backend/tests/test_grid_anchor.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 797
+  },
+  "backend/tests/test_grid_protection.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 384
+  },
+  "backend/tests/test_heartbeat.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 302
+  },
+  "backend/tests/test_hierarchy.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1715
+  },
+  "backend/tests/test_instrumentation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 458
+  },
+  "backend/tests/test_integrated_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1768
+  },
+  "backend/tests/test_kill_switch.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 475
+  },
+  "backend/tests/test_listen_key_method.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 222
+  },
+  "backend/tests/test_live_execution.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 650
+  },
+  "backend/tests/test_live_governance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 751
+  },
+  "backend/tests/test_live_regime_detector.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 657
+  },
+  "backend/tests/test_live_strategy.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 670
+  },
+  "backend/tests/test_logger.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 363
+  },
+  "backend/tests/test_market_data_router.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1039
+  },
+  "backend/tests/test_market_provider.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 358
+  },
+  "backend/tests/test_market_state.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 167
+  },
+  "backend/tests/test_market_state_pipeline.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 405
+  },
+  "backend/tests/test_meta_governance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1858
+  },
+  "backend/tests/test_meta_learning.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 464
+  },
+  "backend/tests/test_metrics.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 529
+  },
+  "backend/tests/test_metrics_registry.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 348
+  },
+  "backend/tests/test_monitoring.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 684
+  },
+  "backend/tests/test_montecarlo.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 277
+  },
+  "backend/tests/test_multi_asset.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 267
+  },
+  "backend/tests/test_online_learning.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_order_cancellation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1383
+  },
+  "backend/tests/test_order_deduplicator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 339
+  },
+  "backend/tests/test_order_expiration.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1358
+  },
+  "backend/tests/test_order_parser.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 697
+  },
+  "backend/tests/test_order_reconciliation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 811
+  },
+  "backend/tests/test_oscillation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 360
+  },
+  "backend/tests/test_paper_exchange.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 743
+  },
+  "backend/tests/test_paper_execution_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 5901
+  },
+  "backend/tests/test_pending_order_processing.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1306
+  },
+  "backend/tests/test_performance_tracker.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 543
+  },
+  "backend/tests/test_persistence.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 503
+  },
+  "backend/tests/test_population.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 613
+  },
+  "backend/tests/test_portfolio_intelligence.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1057
+  },
+  "backend/tests/test_portfolio_risk.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 650
+  },
+  "backend/tests/test_portfolio_sync.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 648
+  },
+  "backend/tests/test_portfolio_valuation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 2202
+  },
+  "backend/tests/test_position_limit_guard.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 286
+  },
+  "backend/tests/test_position_sizing.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 592
+  },
+  "backend/tests/test_profit_protection.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 522
+  },
+  "backend/tests/test_rebalance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 852
+  },
+  "backend/tests/test_reconciliation_loop.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 462
+  },
+  "backend/tests/test_reconnect_policy.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 347
+  },
+  "backend/tests/test_recovery.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 621
+  },
+  "backend/tests/test_recovery_coordinator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1204
+  },
+  "backend/tests/test_recovery_policy.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 245
+  },
+  "backend/tests/test_recovery_workflow.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 739
+  },
+  "backend/tests/test_regime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 336
+  },
+  "backend/tests/test_regime_decay.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 538
+  },
+  "backend/tests/test_regime_router.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1421
+  },
+  "backend/tests/test_regime_routing.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1001
+  },
+  "backend/tests/test_regime_shift_detection.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 220
+  },
+  "backend/tests/test_regime_stability.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 249
+  },
+  "backend/tests/test_risk_budgeting.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 276
+  },
+  "backend/tests/test_risk_events.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 995
+  },
+  "backend/tests/test_risk_of_ruin.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 305
+  },
+  "backend/tests/test_risk_sync.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 671
+  },
+  "backend/tests/test_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 193
+  },
+  "backend/tests/test_runtime_auto_escalation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 501
+  },
+  "backend/tests/test_runtime_clearance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 593
+  },
+  "backend/tests/test_runtime_config.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 263
+  },
+  "backend/tests/test_runtime_deescalation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1006
+  },
+  "backend/tests/test_runtime_drawdown_governance.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 2090
+  },
+  "backend/tests/test_runtime_event_integration.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 928
+  },
+  "backend/tests/test_runtime_governance_loop.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 649
+  },
+  "backend/tests/test_runtime_integrity.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 2445
+  },
+  "backend/tests/test_runtime_loader.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 124
+  },
+  "backend/tests/test_runtime_logger.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 233
+  },
+  "backend/tests/test_runtime_loop.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 467
+  },
+  "backend/tests/test_runtime_metrics_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 769
+  },
+  "backend/tests/test_runtime_monitor.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1228
+  },
+  "backend/tests/test_runtime_monitor_loop.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 525
+  },
+  "backend/tests/test_runtime_persistence.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 4560
+  },
+  "backend/tests/test_runtime_portfolio_sync.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 890
+  },
+  "backend/tests/test_runtime_recovery.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1602
+  },
+  "backend/tests/test_runtime_risk.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 267
+  },
+  "backend/tests/test_runtime_risk_integration.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1289
+  },
+  "backend/tests/test_runtime_snapshot.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 1096
+  },
+  "backend/tests/test_runtime_state_machine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 574
+  },
+  "backend/tests/test_runtime_store.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 814
+  },
+  "backend/tests/test_runtime_tick_actions.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 313
+  },
+  "backend/tests/test_runtime_tick_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 523
+  },
+  "backend/tests/test_runtime_transition_engine.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 682
+  },
+  "backend/tests/test_runtime_update.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 610
+  },
+  "backend/tests/test_safe_mode.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 444
+  },
+  "backend/tests/test_session.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 147
+  },
+  "backend/tests/test_session_risk.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_session_update.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_signed_params.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_slippage.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_spacing.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_spread.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_stability_execution.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_strategy_evolution.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_strategy_registry.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_strategy_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_strategy_runtime_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_streaming_runtime.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_timeframe_aggregator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_trade_lifecycle.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_user_stream.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_volatility.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_walkforward.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_websocket_client.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_websocket_recovery_validation.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 2487
+  },
+  "backend/tests/test_weighted_orchestrator.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "backend/tests/test_zero_balance_filter.py": {
+    "mtime_ns": 1780321953893587193,
+    "size_bytes": 0
+  },
+  "frontend/next.config.ts": {
+    "mtime_ns": 1780321953895186768,
+    "size_bytes": 156
+  },
+  "frontend/services/api.ts": {
+    "mtime_ns": 1780321953895825792,
+    "size_bytes": 4868
+  },
+  "frontend/src/app/layout.tsx": {
+    "mtime_ns": 1780321953895944154,
+    "size_bytes": 682
+  },
+  "frontend/src/app/page.tsx": {
+    "mtime_ns": 1780321953895944154,
+    "size_bytes": 112
+  },
+  "frontend/src/components/AnalyticsDashboard.tsx": {
+    "mtime_ns": 1780321953895944154,
+    "size_bytes": 15362
+  },
+  "frontend/src/components/AnalyticsModal.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 26152
+  },
+  "frontend/src/components/Dashboard.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 24171
+  },
+  "frontend/src/components/EquityChart.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 3827
+  },
+  "frontend/src/components/MetricCard.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 949
+  },
+  "frontend/src/components/RuntimeControls.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 12135
+  },
+  "frontend/src/components/SessionClock.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 10450
+  },
+  "frontend/src/components/SessionDetailsModal.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 13475
+  },
+  "frontend/src/components/SessionHistory.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 17373
+  },
+  "frontend/src/components/TradesTable.tsx": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 3081
+  },
+  "frontend/src/lib/utils.ts": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 169
+  },
+  "frontend/src/mock/index.ts": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 5617
+  },
+  "frontend/src/types/index.ts": {
+    "mtime_ns": 1780321953896001785,
+    "size_bytes": 2209
+  }
+}
